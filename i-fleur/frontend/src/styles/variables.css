@@ -1,0 +1,21 @@
+/* NOUVEAU : Custom properties and base resets - extracted from ifleur.html */
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* NOUVEAU : CSS custom properties for theming */
+:root{
+  --bg:#ffffff;
+  --dark:#1a1a1a;
+  --mid:#888;
+  --light:#e0e0e0;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Montserrat',sans-serif;
+  --cinzel:'Cinzel',serif;
+}
+
+/* NOUVEAU : Base resets */
+html,body{height:100%;}
+body{font-family:var(--sans);font-weight:300;font-size:13px;color:var(--dark);background:var(--bg);line-height:1.7;}
+
+/* NOUVEAU : Placeholder styling */
+::placeholder{color:#bbb;}

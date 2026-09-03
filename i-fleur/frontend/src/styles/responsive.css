@@ -1,0 +1,13 @@
+/* NOUVEAU : Responsive media queries for mobile and tablet */
+
+/* NOUVEAU : Mobile breakpoint (max-width: 768px) */
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr;}
+  .col-photo{position:relative;height:75vw;}
+  .col-content{padding:2rem 1.5rem 3rem;}
+  .logo-title{font-size:2.6rem;}
+  .field-row{grid-template-columns:1fr;}
+  /* MODIFIÉ : récap sur une colonne en mobile */
+  .recap-grid{grid-template-columns:1fr;gap:0.15rem 0;}
+  .recap-value{text-align:left;}
+}

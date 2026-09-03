@@ -1,0 +1,67 @@
+{
+  "prices": { "S": 40000, "M": 60000, "L": 80000 },
+  "vasePrice": 8000,
+  "whatsappNumber": "261340476414",
+  "shop": {
+    "name": "i.fleur",
+    "address": "Antananarivo, Madagascar",
+    "hours": "lundi — samedi · 9h–18h",
+    "instagram": "@ifleurmdg",
+    "facebook": "@ifleurmadagascar"
+  },
+  "delivery": {
+    "retraitGratuit": true,
+    "zones": [
+      {
+        "name": "Centre Antananarivo",
+        "fee": 0,
+        "quartiers": [
+          "Ivandry",
+          "Ankorondrano",
+          "Ambatobe",
+          "Nanisana",
+          "Ankerana",
+          "Analakely",
+          "Behoririka",
+          "Alarobia",
+          "Andraharo",
+          "Isoraka",
+          "Antaninarina",
+          "Antanimena",
+          "Analamahisty",
+          "Cité Planton",
+          "Betongolo",
+          "Mahamasina"
+        ]
+      },
+      {
+        "name": "Périphérie",
+        "fee": 20000,
+        "quartiers": ["Ivato", "Iavoloha", "Ilafy", "Ambohibao"]
+      },
+      {
+        "name": "Autre / hors zone",
+        "fee": null,
+        "quartiers": []
+      }
+    ]
+  },
+  "faq": [
+    {
+      "q": "Comment entretenir mon bouquet ?",
+      "a": "Dès réception, couper les tiges en biais et les placer dans l'eau fraîche. Changer l'eau tous les deux jours en recoupant les tiges. Placer à l'abri de la chaleur et du soleil direct."
+    },
+    {
+      "q": "Comment est composé mon bouquet ?",
+      "a": "Composé d'anthuriums et de fleurs de saison selon la sélection du jour. Tailles : S ~25 cm · M ~35 cm · L ~45 cm de diamètre."
+    },
+    {
+      "q": "Comment fonctionne la livraison ?",
+      "a": "Nous livrons à Antananarivo et environs du lundi au samedi. Après commande, nous vous contactons par WhatsApp pour confirmer le créneau et les frais selon votre quartier."
+    },
+    {
+      "q": "Comment confirmer mon paiement MVola ?",
+      "a": "Après votre transfert MVola au 034 04 764 14, envoyez-nous la capture d'écran via WhatsApp. Votre commande est confirmée dès réception."
+    }
+  ]
+}

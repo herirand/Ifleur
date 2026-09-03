@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>i.fleur · antananarivo</title>
+  <meta name="description"
+    content="i.fleur — bouquet d'anthuriums et fleurs de saison, livrés à Antananarivo. Retrait en boutique ou livraison à domicile, commande via WhatsApp.">
+
+  <!-- MODIFIÉ : preload fonts pour perf -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="src/styles/variables.css">
+  <link rel="stylesheet" href="src/styles/layout.css">
+  <link rel="stylesheet" href="src/styles/components.css">
+  <link rel="stylesheet" href="src/styles/animations.css">
+  <link rel="stylesheet" href="src/styles/responsive.css">
+</head>
+
+<body>
+  <div class="layout">
+
+    <!-- PHOTO -->
+    <div class="col-photo">
+      <div class="slides" id="slider">
+        <div class="slide" style="background-image:url('src/images/bouquet-1.jpg')"></div>
+        <div class="slide" style="background-image:url('src/images/bouquet-2.jpg')"></div>
+        <div class="slide" style="background-image:url('src/images/bouquet-3.jpg')"></div>
+        <div class="slide" style="background-image:url('src/images/bouquet-4.jpg')"></div>
+      </div>
+      <div class="slide-dots">
+        <button class="dot active" data-slide="0">1</button>
+        <button class="dot" data-slide="1">2</button>
+        <button class="dot" data-slide="2">3</button>
+        <button class="dot" data-slide="3">4</button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="col-content">
+
+      <div class="logo-block">
+        <span class="logo-title">i.fleur</span>
+      </div>
+      <div class="tagline">BOUTIQUE EN LIGNE</div>
+      <hr class="top">
+
+      <p class="description">
+        Nées d'une passion profonde pour les fleurs et les émotions qu'elles transmettent, nos compositions mêlent
+        fleurs de saison et notre signature florale&nbsp;: l'anthurium. Chaque bouquet est pensé comme une création
+        unique, travaillée avec soin, sensibilité et attention au moindre détail. Des bouquets imaginés par une mère et
+        sa fille, où chaque arrangement raconte une intention, une atmosphère, un moment.<br><br>
+        Commande en ligne acceptée au minimum 24h à l'avance. Livraison à domicile à Antananarivo.
+      </p>
+
+      <!-- 1. TAILLE -->
+      <div class="step-header">1 — TAILLE</div>
+      <div class="circle-row" id="size-row">
+        <div class="c-opt"><button class="c-btn selected" data-price="40000">S</button>
+          <div class="c-label">40 000<br>Ar</div>
+        </div>
+        <div class="c-line"></div>
+        <div class="c-opt"><button class="c-btn" data-price="60000">M</button>
+          <div class="c-label">60 000<br>Ar</div>
+        </div>
+        <div class="c-line"></div>
+        <div class="c-opt"><button class="c-btn" data-price="80000">L</button>
+          <div class="c-label">80 000<br>Ar</div>
+        </div>
+        <div class="c-line"></div>
+        <div class="c-opt"><button class="c-btn" data-price="0" style="font-size:9px;padding:6px;">Sur-mesure<br>/
+            Abo.</button>
+          <div class="c-label">devis</div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--mid);margin-top:0.3rem">Tailles approximatives : S ~25 cm · M ~35 cm · L ~45
+        cm de diamètre.</p>
+
+      <!-- 2. COULEUR -->
+      <div class="step-header">2 — COULEUR</div>
+      <div class="color-row" id="color-row">
+        <div class="col-opt neutre"><button class="col-btn selected"></button>
+          <div class="col-label">neutre<br><span style="font-size:10px;color:var(--mid)">beige</span></div>
+        </div>
+        <div class="col-line"></div>
+        <div class="col-opt froid"><button class="col-btn"></button>
+          <div class="col-label">froid<br><span style="font-size:10px;color:var(--mid)">rose blanc</span></div>
+        </div>
+        <div class="col-line"></div>
+        <div class="col-opt chaud"><button class="col-btn"></button>
+          <div class="col-label">chaud<br><span style="font-size:10px;color:var(--mid)">bordeaux</span></div>
+        </div>
+        <div class="col-line"></div>
+        <div class="col-opt nuance"><button class="col-btn"></button>
+          <div class="col-label">opposé<br><span style="font-size:10px;color:var(--mid)">burgundy</span></div>
+        </div>
+      </div>
+
+      <!-- 3. VASE -->
+      <div class="step-header">3 — VASE</div>
+      <div class="circle-row" id="vase-row">
+        <div class="c-opt"><button class="c-btn" data-price="8000">oui</button>
+          <div class="c-label">+8 000 Ar</div>
+        </div>
+        <div class="c-line"></div>
+        <div class="c-opt"><button class="c-btn selected" data-price="0">non</button>
+          <div class="c-label">sans vase</div>
+        </div>
+      </div>
+
+      <!-- 4. MESSAGE -->
+      <div class="step-header">4 — MESSAGE PERSONNEL</div>
+      <textarea class="field" id="message" placeholder="votre message… (facultatif)"></textarea>
+
+      <!-- 5. LIVRAISON -->
+      <div class="step-header">5 — LIVRAISON</div>
+      <div class="delivery-toggle">
+        <button class="d-opt active" data-delivery="pickup">retrait en boutique (gratuit)</button>
+        <button class="d-opt" data-delivery="home">livraison à domicile</button>
+      </div>
+
+      <div id="pickup-block">
+        <input class="field" type="date" id="pickup-date">
+        <p style="font-size:11px;color:var(--mid);margin-top:-0.5rem;margin-bottom:1rem">lundi — samedi · 9h–18h</p>
+      </div>
+
+      <div id="home-block" style="display:none">
+        <input class="field" type="date" id="delivery-date" placeholder="date souhaitée">
+        <div class="field-row">
+          <input class="field" type="text" id="deliver-nom" placeholder="nom du destinataire">
+          <input class="field" type="tel" id="deliver-tel" placeholder="téléphone du destinataire">
+        </div>
+        <input class="field" type="text" id="deliver-address" placeholder="adresse">
+        <input class="field" type="text" id="deliver-complement" placeholder="complément (code, interphone, étage)">
+        <div class="field-row">
+          <input class="field" type="text" id="deliver-city" placeholder="ville" value="Antananarivo">
+          <select class="field field-select" id="quartier-select"></select>
+        </div>
+        <p style="font-size:11px;color:var(--mid);margin-top:-0.5rem;margin-bottom:0.5rem" id="delivery-fee-info">
+          Sélectionnez votre quartier pour calculer les frais.</p>
+      </div>
+
+      <!-- 6. FACTURATION -->
+      <div class="step-header">6 — COORDONNÉES DE FACTURATION</div>
+      <div id="billing-block">
+        <div class="field-row">
+          <input class="field" type="text" id="billing-name" placeholder="nom *">
+          <input class="field" type="tel" id="billing-phone" placeholder="téléphone *">
+        </div>
+        <input class="field" type="email" id="billing-email" placeholder="email *">
+        <div class="field-row">
+          <input class="field" type="text" id="billing-address" placeholder="adresse *">
+          <input class="field" type="text" id="billing-city" placeholder="ville *">
+        </div>
+        <p style="font-size:11px;color:var(--mid);margin-top:-0.5rem;margin-bottom:0.5rem">Coordonnées nécessaires pour
+          confirmer votre commande et l'éventuelle facturation.</p>
+      </div>
+
+      <!-- TOTAL -->
+      <div class="total-row">
+        <span class="total-label">TOTAL</span>
+        <span class="total-amount" id="total-display">40 000 Ar</span>
+      </div>
+
+      <!-- RÉCAP -->
+      <div class="recap-block" id="recap">
+        <div class="recap-title">RÉCAPITULATIF</div>
+        <div class="recap-grid">
+          <span class="recap-label">Bouquet</span><span class="recap-value" id="recap-size">—</span>
+          <span class="recap-label">Couleur</span><span class="recap-value" id="recap-color">—</span>
+          <span class="recap-label">Vase</span><span class="recap-value" id="recap-vase">—</span>
+          <span class="recap-label">Message</span><span class="recap-value" id="recap-message">—</span>
+          <span class="recap-label">Prix bouquet</span><span class="recap-value" id="recap-prix">—</span>
+          <span class="recap-label">Frais livraison</span><span class="recap-value" id="recap-frais">—</span>
+        </div>
+      </div>
+
+      <!-- PAIEMENT -->
+      <div class="pay-label">MODE DE PAIEMENT</div>
+      <button class="pay-btn wa" id="btn-whatsapp"><span>WhatsApp · confirmer &amp;
+          commander</span><span>↗</span></button>
+      <button class="pay-btn" id="btn-mvola"><span>MVola · 034 04 764 14</span><span>→</span></button>
+      <button class="pay-btn especes" id="btn-especes"><span>Espèces · à la livraison ou en
+          boutique</span><span>→</span></button>
+      <button class="pay-btn sendwave" id="btn-sendwave"><span>Sendwave / PayPal · virement
+          international</span><span>→</span></button>
+
+      <!-- MVola box -->
+      <div class="mm-box" id="mm-box">
+        <div class="mm-provider">MVOLA</div>
+        <div class="mm-num">034 04 764 14</div>
+        <div class="mm-name">i.fleur</div>
+        <div class="mm-info">Envoyez le montant exact, puis contactez-nous sur WhatsApp avec votre capture d'écran pour
+          confirmer votre commande.</div>
+        <button class="pay-btn wa btn-confirm-wa"><span>Envoyer la confirmation</span><span>↗</span></button>
+      </div>
+
+      <!-- Espèces box -->
+      <div class="especes-box" id="especes-box">
+        <p>Paiement en espèces accepté lors du retrait en boutique ou à la livraison. Votre commande sera confirmée par
+          WhatsApp avant la livraison.</p>
+        <br>
+        <button class="pay-btn wa btn-confirm-wa" style="margin-top:0.5rem"><span>Confirmer ma
+            commande</span><span>↗</span></button>
+      </div>
+
+      <!-- Sendwave box -->
+      <div class="sendwave-box" id="sendwave-box">
+        <p>Pour les envois depuis l'étranger via <strong>Sendwave</strong> ou <strong>PayPal</strong>, contactez-nous
+          directement sur WhatsApp pour obtenir les coordonnées de virement et confirmer votre commande.<br><br>Les
+          frais de transfert international sont à la charge de l'expéditeur.</p>
+        <br>
+        <button class="pay-btn sendwave btn-confirm-wa" style="margin-top:0.5rem;color:#1a4e7a"><span>Nous contacter
+            pour le virement</span><span>↗</span></button>
+      </div>
+
+      <!-- FAQ -->
+      <div class="faq-section">
+        <div class="step-header">FAQ</div>
+        <div id="faq-container"></div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="faq-section">
+        <div class="step-header">CONTACT</div>
+        <div class="contact-block">
+          <p style="font-size:12px;color:var(--mid);line-height:1.8">
+            WhatsApp : <a href="https://wa.me/261340476414" target="_blank" rel="noopener"
+              style="color:var(--dark)">+261 34 04 764 14</a><br>
+            Instagram : <span id="shop-instagram">@ifleurmdg</span><br>
+            Facebook : <span id="shop-facebook">@ifleurmadagascar</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="site-footer">
+        <strong style="font-size:13px;color:var(--dark);font-family:var(--cinzel);letter-spacing:0.08em;"><span
+            id="shop-name">i.fleur</span></strong><br>
+        <span id="shop-address">Antananarivo, Madagascar</span><br>
+        MVola : 034 04 764 14<br><br>
+        <span id="shop-hours">lundi — samedi · 9h–18h</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODIFIÉ : Bundle TypeScript compilé -->
+  <script type="module" src="dist/app.js"></script>
+</body>
+
+</html>
