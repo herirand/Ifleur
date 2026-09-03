@@ -64,19 +64,19 @@ export function updateFeeInfo(): void {
   if (!el) return;
 
   if (deliveryMode === 'pickup') {
-    el.textContent = 'Retrait en boutique : gratuit';
+    el.textContent = 'Retrait en boutique : gratuit / pick up in store: free';
     return;
   }
 
   const zone = findZoneForQuartier(selectedQuartier);
   if (!selectedQuartier) {
-    el.textContent = 'Sélectionnez votre quartier pour calculer les frais.';
+    el.textContent = 'Sélectionnez votre quartier pour calculer les frais. / Select your district to calculate the fees.';
   } else if (zone && zone.fee === null) {
-    el.textContent = `${selectedQuartier} — frais sur devis (nous vous contactons).`;
+    el.textContent = `${selectedQuartier} — frais sur devis (nous vous contactons). / fee on quote (we will contact you).`;
   } else if (zone) {
-    el.textContent = `${selectedQuartier} — frais de livraison : ${formatFees(zone.fee)}.`;
+    el.textContent = `${selectedQuartier} — frais de livraison : ${formatFees(zone.fee)}. / delivery fee: ${formatFees(zone.fee)}.`;
   } else {
-    el.textContent = 'Quartier non reconnu — frais sur devis.';
+    el.textContent = 'Quartier non reconnu — frais sur devis. / District not recognized — fee on quote.';
   }
 }
 
@@ -95,7 +95,7 @@ function populateQuartiers(): void {
   select.innerHTML = '';
   const placeholder = document.createElement('option');
   placeholder.value = '';
-  placeholder.textContent = '— choisir un quartier —';
+  placeholder.textContent = '— choisir un quartier / choose a district —';
   select.appendChild(placeholder);
 
   const all = getAllQuartiers();

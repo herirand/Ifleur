@@ -33,9 +33,14 @@ function buildWhatsAppMessage(): string {
   const val = (id: string): string =>
     (document.getElementById(id) as HTMLInputElement)?.value?.trim() || '—';
 
-  const size = document.querySelector('#size-row .c-btn.selected')?.textContent?.trim() || '—';
+  const sizeBtn = document.querySelector('#size-row .c-btn.selected') as HTMLElement | null;
+  const isDevisSize = sizeBtn?.dataset.price === '0';
+  const size = isDevisSize
+    ? 'Sur-mesure / custom'
+    : (sizeBtn?.textContent?.trim().split('\n')[0] || '—');
   const color = getSelectedColor();
-  const vase = document.querySelector('#vase-row .c-btn.selected')?.textContent?.trim() || '—';
+  const vaseBtn = document.querySelector('#vase-row .c-btn.selected') as HTMLElement | null;
+  const withVase = vaseBtn ? (parseInt(vaseBtn.dataset.price || '0', 10) || 0) > 0 : false;
   const message = (document.getElementById('message') as HTMLTextAreaElement)?.value?.trim() || '—';
 
   const pickupDate = val('pickup-date');
@@ -53,33 +58,33 @@ function buildWhatsAppMessage(): string {
   const fees = getDeliveryFee();
 
   const lines = [
-    '*NOUVELLE COMMANDE i.fleur*',
+    '*NOUVELLE COMMANDE i.fleur / NEW ORDER*',
     '',
-    '*Produit*',
-    `Taille: ${size === '0' ? 'Sur devis / Abo.' : size}`,
-    `Couleur: ${color}`,
-    `Vase: ${vase === 'oui' ? 'oui (+' + formatPrice(CONFIG.vasePrice) + ')' : 'non'}`,
+    '*Produit / Product*',
+    `Taille / Size: ${isDevisSize ? 'Sur-mesure / custom (min ' + formatPrice(CONFIG.surMesureMin) + ')' : size}`,
+    `Couleur / Color: ${color}`,
+    `Vase / Pot: ${withVase ? 'oui / yes (+' + formatPrice(CONFIG.vasePrice) + ')' : 'non / no'}`,
     `Message: ${message}`,
     '',
-    '*Livraison*',
+    '*Livraison / Delivery*',
   ];
 
   if (deliveryMode === 'pickup') {
-    lines.push('Mode: Retrait en boutique (gratuit)');
-    lines.push(`Date retrait: ${pickupDate || '—'}`);
+    lines.push('Mode: Retrait en boutique (gratuit) / Pick up in store (free)');
+    lines.push(`Date retrait / Pickup on: ${pickupDate || '—'}`);
   } else {
-    lines.push('Mode: Livraison à domicile');
-    lines.push(`Date livraison: ${deliveryDate || '—'}`);
-    lines.push(`Destinataire: ${deliverTo.nom}`);
-    lines.push(`Tél destinataire: ${deliverTo.tel}`);
-    lines.push(`Adresse: ${deliverTo.adresse}${deliverTo.complement !== '—' ? ' (' + deliverTo.complement + ')' : ''}`);
-    lines.push(`Ville: ${deliverTo.ville}`);
-    lines.push(`Quartier: ${quartier || '—'}`);
+    lines.push('Mode: Livraison à domicile / Home delivery');
+    lines.push(`Date livraison / Delivery on: ${deliveryDate || '—'}`);
+    lines.push(`Destinataire / Recipient: ${deliverTo.nom}`);
+    lines.push(`Tél destinataire / Phone: ${deliverTo.tel}`);
+    lines.push(`Adresse / Address: ${deliverTo.adresse}${deliverTo.complement !== '—' ? ' (' + deliverTo.complement + ')' : ''}`);
+    lines.push(`Ville / City: ${deliverTo.ville}`);
+    lines.push(`Quartier / District: ${quartier || '—'}`);
     const feeLabel =
       fees === 0 && area && area.fee === null
-        ? 'sur devis'
+        ? 'sur devis / on quote'
         : formatPrice(fees);
-    lines.push(`Frais livraison: ${feeLabel}`);
+    lines.push(`Frais livraison / Delivery fee: ${feeLabel}`);
   }
 
   const billingShort = [
@@ -89,11 +94,11 @@ function buildWhatsAppMessage(): string {
   ].filter(v => v !== '—').join(' · ');
 
   lines.push('');
-  lines.push('*Facturation*');
-  lines.push(`Coordonnées: ${billingShort || '— — — '}`);
+  lines.push('*Facturation / Billing*');
+  lines.push(`Coordonnées / Infos: ${billingShort || '— — — '}`);
 
   lines.push('');
-  lines.push(`*TOTAL: ${isDevis ? 'sur devis' : formatPrice(basePrice + vasePrice + fees)}*`);
+  lines.push(`*TOTAL: ${isDevis ? 'sur devis / on quote' : formatPrice(basePrice + vasePrice + fees)}*`);
 
   return lines.join('\n');
 }

@@ -1,13 +1,51 @@
-/* NOUVEAU : Responsive media queries for mobile and tablet */
+/* MODIFIÉ : Responsive — breakpoints affinés, mobile plus aéré */
 
-/* NOUVEAU : Mobile breakpoint (max-width: 768px) */
+/* NOUVEAU : Tablet (max-width: 1024px) */
+@media(max-width:1024px){
+  :root{--gutter:2.5rem;}
+  .logo-img{max-width:150px;}
+  .logo-title{font-size:3rem;}
+}
+
+/* MODIFIÉ : Mobile (max-width: 768px) */
 @media(max-width:768px){
+  :root{--gutter:1.5rem;}
   .layout{grid-template-columns:1fr;}
-  .col-photo{position:relative;height:75vw;}
-  .col-content{padding:2rem 1.5rem 3rem;}
-  .logo-title{font-size:2.6rem;}
-  .field-row{grid-template-columns:1fr;}
-  /* MODIFIÉ : récap sur une colonne en mobile */
+  /* MODIFIÉ : Photo plus haute — style saison ~50vh */
+  .col-photo{position:relative;height:50vh;border-right:none;}
+  .col-content{padding:var(--gutter) var(--gutter) 3rem;}
+  .logo-img{max-width:140px;}
+  .logo-title{font-size:2.4rem;}
+  .tagline{margin-bottom:1rem;}
+  /* MODIFIÉ : Cercles taille plus compacts */
+  .circle-row{flex-wrap:wrap;gap:0.3rem;}
+  .c-btn{width:46px;height:46px;font-size:10px;}
+  .c-label{font-size:10px;}
+  /* MODIFIÉ : Cercles couleur plus compacts */
+  .col-btn{width:46px;height:46px;}
+  /* MODIFIÉ : Champs en pleine largeur */
+  .field-row{grid-template-columns:1fr;gap:0.5rem;}
+  /* MODIFIÉ : Recap sur une colonne */
   .recap-grid{grid-template-columns:1fr;gap:0.15rem 0;}
   .recap-value{text-align:left;}
+  /* MODIFIÉ : Navigation photo plus discrète */
+  .slide-nav{width:36px;height:36px;font-size:20px;}
+  .nav-prev{left:10px;}
+  .nav-next{right:10px;}
+  /* MODIFIÉ : Total plus petit */
+  .total-amount{font-size:1.8rem;}
+  /* MODIFIÉ : Delivery toggle empilé */
+  .delivery-toggle{flex-direction:column;gap:0.8rem;}
+}
+
+/* NOUVEAU : Petit mobile (max-width: 480px) */
+@media(max-width:480px){
+  :root{--gutter:1.2rem;}
+  .col-photo{height:45vh;}
+  .logo-img{max-width:120px;}
+  .logo-title{font-size:2rem;}
+  .description{font-size:14px;}
+  .c-btn{width:42px;height:42px;font-size:9px;}
+  .col-btn{width:42px;height:42px;}
+  .pay-btn{font-size:11px;padding:0.75rem 0.8rem;}
 }

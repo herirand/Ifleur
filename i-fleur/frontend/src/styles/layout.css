@@ -1,10 +1,30 @@
-/* NOUVEAU : Grid layout, sticky positioning, and responsive breakpoints */
+/* MODIFIÉ : Grid layout avec gap responsive + colonnes affinées */
 
-/* NOUVEAU : Main grid layout */
-.layout{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+/* MODIFIÉ : Main grid layout */
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:100vh;}
 
-/* NOUVEAU : Left column - sticky photo area */
-.col-photo{position:sticky;top:0;height:100vh;overflow:hidden;}
+/* MODIFIÉ : Colonne photo — bordure droite fine comme saison-eshop */
+.col-photo{position:sticky;top:0;height:100vh;overflow:hidden;border-right:0.5px solid var(--light);}
 
-/* NOUVEAU : Right column - content scroll area */
-.col-content{padding:3.5rem 3.5rem 5rem;overflow-y:auto;}
+/* MODIFIÉ : Colonne contenu — padding via variable gutter */
+.col-content{padding:var(--gutter) var(--gutter) 5rem;overflow-y:auto;}
+
+/* NOUVEAU : Boutons navigation photo superposés sur l'image */
+.slide-nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(0,0,0,0.35);background:rgba(255,255,255,0.75);
+  color:var(--dark);font-size:24px;line-height:1;font-weight:300;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all 0.25s;z-index:5;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.slide-nav:hover{background:var(--dark);color:#fff;border-color:var(--dark);}
+.nav-prev{left:16px;}
+.nav-next{right:16px;}
+
+/* NOUVEAU : Pagination pastilles superposées en bas de l'image */
+.slide-dots{
+  position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
+  display:flex;gap:8px;z-index:5;
+}

@@ -35,6 +35,18 @@ function next(): void {
   goTo((current + 1) % SLIDE_COUNT);
 }
 
+// NOUVEAU : Reculer au slide précédent
+function prev(): void {
+  goTo((current - 1 + SLIDE_COUNT) % SLIDE_COUNT);
+}
+
+// NOUVEAU : Action navigation (stop l'auto-play puis navigue)
+function manualNavigate(fn: () => void): void {
+  stopAutoplay();
+  fn();
+  startAutoplay();
+}
+
 // NOUVEAU : Démarrer l'auto-play
 export function startAutoplay(): void {
   stopAutoplay();
@@ -49,16 +61,21 @@ export function stopAutoplay(): void {
   }
 }
 
-// NOUVEAU : Initialiser le slider et les dots
+// MODIFIÉ : Initialiser le slider, les dots et les boutons de navigation
 export function initSlider(): void {
   const dots = $$('.dot');
 
   dots.forEach((dot, i) => {
     dot.addEventListener('click', () => {
-      goTo(i);
-      startAutoplay();
+      manualNavigate(() => goTo(i));
     });
   });
+
+  // NOUVEAU : boutons précédent / suivant
+  const prevBtn = $('.nav-prev');
+  const nextBtn = $('.nav-next');
+  prevBtn?.addEventListener('click', () => manualNavigate(prev));
+  nextBtn?.addEventListener('click', () => manualNavigate(next));
 
   goTo(0);
   startAutoplay();

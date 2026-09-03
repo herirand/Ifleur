@@ -1,10 +1,10 @@
 // MODIFIÉ : Types alignés sur la nouvelle config statique (remplace l'ancien schéma API config)
 
-// NOUVEAU : Types de taille de commande
-export type OrderSize = 'S' | 'M' | 'L' | 'devis';
+// MODIFIÉ : Types de taille de commande (ajout mini + sur-mesure, conformité cahier des charges)
+export type OrderSize = 'mini' | 'S' | 'M' | 'L' | 'sur-mesure';
 
-// NOUVEAU : Types de couleur florale
-export type OrderColor = 'neutre' | 'froid' | 'chaud' | 'nuance';
+// MODIFIÉ : Types de couleur florale (conformité cahier des charges : pastel / chaud / surprenez-moi / neutre)
+export type OrderColor = 'pastel' | 'chaud' | 'surprenez-moi' | 'neutre';
 
 // NOUVEAU : Types de livraison
 export type OrderDelivery = 'pickup' | 'home';
@@ -23,9 +23,11 @@ export interface FaqItem {
 }
 
 // NOUVEAU : Interface configuration boutique (chargée depuis config.json)
+// MODIFIÉ : ajout des clés mini/surMesureMin pour les nouvelles tailles
 export interface Config {
-  prices: { S: number; M: number; L: number };
+  prices: { mini: number; S: number; M: number; L: number };
   vasePrice: number;
+  surMesureMin: number;
   whatsappNumber: string;
   shop: {
     name: string;

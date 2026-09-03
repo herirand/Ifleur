@@ -2,10 +2,10 @@
 
 import { $$ } from './utils.js';
 
-// NOUVEAU : Couleur florale sélectionnée
+// MODIFIÉ : Couleur florale sélectionnée (défaut : neutre vert & blanc)
 let selectedColor: string = 'neutre';
 
-// NOUVEAU : Gérer la sélection de couleur
+// MODIFIÉ : Gérer la sélection de couleur (nouvelles palettes pastel / chaud / surprenez-moi / neutre)
 export function selectColor(btn: HTMLElement): void {
   const buttons = $$('#color-row .col-btn');
   buttons.forEach(b => b.classList.remove('selected'));
@@ -15,7 +15,7 @@ export function selectColor(btn: HTMLElement): void {
   if (parent) {
     const classList = Array.from(parent.classList);
     const colorClass = classList.find(c =>
-      ['neutre', 'froid', 'chaud', 'nuance'].includes(c)
+      ['pastel', 'chaud', 'surprenez-moi', 'neutre'].includes(c)
     );
     if (colorClass) {
       selectedColor = colorClass;

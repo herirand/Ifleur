@@ -1,11 +1,12 @@
 {
-  "prices": { "S": 40000, "M": 60000, "L": 80000 },
-  "vasePrice": 8000,
+  "prices": { "mini": 100000, "S": 80000, "M": 120000, "L": 150000 },
+  "vasePrice": 20000,
+  "surMesureMin": 200000,
   "whatsappNumber": "261340476414",
   "shop": {
     "name": "i.fleur",
     "address": "Antananarivo, Madagascar",
-    "hours": "lundi — samedi · 9h–18h",
+    "hours": "lundi — samedi · 9h–18h / monday — saturday · 9am–6pm",
     "instagram": "@ifleurmdg",
     "facebook": "@ifleurmadagascar"
   },
@@ -48,20 +49,32 @@
   },
   "faq": [
     {
-      "q": "Comment entretenir mon bouquet ?",
-      "a": "Dès réception, couper les tiges en biais et les placer dans l'eau fraîche. Changer l'eau tous les deux jours en recoupant les tiges. Placer à l'abri de la chaleur et du soleil direct."
+      "q": "Comment entretenir mon bouquet ? / How should I care for my bouquet ?",
+      "a": "Dès réception, mettez directement le bouquet à l'eau dans un vase. Changer l'eau tous les deux jours en prenant soin de recouper les tiges à chaque fois. / Upon receipt, put the bouquet directly in a vase with water. Change the water every two days, recutting the stems each time."
     },
     {
-      "q": "Comment est composé mon bouquet ?",
-      "a": "Composé d'anthuriums et de fleurs de saison selon la sélection du jour. Tailles : S ~25 cm · M ~35 cm · L ~45 cm de diamètre."
+      "q": "Quand sera livré mon bouquet ? / When will my bouquet be delivered ?",
+      "a": "Suite à votre commande, votre bouquet sera livré entre 10h et 18h du lundi au samedi. / Following your order, your bouquet will be delivered between 10am and 6pm, Monday to Saturday."
     },
     {
-      "q": "Comment fonctionne la livraison ?",
-      "a": "Nous livrons à Antananarivo et environs du lundi au samedi. Après commande, nous vous contactons par WhatsApp pour confirmer le créneau et les frais selon votre quartier."
+      "q": "Comment est composé mon bouquet ? / What is my bouquet made of ?",
+      "a": "Votre bouquet est composé d'anthuriums et de fleurs de saison selon la sélection du jour. Un bouquet unique et contemporain, composé avec attention par notre équipe. / Your bouquet is composed of anthuriums and seasonal flowers from the day's selection. A unique and contemporary bouquet, carefully composed by our team."
     },
     {
-      "q": "Comment confirmer mon paiement MVola ?",
-      "a": "Après votre transfert MVola au 034 04 764 14, envoyez-nous la capture d'écran via WhatsApp. Votre commande est confirmée dès réception."
+      "q": "Je voudrais un abonnement / I would like to subscribe",
+      "a": "Pour souscrire à un abonnement entreprise ou pour votre maison, veuillez nous écrire au +261 34 04 764 14. Nous vous préparerons un devis et une offre sur-mesure. / To subscribe to a floral subscription for your business or home, please contact us at +261 34 04 764 14. We will prepare a tailored quote and a bespoke offer."
+    },
+    {
+      "q": "Je voudrais fleurir un évènement / I would like to decorate an event",
+      "a": "Pour toute demande (mariage, anniversaire, fête d'entreprise, etc.), veuillez nous écrire au +261 34 04 764 14. Nous vous préparerons un devis et une offre sur-mesure. / For any inquiry (wedding, birthday, corporate event), please contact us at +261 34 04 764 14. We will prepare a tailored quote and a bespoke offer."
+    },
+    {
+      "q": "Guide de taille / Size guide",
+      "a": "Mini : approx 15cm · S : approx 20cm · M : approx 30cm · L : approx 40cm. / Mini: approx 15cm · S: approx 20cm · M: approx 30cm · L: approx 40cm."
+    },
+    {
+      "q": "Comment confirmer mon paiement MVola ? / How do I confirm my MVola payment ?",
+      "a": "Après votre transfert MVola au 034 04 764 14, envoyez-nous la capture d'écran via WhatsApp. Votre commande est confirmée dès réception. / After your MVola transfer to 034 04 764 14, send us the screenshot via WhatsApp. Your order is confirmed upon receipt."
     }
   ]
 }

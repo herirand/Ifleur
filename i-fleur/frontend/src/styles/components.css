@@ -1,8 +1,11 @@
-/* NOUVEAU : All component styles extracted from ifleur.html */
+/* MODIFIÉ : Composants UI — raffinement style saison + identité i.fleur */
 
 /* ========== LOGO / TITRE ========== */
-/* NOUVEAU : Logo block centered at top of content */
+/* MODIFIÉ : Logo block — image au lieu du texte */
 .logo-block{text-align:center;margin-bottom:0.5rem;}
+/* NOUVEAU : Logo image */
+.logo-img{max-width:180px;height:auto;display:block;margin:0 auto 0.5rem;}
+/* MODIFIÉ : Logo text fallback — gardé pour compatibilité */
 .logo-title{
   font-family:var(--cinzel);
   font-size:3.6rem;
@@ -14,7 +17,7 @@
   margin-bottom:0.5rem;
 }
 
-/* NOUVEAU : Tagline subtitle */
+/* MODIFIÉ : Tagline — plus aéré */
 .tagline{
   font-size:10px;
   letter-spacing:0.28em;
@@ -24,115 +27,164 @@
   font-weight:400;
 }
 
-/* NOUVEAU : Divider and description */
+/* MODIFIÉ : Divider — trait fin noir pur */
 hr.top{border:none;border-top:1px solid var(--dark);margin-bottom:1.5rem;}
 .description{font-family:var(--serif);font-size:15px;line-height:1.85;margin-bottom:1rem;}
+/* MODIFIÉ : partie anglaise en italique, plus discrète */
+.description em{color:var(--mid);font-size:13px;}
+
+/* MODIFIÉ : Size note — plus discrète */
+.size-note{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--mid);margin:-0.8rem 0 1rem;}
 
 /* ========== STEP HEADERS ========== */
-/* NOUVEAU : Step header with trailing line */
+/* MODIFIÉ : Headers de section — uppercase comme saison-eshop */
 .step-header{
-  font-size:11px;
+  font-size:10px;
   letter-spacing:0.22em;
   font-weight:600;
   color:var(--dark);
-  margin:2rem 0 1.4rem;
+  margin:2rem 0 1.2rem;
   display:flex;
   align-items:center;
   gap:1rem;
   font-family:var(--sans);
+  text-transform:uppercase;
 }
 .step-header::after{content:'';flex:1;height:0.5px;background:var(--light);}
 
-/* ========== CIRCLE SELECTOR ========== */
-/* NOUVEAU : Circle option row */
+/* ========== CIRCLE SELECTOR (taille + vase) ========== */
+/* MODIFIÉ : Cercles — transition cubic-bezier plus douce */
 .circle-row{display:flex;align-items:flex-start;margin-bottom:0.5rem;}
 .c-opt{display:flex;flex-direction:column;align-items:center;gap:0.4rem;}
-.c-btn{width:52px;height:52px;border-radius:50%;border:1.5px solid var(--dark);background:white;font-family:var(--sans);font-size:11px;font-weight:400;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;color:var(--dark);text-align:center;line-height:1.2;padding:4px;}
-.c-btn:hover{background:#f5f5f5;}
-.c-btn.selected{background:var(--dark);color:white;}
+.c-btn{
+  width:52px;height:52px;border-radius:50%;
+  border:1.5px solid var(--dark);background:white;
+  font-family:var(--sans);font-size:11px;font-weight:400;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);color:var(--dark);
+  text-align:center;line-height:1.2;padding:4px;
+}
+.c-btn:hover{background:#f5f5f5;transform:scale(1.04);}
+/* MODIFIÉ : État actif = accent vert au lieu du noir */
+.c-btn.selected{background:var(--accent);color:white;border-color:var(--accent);}
 .c-label{font-size:11px;font-weight:300;color:var(--dark);text-align:center;line-height:1.4;}
 .c-line{flex:1;height:1.5px;background:var(--dark);margin-top:26px;}
 
 /* ========== COLOR SELECTOR ========== */
-/* NOUVEAU : Color option row */
+/* MODIFIÉ : Sélection = accent vert */
 .color-row{display:flex;align-items:flex-start;margin-bottom:0.5rem;}
 .col-opt{display:flex;flex-direction:column;align-items:center;gap:0.4rem;}
-.col-btn{width:52px;height:52px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;transition:border-color 0.2s;}
-.col-btn.selected{border-color:var(--dark);}
+.col-btn{
+  width:52px;height:52px;border-radius:50%;
+  border:2.5px solid transparent;cursor:pointer;
+  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.col-btn:hover{transform:scale(1.06);}
+/* MODIFIÉ : Sélection = accent vert avec ring effect */
+.col-btn.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--accent);}
 .col-label{font-size:11px;font-weight:300;color:var(--dark);text-align:center;line-height:1.4;}
 .col-line{flex:1;height:1.5px;background:var(--dark);margin-top:26px;}
 
-/* NOUVEAU : Floral color gradient presets */
-.neutre  .col-btn{background:radial-gradient(circle at 38% 32%,#f5ede0,#e8d5b8,#d4bc98);}
-.froid   .col-btn{background:radial-gradient(circle at 38% 32%,#fdf0f0,#f5d8d8,#ecc0c0);}
-.chaud   .col-btn{background:radial-gradient(circle at 38% 32%,#8b2040,#6b1530,#4a0d20);}
-.nuance  .col-btn{background:radial-gradient(circle at 38% 32%,#722040,#4e1030,#350820);}
+/* MODIFIÉ : Gradients floraux */
+.neutre      .col-btn{background:radial-gradient(circle at 38% 32%,#f1f7f0,#d6e6cf,#a8c9a0);}
+.pastel      .col-btn{background:radial-gradient(circle at 38% 32%,#fdeef2,#f7d3dd,#eeb4c6);}
+.chaud       .col-btn{background:radial-gradient(circle at 38% 32%,#f4a75a,#d9673a,#9c3a1e);}
+.surprenez-moi .col-btn{background:conic-gradient(from 40deg,#f4a75a,#f5d0d8,#d6e6cf,#b9a7e0,#a7c9e0,#f4a75a);}
 
 /* ========== INPUTS ========== */
-/* NOUVEAU : Form field styling */
-.field{width:100%;border:none;border-bottom:1px solid var(--light);padding:0.6rem 0;font-family:var(--sans);font-size:12px;font-weight:300;color:var(--dark);background:transparent;outline:none;transition:border-color 0.2s;margin-bottom:1rem;letter-spacing:0.02em;}
+/* MODIFIÉ : Champs — transition plus douce */
+.field{
+  width:100%;border:none;border-bottom:1px solid var(--light);
+  padding:0.6rem 0;font-family:var(--sans);font-size:12px;
+  font-weight:300;color:var(--dark);background:transparent;
+  outline:none;transition:border-color 0.3s;margin-bottom:1rem;
+  letter-spacing:0.02em;
+}
 .field:focus{border-bottom-color:var(--dark);}
 textarea.field{resize:none;height:55px;line-height:1.5;}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 
 /* ========== DELIVERY TOGGLE ========== */
-/* NOUVEAU : Delivery method selector */
+/* MODIFIÉ : Toggle livraison — underline actif = accent */
 .delivery-toggle{display:flex;gap:2rem;margin-bottom:1.2rem;flex-wrap:wrap;}
-.d-opt{font-size:12px;cursor:pointer;padding-bottom:3px;border-bottom:1px solid transparent;transition:border-color 0.2s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--sans);font-weight:300;color:var(--dark);}
-.d-opt.active{border-bottom-color:var(--dark);}
+.d-opt{
+  font-size:12px;cursor:pointer;padding-bottom:3px;
+  border-bottom:1.5px solid transparent;transition:all 0.25s;
+  background:none;border-top:none;border-left:none;border-right:none;
+  font-family:var(--sans);font-weight:300;color:var(--dark);
+}
+.d-opt.active{border-bottom-color:var(--accent);font-weight:400;}
 
 /* ========== TOTAL ========== */
-/* NOUVEAU : Order total display */
-.total-row{display:flex;justify-content:space-between;align-items:baseline;margin:2rem 0 1.5rem;padding-top:1rem;border-top:1px solid var(--dark);}
+/* MODIFIÉ : Total — plus impactant */
+.total-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin:2rem 0 1.5rem;padding-top:1rem;
+  border-top:1px solid var(--dark);
+}
 .total-label{font-size:10px;letter-spacing:0.22em;font-weight:600;}
 .total-amount{font-family:var(--serif);font-size:2.2rem;font-weight:300;}
 
 /* ========== PAYMENT BUTTONS ========== */
-/* NOUVEAU : Payment button styles */
-.pay-label{font-size:11px;letter-spacing:0.22em;font-weight:600;color:var(--dark);margin-bottom:0.8rem;}
-.pay-btn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:0.9rem 1rem;border:1px solid var(--light);background:white;font-family:var(--sans);font-size:12px;font-weight:300;letter-spacing:0.04em;cursor:pointer;color:var(--dark);text-decoration:none;transition:all 0.2s;margin-bottom:0.5rem;text-align:left;}
+/* MODIFIÉ : Boutons paiement — bordures discrètes, hover accent */
+.pay-label{font-size:10px;letter-spacing:0.22em;font-weight:600;color:var(--dark);margin-bottom:0.8rem;}
+.pay-btn{
+  display:flex;justify-content:space-between;align-items:center;
+  width:100%;padding:0.9rem 1rem;border:1px solid var(--light);
+  background:white;font-family:var(--sans);font-size:12px;
+  font-weight:300;letter-spacing:0.04em;cursor:pointer;color:var(--dark);
+  text-decoration:none;transition:all 0.25s;margin-bottom:0.5rem;text-align:left;
+}
 .pay-btn:hover{background:var(--dark);color:white;border-color:var(--dark);}
+/* MODIFIÉ : WhatsApp — vert naturel */
 .pay-btn.wa{border-color:#c5e5c5;color:#2a6e2a;}
 .pay-btn.wa:hover{background:#256325;color:white;border-color:#256325;}
+/* MODIFIÉ : Espèces — tons chauds */
 .pay-btn.especes{border-color:#e0d5c0;color:#6b5a30;}
 .pay-btn.especes:hover{background:#6b5a30;color:white;border-color:#6b5a30;}
+/* MODIFIÉ : Sendwave — tons bleus */
 .pay-btn.sendwave{border-color:#c0d5e8;color:#1a4e7a;}
 .pay-btn.sendwave:hover{background:#1a4e7a;color:white;border-color:#1a4e7a;}
 
 /* ========== INFO BOXES ========== */
-/* NOUVEAU : Mobile Money info box */
-.mm-box{display:none;border:1px solid var(--light);padding:1.5rem;margin-bottom:1rem;background:#fafafa;}
+/* MODIFIÉ : Fond transparent — plus épuré comme saison-eshop */
+.mm-box{display:none;border:1px solid var(--light);padding:1.5rem;margin-bottom:1rem;background:transparent;}
 .mm-provider{font-size:10px;letter-spacing:0.2em;color:var(--mid);margin-bottom:0.5rem;font-weight:500;}
 .mm-num{font-family:var(--serif);font-size:1.8rem;font-weight:300;margin-bottom:0.25rem;}
 .mm-name{font-size:12px;color:var(--mid);margin-bottom:1rem;}
 .mm-info{font-size:12px;color:var(--mid);line-height:1.75;margin-bottom:1rem;}
 
-/* NOUVEAU : Cash payment info box */
-.especes-box{display:none;border:1px solid #e0d5c0;padding:1.5rem;margin-bottom:1rem;background:#fdf9f2;}
+/* MODIFIÉ : Espèces — fond transparent */
+.especes-box{display:none;border:1px solid #e0d5c0;padding:1.5rem;margin-bottom:1rem;background:transparent;}
 .especes-box p{font-size:12px;color:#6b5a30;line-height:1.75;}
 
-/* NOUVEAU : Sendwave payment info box */
-.sendwave-box{display:none;border:1px solid #c0d5e8;padding:1.5rem;margin-bottom:1rem;background:#f2f7fc;}
+/* MODIFIÉ : Sendwave — fond transparent */
+.sendwave-box{display:none;border:1px solid #c0d5e8;padding:1.5rem;margin-bottom:1rem;background:transparent;}
 .sendwave-box p{font-size:12px;color:#1a4e7a;line-height:1.75;}
 
 /* ========== FAQ ========== */
-/* NOUVEAU : FAQ section */
 .faq-section{margin-top:3rem;}
 .faq-item{border-top:0.5px solid var(--light);}
 .faq-item:last-child{border-bottom:0.5px solid var(--light);}
-.faq-q{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;cursor:pointer;font-size:12px;font-weight:400;letter-spacing:0.04em;background:none;border:none;width:100%;text-align:left;font-family:var(--sans);color:var(--dark);}
+.faq-q{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:1rem 0;cursor:pointer;font-size:12px;font-weight:400;
+  letter-spacing:0.04em;background:none;border:none;width:100%;
+  text-align:left;font-family:var(--sans);color:var(--dark);
+}
+/* NOUVEAU : FAQ hover accent */
+.faq-q:hover{color:var(--accent);}
 .faq-toggle{font-size:20px;color:var(--mid);transition:transform 0.3s;flex-shrink:0;margin-left:1rem;}
-.faq-item.open .faq-toggle{transform:rotate(45deg);}
+/* MODIFIÉ : Toggle rotation = accent */
+.faq-item.open .faq-toggle{transform:rotate(45deg);color:var(--accent);}
 .faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
 .faq-item.open .faq-a{max-height:400px;}
 .faq-a-inner{padding-bottom:1rem;font-size:12px;color:var(--mid);line-height:1.8;}
 
 /* ========== FOOTER ========== */
-/* NOUVEAU : Site footer */
 .site-footer{margin-top:3rem;padding-top:1.5rem;border-top:0.5px solid var(--light);font-size:11px;color:var(--mid);line-height:2.1;}
 
 /* ========== SELECT (livraison quartier) ========== */
-/* NOUVEAU : Select stylé comme les champs */
 .field-select{
   width:100%;border:none;border-bottom:1px solid var(--light);padding:0.6rem 0;
   font-family:var(--sans);font-size:12px;font-weight:300;color:var(--dark);
@@ -144,14 +196,15 @@ textarea.field{resize:none;height:55px;line-height:1.5;}
 .field-select optgroup{color:var(--dark);background:#fff;font-family:var(--sans);font-size:12px;}
 
 /* ========== RECAP ========== */
-/* NOUVEAU : Bloc récapitulatif de commande */
-.recap-block{border:1px solid var(--light);padding:1.2rem 1.2rem;margin:0 0 1.5rem;background:#fafafa;}
+/* MODIFIÉ : Fond transparent, bordure discrète */
+.recap-block{border:1px solid var(--light);padding:1.2rem 1.2rem;margin:0 0 1.5rem;background:transparent;}
 .recap-title{font-size:10px;letter-spacing:0.22em;font-weight:600;color:var(--dark);margin-bottom:0.8rem;}
 .recap-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.35rem 1rem;font-size:12px;line-height:1.5;}
 .recap-label{color:var(--mid);font-weight:300;}
 .recap-value{color:var(--dark);text-align:right;font-weight:400;word-break:break-word;}
 
 /* ========== CONTACT ========== */
-/* NOUVEAU : Bloc contact */
 .contact-block{border-top:0.5px solid var(--light);padding-top:0.5rem;}
-.contact-block a{border-bottom:0.5px solid var(--dark);text-decoration:none;}
+.contact-block a{border-bottom:0.5px solid var(--dark);text-decoration:none;transition:border-color 0.2s;}
+/* NOUVEAU : Contact hover accent */
+.contact-block a:hover{border-bottom-color:var(--accent);color:var(--accent);}

@@ -112,24 +112,28 @@ export function initPricing(): void {
   refreshRecap();
 }
 
-// NOUVEAU : Remplir le récapitulatif (appelé aussi depuis billing.ts)
+// MODIFIÉ : Remplir le récapitulatif (appelé aussi depuis billing.ts) — lecture robuste des nouvelles options
 export function refreshRecap(): void {
   const setText = (id: string, value: string): void => {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
   };
 
-  const size = document.querySelector('#size-row .c-btn.selected')?.textContent?.trim() || '—';
-  const color = document.querySelector('#color-row .col-btn.selected')?.closest('.col-opt')?.className?.split(' ')[0] || '—';
-  const vase = document.querySelector('#vase-row .c-btn.selected')?.textContent?.trim() || '—';
+  const sizeBtn = document.querySelector('#size-row .c-btn.selected') as HTMLElement | null;
+  const sizeLabel = sizeBtn?.dataset.price === '0'
+    ? 'Sur-mesure / Custom'
+    : (sizeBtn?.textContent?.trim().split('\n')[0] || '—');
+  const colorClass = (document.querySelector('#color-row .col-btn.selected')?.closest('.col-opt') as HTMLElement | null)?.className?.split(' ')[0] || '—';
+  const vaseBtn = document.querySelector('#vase-row .c-btn.selected') as HTMLElement | null;
+  const withVase = vaseBtn ? (parseInt(vaseBtn.dataset.price || '0', 10) || 0) > 0 : false;
   const message = (document.getElementById('message') as HTMLTextAreaElement)?.value?.trim() || '—';
 
-  setText('recap-size', size === '0' ? 'Sur devis / Abo.' : `Taille ${size}`);
-  setText('recap-color', color.charAt(0).toUpperCase() + color.slice(1));
-  setText('recap-vase', vase === 'oui' ? `Oui (+${formatPrice(CONFIG.vasePrice)})` : 'Non');
+  setText('recap-size', sizeLabel);
+  setText('recap-color', colorClass.charAt(0).toUpperCase() + colorClass.slice(1));
+  setText('recap-vase', withVase ? `Oui / Yes (+${formatPrice(CONFIG.vasePrice)})` : 'Non / No');
   setText('recap-message', message);
 
   const st = getPricingState();
-  setText('recap-prix', st.isDevis ? 'Sur devis' : formatPrice(st.basePrice));
-  setText('recap-frais', st.deliveryFee === 0 ? 'Gratuit' : formatPrice(st.deliveryFee));
+  setText('recap-prix', st.isDevis ? 'Sur devis / On quote' : formatPrice(st.basePrice));
+  setText('recap-frais', st.deliveryFee === 0 ? 'Gratuit / Free' : formatPrice(st.deliveryFee));
 }

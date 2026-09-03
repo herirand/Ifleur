@@ -1,21 +1,29 @@
-/* NOUVEAU : Custom properties and base resets - extracted from ifleur.html */
-
+/* MODIFIÉ : Custom properties — palette resserrée style saison-eshop + accent i.fleur */
 *{box-sizing:border-box;margin:0;padding:0;}
 
-/* NOUVEAU : CSS custom properties for theming */
+/* MODIFIÉ : Variables globales — noir pur (#000) comme saison-eshop, accent vert anthurium */
 :root{
   --bg:#ffffff;
-  --dark:#1a1a1a;
-  --mid:#888;
-  --light:#e0e0e0;
+  --dark:#000000;
+  --mid:#999999;
+  --light:#D9D9D9;
+  /* NOUVEAU : Accent vert anthurium — identité propre i.fleur */
+  --accent:#2d5a3d;
   --serif:'Cormorant Garamond',Georgia,serif;
   --sans:'Montserrat',sans-serif;
   --cinzel:'Cinzel',serif;
+  /* NOUVEAU : Gouttière responsive (système saison) */
+  --gutter:3.5rem;
 }
 
 /* NOUVEAU : Base resets */
 html,body{height:100%;}
 body{font-family:var(--sans);font-weight:300;font-size:13px;color:var(--dark);background:var(--bg);line-height:1.7;}
 
-/* NOUVEAU : Placeholder styling */
+/* MODIFIÉ : Placeholder styling — gris plus doux */
 ::placeholder{color:#bbb;}
+
+/* NOUVEAU : Scrollbar discrète pour la colonne contenu */
+.col-content::-webkit-scrollbar{width:4px;}
+.col-content::-webkit-scrollbar-track{background:transparent;}
+.col-content::-webkit-scrollbar-thumb{background:var(--light);border-radius:2px;}
