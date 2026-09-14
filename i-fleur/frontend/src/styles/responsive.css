@@ -1,51 +1,44 @@
-/* MODIFIÉ : Responsive — breakpoints affinés, mobile plus aéré */
+/* MODIFIÉ : Responsive — layout et échelles typographiques alignés sur saison-eshop */
 
-/* NOUVEAU : Tablet (max-width: 1024px) */
-@media(max-width:1024px){
-  :root{--gutter:2.5rem;}
-  .logo-img{max-width:150px;}
-  .logo-title{font-size:3rem;}
+/* NOUVEAU : Grand écran (>= 1300px) */
+@media print,screen and (min-width:1300px){
+  :root{
+    --font300:5rem;
+    --font200:3rem;
+    --font150:1.8rem;
+    --font100:1.3rem;
+    --font80:0.8rem;
+  }
 }
 
-/* MODIFIÉ : Mobile (max-width: 768px) */
-@media(max-width:768px){
-  :root{--gutter:1.5rem;}
-  .layout{grid-template-columns:1fr;}
-  /* MODIFIÉ : Photo plus haute — style saison ~50vh */
-  .col-photo{position:relative;height:50vh;border-right:none;}
+/* MODIFIÉ : Tablet (max-width:1024px) */
+@media print,screen and (max-width:1024px){
+  :root{
+    --gutter:20px;
+    --font300:3rem;
+    --font200:1.8rem;
+    --font150:1.3rem;
+    --font100:1rem;
+    --font90:0.9rem;
+    --logo_hauteur:80px;
+  }
+  .layout{display:block;}
+  .col-photo{position:relative;width:auto;top:auto;bottom:auto;height:60vh;}
+  .col-content{margin-left:0;}
+}
+
+/* MODIFIÉ : Mobile (max-width:768px) */
+@media print,screen and (max-width:768px){
+  :root{
+    --gutter:10px;
+    --font300:2rem;
+    --font200:1.5rem;
+    --font150:1.1rem;
+    --font100:0.9rem;
+    --font90:0.9rem;
+    --logo_hauteur:30px;
+    --hauteur_diapo:30vh;
+  }
+  .col-photo{height:50vh;}
   .col-content{padding:var(--gutter) var(--gutter) 3rem;}
-  .logo-img{max-width:140px;}
-  .logo-title{font-size:2.4rem;}
-  .tagline{margin-bottom:1rem;}
-  /* MODIFIÉ : Cercles taille plus compacts */
-  .circle-row{flex-wrap:wrap;gap:0.3rem;}
-  .c-btn{width:46px;height:46px;font-size:10px;}
-  .c-label{font-size:10px;}
-  /* MODIFIÉ : Cercles couleur plus compacts */
-  .col-btn{width:46px;height:46px;}
-  /* MODIFIÉ : Champs en pleine largeur */
-  .field-row{grid-template-columns:1fr;gap:0.5rem;}
-  /* MODIFIÉ : Recap sur une colonne */
-  .recap-grid{grid-template-columns:1fr;gap:0.15rem 0;}
-  .recap-value{text-align:left;}
-  /* MODIFIÉ : Navigation photo plus discrète */
-  .slide-nav{width:36px;height:36px;font-size:20px;}
-  .nav-prev{left:10px;}
-  .nav-next{right:10px;}
-  /* MODIFIÉ : Total plus petit */
-  .total-amount{font-size:1.8rem;}
-  /* MODIFIÉ : Delivery toggle empilé */
-  .delivery-toggle{flex-direction:column;gap:0.8rem;}
-}
-
-/* NOUVEAU : Petit mobile (max-width: 480px) */
-@media(max-width:480px){
-  :root{--gutter:1.2rem;}
-  .col-photo{height:45vh;}
-  .logo-img{max-width:120px;}
-  .logo-title{font-size:2rem;}
-  .description{font-size:14px;}
-  .c-btn{width:42px;height:42px;font-size:9px;}
-  .col-btn{width:42px;height:42px;}
-  .pay-btn{font-size:11px;padding:0.75rem 0.8rem;}
 }

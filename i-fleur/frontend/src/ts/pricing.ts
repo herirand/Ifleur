@@ -67,13 +67,18 @@ export function selectSize(btn: HTMLElement): void {
     basePrice = parseInt(priceAttr, 10);
   }
 
+  // NOUVEAU : afficher le bloc « prix sur devis » quand le sur-mesure est choisi
+  const smBlock = document.getElementById('size-surmesure-block');
+  if (smBlock) smBlock.classList.toggle('visible', btn.dataset.price === '0');
+
   updateTotal();
   notify();
 }
 
 // MODIFIÉ : Gestion de la sélection de vase
 export function selectVase(btn: HTMLElement): void {
-  const buttons = $$('#vase-row .c-btn');
+  // MODIFIÉ : vase en radio-boîtes (sélecteur .r-btn)
+  const buttons = $$('#vase-row .r-btn');
   buttons.forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
 
@@ -98,7 +103,8 @@ export function initPricing(): void {
     btn.addEventListener('click', () => selectSize(btn));
   });
 
-  $$('#vase-row .c-btn').forEach(btn => {
+  // MODIFIÉ : vase en radio-boîtes (sélecteur .r-btn)
+  $$('#vase-row .r-btn').forEach(btn => {
     btn.addEventListener('click', () => selectVase(btn));
   });
 
@@ -124,7 +130,8 @@ export function refreshRecap(): void {
     ? 'Sur-mesure / Custom'
     : (sizeBtn?.textContent?.trim().split('\n')[0] || '—');
   const colorClass = (document.querySelector('#color-row .col-btn.selected')?.closest('.col-opt') as HTMLElement | null)?.className?.split(' ')[0] || '—';
-  const vaseBtn = document.querySelector('#vase-row .c-btn.selected') as HTMLElement | null;
+  // MODIFIÉ : vase en radio-boîtes (sélecteur .r-btn)
+  const vaseBtn = document.querySelector('#vase-row .r-btn.selected') as HTMLElement | null;
   const withVase = vaseBtn ? (parseInt(vaseBtn.dataset.price || '0', 10) || 0) > 0 : false;
   const message = (document.getElementById('message') as HTMLTextAreaElement)?.value?.trim() || '—';
 

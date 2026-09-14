@@ -1,30 +1,21 @@
-/* MODIFIÉ : Grid layout avec gap responsive + colonnes affinées */
+/* MODIFIÉ : Layout global */
+.layout{min-height:100vh;}
 
-/* MODIFIÉ : Main grid layout */
-.layout{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:100vh;}
+/* MODIFIÉ : Colonne photo — fixe à gauche, 50% */
+.col-photo{position:fixed;width:50%;left:0;top:0;bottom:0;overflow:hidden;z-index:0;}
 
-/* MODIFIÉ : Colonne photo — bordure droite fine comme saison-eshop */
-.col-photo{position:sticky;top:0;height:100vh;overflow:hidden;border-right:0.5px solid var(--light);}
+/* MODIFIÉ : Colonne contenu — à droite, scroll page */
+.col-content{margin-left:50%;padding:var(--gutter);}
 
-/* MODIFIÉ : Colonne contenu — padding via variable gutter */
-.col-content{padding:var(--gutter) var(--gutter) 5rem;overflow-y:auto;}
+/* MODIFIÉ : Bloc logo — header référence (logo centré haut) */
+.logo-block{text-align:center;padding:var(--gutter) var(--gutter) 0;}
+.logo-img{max-height:7vh;width:auto;display:block;margin:0 auto;}
 
-/* NOUVEAU : Boutons navigation photo superposés sur l'image */
-.slide-nav{
-  position:absolute;top:50%;transform:translateY(-50%);
-  width:44px;height:44px;border-radius:50%;
-  border:1px solid rgba(0,0,0,0.35);background:rgba(255,255,255,0.75);
-  color:var(--dark);font-size:24px;line-height:1;font-weight:300;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all 0.25s;z-index:5;
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
-}
-.slide-nav:hover{background:var(--dark);color:#fff;border-color:var(--dark);}
-.nav-prev{left:16px;}
-.nav-next{right:16px;}
+/* MODIFIÉ : Barre de titre "page-title" — exactement le h1 saison */
+.tagline{font-size:var(--font80);letter-spacing:2px;text-transform:uppercase;text-align:center;padding:10px 0;border-bottom:var(--border);margin-bottom:var(--gutter);}
 
-/* NOUVEAU : Pagination pastilles superposées en bas de l'image */
+/* MODIFIÉ : Pagination numérotée — centrée bas de photo */
 .slide-dots{
-  position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
+  position:absolute;bottom:calc(var(--gutter)*2);left:50%;transform:translateX(-50%);
   display:flex;gap:8px;z-index:5;
 }

@@ -1,29 +1,49 @@
-/* MODIFIÉ : Custom properties — palette resserrée style saison-eshop + accent i.fleur */
-*{box-sizing:border-box;margin:0;padding:0;}
-
-/* MODIFIÉ : Variables globales — noir pur (#000) comme saison-eshop, accent vert anthurium */
-:root{
-  --bg:#ffffff;
-  --dark:#000000;
-  --mid:#999999;
-  --light:#D9D9D9;
-  /* NOUVEAU : Accent vert anthurium — identité propre i.fleur */
-  --accent:#2d5a3d;
-  --serif:'Cormorant Garamond',Georgia,serif;
-  --sans:'Montserrat',sans-serif;
-  --cinzel:'Cinzel',serif;
-  /* NOUVEAU : Gouttière responsive (système saison) */
-  --gutter:3.5rem;
+/* MODIFIÉ : Polices — typeface Saison (woff2/woff) comme saison-eshop */
+@font-face{
+  font-family:'Saison';
+  src:url('../fonts/Saison.woff2') format('woff2'),
+      url('../fonts/Saison.woff') format('woff');
+  font-weight:normal;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Saison';
+  src:url('../fonts/Saison.woff2') format('woff2'),
+      url('../fonts/Saison.woff') format('woff');
+  font-weight:bold;
+  font-style:normal;
+  font-display:swap;
 }
 
-/* NOUVEAU : Base resets */
+/* MODIFIÉ : Reset universel */
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* MODIFIÉ : Variables globales — tokens exacts de la référence saison-eshop */
+:root{
+  --font_base:'Saison',sans-serif;
+  --font:'Saison',sans-serif;
+  --noir:#000;
+  --blanc:#FFF;
+  --grisclair:#F5F5F5;
+  --gris:#D9D9D9;
+  --gutter:25px;
+  --font300:4rem;
+  --font200:2.5rem;
+  --font150:1.6rem;
+  --font100:1.1rem;
+  --font90:1rem;
+  --font85:0.9rem;
+  --font80:0.7rem;
+  --logo_hauteur:150px;
+  --hauteur_diapo:70vh;
+  --border:1px solid var(--noir);
+  --bord:1px solid var(--noir);
+}
+
+/* MODIFIÉ : Base document */
 html,body{height:100%;}
-body{font-family:var(--sans);font-weight:300;font-size:13px;color:var(--dark);background:var(--bg);line-height:1.7;}
+body{font-family:var(--font_base);font-weight:normal;font-size:var(--font85);line-height:1.7;color:var(--noir);background:var(--blanc);}
 
-/* MODIFIÉ : Placeholder styling — gris plus doux */
-::placeholder{color:#bbb;}
-
-/* NOUVEAU : Scrollbar discrète pour la colonne contenu */
-.col-content::-webkit-scrollbar{width:4px;}
-.col-content::-webkit-scrollbar-track{background:transparent;}
-.col-content::-webkit-scrollbar-thumb{background:var(--light);border-radius:2px;}
+/* MODIFIÉ : Placeholder global — style référence exact */
+::placeholder{color:var(--gris);font-size:var(--font80);text-transform:lowercase;}

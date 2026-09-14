@@ -4,51 +4,50 @@
 
 Repo for **i.fleur**, a flower boutique in Antananarivo, Madagascar. Contains TWO distinct sites:
 
-1. **`ifleur.html`** — legacy static single-file page (inline CSS/JS, base64 images, no build).
-2. **`i-fleur/`** — active frontend site. **100% static, no backend in production** (deployed to Netlify). This is the primary working app.
+1. **`ifleur.html`** — legacy static single-file page (inline CSS/JS, base64 images, no build). Not the working app; ignore for new work.
+2. **`i-fleur/frontend/`** — the ACTIVE app: 100% static, TypeScript + esbuild, deployed to Netlify. This is the primary working directory.
 
-## Structure
+## Layout
 
-- `ifleur.html` — self-contained legacy page; all CSS/JS inline, Google Fonts only dependency
-- `site web.pptx` — the spec / cahier des charges (design reference: saison-eshop.com; prices in pptx are EUROS — the Ariary prices in code are correct)
-- `netlify.toml` — Netlify static deploy (build command + publish dir)
-- `i-fleur/frontend/` — the active static site
-- `i-fleur/backend/` — **archived, NOT deployed** (Fastify skeleton from an earlier approach; Netlify free can't run node servers). Do not touch; keep as reference only
-- `i-fleur/to/backend/` — source/backup copy of that backend (entrypoint `index.ts`); legacy, do not edit
+- `ifleur.html` — legacy self-contained page (Google Fonts only external dependency)
+- `site web.pptx` — spec / cahier des charges (design reference: saison-eshop.com). **Its euro prices are wrong — trust the Ariary figures in code.**
+- `netlify.toml` — Netlify deploy: build `cd i-fleur/frontend && npm run build`, publish `i-fleur/frontend`, Node 20
+- `i-fleur/` — active site (see `i-fleur/AGENTS.md` for code-level detail)
+- No backend anywhere in this repo (the Fastify backend was removed/archived). Do not create or restore one.
 
-## i-fleur Frontend (active)
+## Commands (run in `i-fleur/frontend/`)
 
-Stack: TypeScript + esbuild. No framework, no runtime network calls (config is imported JSON). JSON storage inside the bundle.
+- **Dev**: `npm install && npm run dev` → bundles `src/ts/main.ts` → `dist/app.js` AND serves the dir on `:8000` (single command; don't run esbuild manually)
+- **Build**: `npm run build` (esbuild minify → `dist/app.js`; Netlify runs this on deploy)
+- **Typecheck**: `npx tsc --noEmit` — only static check (no tests, no linter)
+- `dist/` is gitignored — never commit the bundle; always rebuild before testing/deploying
 
-### Commands
-- **Dev**: `cd i-fleur/frontend && npm install && npm run dev` → esbuild bundles `src/ts/main.ts` → `dist/app.js` AND serves the dir (`--servedir=.`) on `:8000`; one command does both
-- **Build**: `cd i-fleur/frontend && npm run build` (esbuild minify → `dist/app.js`)
-- **Typecheck**: `cd i-fleur/frontend && npx tsc --noEmit`
-- No test framework, no linter configured
-- Never commit `dist/app.js`? (`dist/` is gitignored; Netlify rebuilds it)
+## Prices & config (high gotcha)
 
-### Key facts
-- All prices, WhatsApp number, shop info, delivery zones, and FAQ live in **`src/ts/config.json`** (imported directly into the bundle). To change a quartier/delivery fee: edit that JSON, then `npm run build`, then redeploy.
-- Delivery zones: each zone has `fee` (`0` = free, `null` = "sur devis"/hors zone) + list of `quartiers`.
-- Frontend modules: `main.ts` (orchestration), `data.ts` (config access), `pricing.ts` (total = price + vase + delivery fee), `delivery.ts` (quartier select), `billing.ts` (billing fields + validation), `payment.ts` (WhatsApp message + validation), `selectors.ts`, `slider.ts`. No `api.ts` — the API client was removed.
-- Ordering = WhatsApp only (wa.me/261340476414 with a pre-filled message). No backend / no order storage / no back-office.
+- All business data lives in **`src/ts/config.json`** (prices, vase price, sur-mesure min, WhatsApp number, shop info, delivery zones, FAQ). It is baked into the bundle at build time — no runtime network calls. Edit the JSON → rebuild → redeploy.
+- Product prices are actually read from the `data-price` attributes on the size/vase buttons in **`index.html`**, so a price change must be made in **two places (`index.html` + `config.json`)** — keep them in sync or the total/recap will drift.
+- Current prices (Ar): Mini 100 000 · S 80 000 · M 120 000 · L 150 000 · vase +20 000 · sur-mesure min 200 000.
+- Delivery zones in `config.json`: `fee` `0` = free, `null` = "sur devis"/hors zone, plus a list of `quartiers`; périphérie = +20 000 Ar.
 
-### Editing conventions (mandatory)
-- Mark every change: `// NOUVEAU : [desc]` for new code, `// MODIFIÉ : [desc]` for changed code
-- Backend code is COPY-PASTE ONLY — if backend work is ever needed, never edit `i-fleur/backend/src` directly; hand the user ready-to-integrate code
+## Code layout
 
-## Key Context
+- Modules in `src/ts/`: `main.ts` (entrypoint), `data.ts` (config access), `pricing.ts` (total = size + vase + delivery), `delivery.ts` (quartier select), `billing.ts` (fields + validation), `payment.ts` (WhatsApp message), `selectors.ts`, `slider.ts`, `types.ts`, `utils.ts`.
+- CSS split across `src/styles/*.css`.
+- Imports use explicit `.js` extensions (e.g. `import { CONFIG } from './data.js';`).
+- Ordering = WhatsApp only (`wa.me/261340476414` with a pre-filled message). No order storage / no back-office.
 
-- Language: French (Malagasy market)
-- Currency: Ariary (Ar); prices S=40k, M=60k, L=80k, vase +8k, périphérie +20k (from pptx zones)
-- Payment: WhatsApp ordering, MVola, Sendwave/PayPal, cash on delivery
-- Delivery: Antananarivo only, pickup (free) or home delivery (fee by quartier zone); 24h advance notice, same-day via phone
-- WhatsApp: +261 34 04 764 14
-- Contact: Instagram @ifleurmdg, Facebook @ifleurmadagascar
+## Conventions (mandatory)
 
-## Editing Notes
+- Mark every code change with a comment:
+  - `// NOUVEAU : [desc]` for new code
+  - `// MODIFIÉ : [desc]` for changed code
+- Comments in French; UI copy is bilingual FR/EN.
+- Prices are in Ariary (`Ar`); ignore the euro figures from the pptx.
+- Backend is COPY-PASTE ONLY — never hand-edit archived backend source; hand the user ready-to-integrate code.
 
-- Legacy `ifleur.html`: prices hardcoded in `data-price` attributes and JS vars
-- i-fleur: config from `src/ts/config.json`; CSS/TS split across `src/styles/*` and `src/ts/*`
-- Deploy: Netlify → repo root, build `cd i-fleur/frontend && npm run build`, publish `i-fleur/frontend`
-- No tests, no linting, no build step for the legacy page; i-fleur has a `build` step
+## Key facts
+
+- Payment: order via the WhatsApp form, pay by MVola, Sendwave/PayPal, or cash on delivery.
+- Delivery: Antananarivo only; pickup free or home delivery (fee by quartier zone); 24h advance notice, same-day via phone.
+- WhatsApp +261 34 04 764 14 · Instagram @ifleurmdg · Facebook @ifleurmadagascar.
+- Legacy `ifleur.html`: prices hardcoded in `data-price` attributes + JS vars, NOT synced with the active site.

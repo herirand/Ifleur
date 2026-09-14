@@ -61,7 +61,7 @@ export function stopAutoplay(): void {
   }
 }
 
-// MODIFIÉ : Initialiser le slider, les dots et les boutons de navigation
+// MODIFIÉ : slider sans flèches (pagination numérotée seule, style saison)
 export function initSlider(): void {
   const dots = $$('.dot');
 
@@ -70,12 +70,6 @@ export function initSlider(): void {
       manualNavigate(() => goTo(i));
     });
   });
-
-  // NOUVEAU : boutons précédent / suivant
-  const prevBtn = $('.nav-prev');
-  const nextBtn = $('.nav-next');
-  prevBtn?.addEventListener('click', () => manualNavigate(prev));
-  nextBtn?.addEventListener('click', () => manualNavigate(next));
 
   goTo(0);
   startAutoplay();

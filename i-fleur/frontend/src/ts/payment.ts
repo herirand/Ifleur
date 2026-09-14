@@ -39,7 +39,8 @@ function buildWhatsAppMessage(): string {
     ? 'Sur-mesure / custom'
     : (sizeBtn?.textContent?.trim().split('\n')[0] || '—');
   const color = getSelectedColor();
-  const vaseBtn = document.querySelector('#vase-row .c-btn.selected') as HTMLElement | null;
+  // MODIFIÉ : vase en radio-boîtes (sélecteur .r-btn)
+  const vaseBtn = document.querySelector('#vase-row .r-btn.selected') as HTMLElement | null;
   const withVase = vaseBtn ? (parseInt(vaseBtn.dataset.price || '0', 10) || 0) > 0 : false;
   const message = (document.getElementById('message') as HTMLTextAreaElement)?.value?.trim() || '—';
 

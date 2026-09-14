@@ -1,45 +1,26 @@
-/* MODIFIÉ : Animations — transitions plus douces, cubic-bezier unifié */
+/* MODIFIÉ : Piste du slider — glissement horizontal 0.3s (défaut swiper de référence) */
+.slides{display:flex;height:100%;transition:transform .3s linear;}
 
-/* MODIFIÉ : Slide container — easing plus naturel */
-.slides{display:flex;height:100%;transition:transform 0.8s cubic-bezier(0.4,0,0.2,1);}
-
-/* NOUVEAU : Individual slide */
+/* MODIFIÉ : Slide — pleine surface */
 .slide{min-width:100%;height:100%;background-size:cover;background-position:center;}
 
-/* MODIFIÉ : Dot pagination — transition plus fluide */
+/* MODIFIÉ : Pagination — carrés 35px (référence .swiper-pagination-bullet) */
 .dot{
-  width:30px;height:30px;border-radius:50%;border:1.5px solid var(--dark);
-  background:white;font-family:var(--sans);font-size:11px;font-weight:400;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all 0.3s cubic-bezier(0.4,0,0.2,1);color:var(--dark);
+  width:35px;height:35px;border-radius:0;
+  background:var(--blanc);border:1px solid var(--blanc);
+  color:var(--noir);font-family:var(--font);font-size:1rem;
+  line-height:35px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .3s linear;
 }
-.dot.active{background:var(--dark);color:white;}
-.dot:hover:not(.active){background:#f0f0f0;}
+.dot.active{background:var(--noir);border-color:var(--noir);color:var(--blanc);}
+.dot:hover:not(.active){background:var(--grisclair);}
 
-/* NOUVEAU : Color button transition */
-.col-btn{transition:all 0.3s cubic-bezier(0.4,0,0.2,1);}
+/* MODIFIÉ : Transitions unifiées .3s linear (référence) */
+.col-btn,.col-opt,.c-btn,.r-btn,.d-opt,.field,.field-select,.faq-toggle,.faq-a{transition:all .3s linear;}
+.col-btn{transition:all .3s linear;}
+.pay-btn{transition:all .3s linear;}
 
-/* NOUVEAU : Payment button transitions */
-.pay-btn{transition:all 0.25s cubic-bezier(0.4,0,0.2,1);}
-
-/* NOUVEAU : FAQ toggle rotation animation */
-.faq-toggle{transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);}
-.faq-item.open .faq-toggle{transform:rotate(45deg);}
-
-/* NOUVEAU : FAQ answer expand/collapse */
-.faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1);}
-.faq-item.open .faq-a{max-height:400px;}
-
-/* NOUVEAU : Field focus transition */
-.field{transition:border-color 0.3s;}
-
-/* NOUVEAU : Circle button transition */
-.c-btn{transition:all 0.3s cubic-bezier(0.4,0,0.2,1);}
-
-/* NOUVEAU : Delivery option transition */
-.d-opt{transition:all 0.25s cubic-bezier(0.4,0,0.2,1);}
-
-/* NOUVEAU : Reduced motion respect */
+/* NOUVEAU : prefers-reduced-motion */
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{
     animation-duration:0.01ms !important;
