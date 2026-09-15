@@ -40,5 +40,7 @@
     --hauteur_diapo:30vh;
   }
   .col-photo{height:50vh;}
-  .col-content{padding:var(--gutter) var(--gutter) 3rem;}
+  /* MODIFIÉ : padding-top:0 — logo collé en haut (cohérent avec le layout desktop) */
+  .col-content{padding:0 var(--gutter) 3rem;}
+  .col-content.site-head{padding-bottom:0;}
 }

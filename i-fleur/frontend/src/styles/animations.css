@@ -4,9 +4,9 @@
 /* MODIFIÉ : Slide — pleine surface */
 .slide{min-width:100%;height:100%;background-size:cover;background-position:center;}
 
-/* MODIFIÉ : Pagination — carrés 35px (référence .swiper-pagination-bullet) */
+/* MODIFIÉ : Pagination — ronds 35px (diamètre moitié du carré d'origine, exigence client : boutons ronds) */
 .dot{
-  width:35px;height:35px;border-radius:0;
+  width:35px;height:35px;border-radius:50%;
   background:var(--blanc);border:1px solid var(--blanc);
   color:var(--noir);font-family:var(--font);font-size:1rem;
   line-height:35px;cursor:pointer;display:flex;align-items:center;justify-content:center;
@@ -15,9 +15,8 @@
 .dot.active{background:var(--noir);border-color:var(--noir);color:var(--blanc);}
 .dot:hover:not(.active){background:var(--grisclair);}
 
-/* MODIFIÉ : Transitions unifiées .3s linear (référence) */
-.col-btn,.col-opt,.c-btn,.r-btn,.d-opt,.field,.field-select,.faq-toggle,.faq-a{transition:all .3s linear;}
-.col-btn{transition:all .3s linear;}
+/* MODIFIÉ : Transitions unifiées .3s linear (référence) — .col-btn retiré : référence saison-eshop = sélection couleur instantanée, sans transition */
+.col-opt,.c-btn,.r-btn,.d-opt,.field,.field-select,.faq-toggle,.faq-a{transition:all .3s linear;}
 .pay-btn{transition:all .3s linear;}
 
 /* NOUVEAU : prefers-reduced-motion */

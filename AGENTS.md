@@ -27,6 +27,7 @@ Repo for **i.fleur**, a flower boutique in Antananarivo, Madagascar. Contains TW
 - All business data lives in **`src/ts/config.json`** (prices, vase price, sur-mesure min, WhatsApp number, shop info, delivery zones, FAQ). It is baked into the bundle at build time — no runtime network calls. Edit the JSON → rebuild → redeploy.
 - Product prices are actually read from the `data-price` attributes on the size/vase buttons in **`index.html`**, so a price change must be made in **two places (`index.html` + `config.json`)** — keep them in sync or the total/recap will drift.
 - Current prices (Ar): Mini 100 000 · S 80 000 · M 120 000 · L 150 000 · vase +20 000 · sur-mesure min 200 000.
+- `i-fleur/README.md` is stale: it says vase is +8 000 Ar (wrong — actual is +20 000 Ar). Trust `config.json`/`index.html`, not the README.
 - Delivery zones in `config.json`: `fee` `0` = free, `null` = "sur devis"/hors zone, plus a list of `quartiers`; périphérie = +20 000 Ar.
 
 ## Code layout

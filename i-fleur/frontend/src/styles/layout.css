@@ -1,21 +1,62 @@
 /* MODIFIÉ : Layout global */
-.layout{min-height:100vh;}
+.layout {
+  min-height: 100vh;
+}
 
 /* MODIFIÉ : Colonne photo — fixe à gauche, 50% */
-.col-photo{position:fixed;width:50%;left:0;top:0;bottom:0;overflow:hidden;z-index:0;}
+.col-photo {
+  position: fixed;
+  width: 50%;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 0;
+}
 
-/* MODIFIÉ : Colonne contenu — à droite, scroll page */
-.col-content{margin-left:50%;padding:var(--gutter);}
+/* MODIFIÉ : Colonne contenu — à droite, scroll (padding-top:0 pour coller le logo en haut) */
+.col-content {
+  margin-left: 50%;
+  padding: 0 var(--gutter) var(--gutter);
+}
 
-/* MODIFIÉ : Bloc logo — header référence (logo centré haut) */
-.logo-block{text-align:center;padding:var(--gutter) var(--gutter) 0;}
-.logo-img{max-height:7vh;width:auto;display:block;margin:0 auto;}
+/* MODIFIÉ : Header logo + tagline (colonne droite desktop ; full-width et en HAUT en stacked) */
+.site-head {
+  padding: 0 var(--gutter);
+}
+
+/* MODIFIÉ : Bloc logo — header référence (logo centré haut, sans padding haut : tout en haut) */
+.logo-block {
+  text-align: center;
+  padding: 0 var(--gutter);
+}
+
+/* MODIFIÉ : Logo agrandi — max-height 9vh (7vh → 9vh) */
+.logo-img {
+  max-height: 15vh;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+}
 
 /* MODIFIÉ : Barre de titre "page-title" — exactement le h1 saison */
-.tagline{font-size:var(--font80);letter-spacing:2px;text-transform:uppercase;text-align:center;padding:10px 0;border-bottom:var(--border);margin-bottom:var(--gutter);}
+.tagline {
+  font-size: var(--font80);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 10px 0;
+  border-bottom: var(--border);
+  margin-bottom: var(--gutter);
+}
 
 /* MODIFIÉ : Pagination numérotée — centrée bas de photo */
-.slide-dots{
-  position:absolute;bottom:calc(var(--gutter)*2);left:50%;transform:translateX(-50%);
-  display:flex;gap:8px;z-index:5;
+.slide-dots {
+  position: absolute;
+  bottom: calc(var(--gutter)*2);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 5;
 }

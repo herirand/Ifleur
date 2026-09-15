@@ -40,8 +40,8 @@
 .pastel .col-btn{background:linear-gradient(135deg,#FFFFFF 0%,#E0E8F2 25%,#C1CCDE 50%,#7B8C9E 75%,#303D4A 100%);}
 .chaud .col-btn{background:linear-gradient(135deg,#FFF055 0%,#FFD56B 25%,#FFB080 50%,#F48AB1 75%,#A04F6B 100%);}
 .surprenez-moi .col-btn{background:linear-gradient(135deg,#FFEA00 0%,#FFBC2C 25%,#FF9050 50%,#A070FF 75%,#6C00FF 100%);}
-/* MODIFIÉ : État actif — cercle 100% noir (après les gradients pour gagner en spécificité) */
-.color-row .col-btn.selected{background:var(--noir);border-color:var(--noir);}
+/* MODIFIÉ : État actif — seul le filet passe au noir, le dégradé reste visible (background-color longhand : le background-image du dégradé le recouvre, miroir référence saison-eshop) */
+.color-row .col-btn.selected{background-color:var(--noir);border-color:var(--noir);}
 /* MODIFIÉ : Libellé couleur — majuscules espacées */
 .col-label{font-size:var(--font80);text-transform:uppercase;letter-spacing:2px;color:var(--noir);text-align:center;padding:2px 15px;}
 /* MODIFIÉ : Filet de connexion — le filet est le ::after de .color-row */
@@ -84,6 +84,9 @@ textarea.field{resize:vertical;height:auto;min-height:80px;line-height:1.5;}
 .field-select{width:100%;border:none;border-radius:0;background:var(--grisclair);padding:10px;font-family:var(--font);font-size:var(--font90);color:var(--noir);outline:none;margin-bottom:10px;cursor:pointer;-webkit-appearance:none;appearance:none;}
 .field-select option,.field-select optgroup{color:var(--noir);background:var(--blanc);}
 
+/* NOUVEAU : Champ en erreur de validation — bordure rouge (référence saison-eshop : input.error → border:2px solid red) */
+.field.field-error,.field-select.field-error{border:2px solid #FF0000;}
+
 /* ========== TOTAL ========== */
 /* MODIFIÉ : Ligne du total — prise entre deux filets, montant 2.5rem */
 .total-row{display:flex;justify-content:space-between;align-items:center;margin:30px 0;padding:20px 0 15px;border-top:var(--border);border-bottom:var(--border);font-size:var(--font200);}
@@ -112,9 +115,10 @@ textarea.field{resize:vertical;height:auto;min-height:80px;line-height:1.5;}
 .pay-label{font-size:var(--font80);letter-spacing:3px;text-transform:uppercase;margin-bottom:15px;}
 /* MODIFIÉ : Bouton principal — pleine largeur, padding 30/15/25, hover inversé */
 .pay-btn{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;margin-top:30px;padding:30px 15px 25px;background:var(--grisclair);color:var(--noir);border:none;border-radius:0;font-family:var(--font);font-size:var(--font150);letter-spacing:3px;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .3s linear;text-align:left;white-space:normal;}
-.pay-btn:hover{background:var(--noir);color:var(--blanc);}
 /* MODIFIÉ : Bouton secondaire — plus léger */
 .pay-btn.secondary{font-size:var(--font80);letter-spacing:2px;padding:14px 15px;margin-top:8px;background:var(--blanc);}
+/* MODIFIÉ : Hover inversé — déclaré APRÈS .secondary (même spécificité (0,2,0)) pour que le fond noir gagne : sinon hover gardait le fond blanc + texte blanc = texte invisible au click */
+.pay-btn:hover{background:var(--noir);color:var(--blanc);}
 
 /* ========== BOÎTES D'INFORMATION PAIEMENT ========== */
 /* MODIFIÉ : Boîtes info — fond gris clair, ouvertes uniquement via JS */

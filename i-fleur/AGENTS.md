@@ -32,6 +32,8 @@ npx tsc --noEmit # typecheck
 
 Everything business-configurable lives in **`src/ts/config.json`**, imported directly into the bundle (`data.ts` exports `CONFIG`). There is no `fetch`/API — the JSON is baked into `app.js` at build time. **Changing delivery zones, prices, or FAQ requires editing that JSON, then `npm run build` (or `dev`), then redeploy** — editing the HTML/TS alone will not change behavior.
 
+> `README.md` in this folder is stale (it claims vase = +8 000 Ar; code says +20 000 Ar, see `config.json` and the vase button in `index.html`). Trust code, not the README.
+
 Delivery zones semantics (`.delivery.zones`):
 - `fee`: `0` = free, number = delivery fee, `null` = "sur devis" / hors zone.
 - A zone with empty `quartiers` **and** `fee: null` is treated as the hors-zone fallback and is **excluded** from the quartier `<select>` (`data.ts:findZoneForQuartier` / `getAllQuartiers`).
