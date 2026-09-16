@@ -1,20 +1,20 @@
-// NOUVEAU : Module carrousel d'images (slider)
+// Module carrousel d'images (slider)
 
 import { $, $$ } from './utils.js';
 
-// NOUVEAU : Index courant du slide actif
+// Index courant du slide actif
 let current = 0;
 
-// NOUVEAU : Nombre total de slides
+// Nombre total de slides
 const SLIDE_COUNT = 4;
 
-// NOUVEAU : Intervalle auto-play en ms
+// Intervalle auto-play en ms
 const AUTOPLAY_MS = 4500;
 
-// NOUVEAU : Timer de l'auto-play
+// Timer de l'auto-play
 let autoplayTimer: ReturnType<typeof setInterval> | null = null;
 
-// NOUVEAU : Naviguer vers un slide spécifique
+// Naviguer vers un slide spécifique
 export function goTo(n: number): void {
   current = n;
 
@@ -30,30 +30,30 @@ export function goTo(n: number): void {
   });
 }
 
-// NOUVEAU : Avancer au slide suivant
+// Avancer au slide suivant
 function next(): void {
   goTo((current + 1) % SLIDE_COUNT);
 }
 
-// NOUVEAU : Reculer au slide précédent
+// Reculer au slide précédent
 function prev(): void {
   goTo((current - 1 + SLIDE_COUNT) % SLIDE_COUNT);
 }
 
-// NOUVEAU : Action navigation (stop l'auto-play puis navigue)
+// Action navigation (stop l'auto-play puis navigue)
 function manualNavigate(fn: () => void): void {
   stopAutoplay();
   fn();
   startAutoplay();
 }
 
-// NOUVEAU : Démarrer l'auto-play
+// Démarrer l'auto-play
 export function startAutoplay(): void {
   stopAutoplay();
   autoplayTimer = setInterval(next, AUTOPLAY_MS);
 }
 
-// NOUVEAU : Arrêter l'auto-play
+// Arrêter l'auto-play
 export function stopAutoplay(): void {
   if (autoplayTimer !== null) {
     clearInterval(autoplayTimer);
@@ -61,7 +61,7 @@ export function stopAutoplay(): void {
   }
 }
 
-// MODIFIÉ : slider sans flèches (pagination numérotée seule, style saison)
+// slider sans flèches (pagination numérotée seule, style saison)
 export function initSlider(): void {
   const dots = $$('.dot');
 

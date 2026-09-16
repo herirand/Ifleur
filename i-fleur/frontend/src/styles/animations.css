@@ -1,30 +1,74 @@
-/* MODIFIÉ : Piste du slider — glissement horizontal 0.3s (défaut swiper de référence) */
-.slides{display:flex;height:100%;transition:transform .3s linear;}
-
-/* MODIFIÉ : Slide — pleine surface */
-.slide{min-width:100%;height:100%;background-size:cover;background-position:center;}
-
-/* MODIFIÉ : Pagination — ronds 35px (diamètre moitié du carré d'origine, exigence client : boutons ronds) */
-.dot{
-  width:35px;height:35px;border-radius:50%;
-  background:var(--blanc);border:1px solid var(--blanc);
-  color:var(--noir);font-family:var(--font);font-size:1rem;
-  line-height:35px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:all .3s linear;
+/* Piste du slider — glissement horizontal 0.3s (défaut swiper de référence) */
+.slides {
+  display: flex;
+  height: 100%;
+  transition: transform .3s linear;
 }
-.dot.active{background:var(--noir);border-color:var(--noir);color:var(--blanc);}
-.dot:hover:not(.active){background:var(--grisclair);}
 
-/* MODIFIÉ : Transitions unifiées .3s linear (référence) — .col-btn retiré : référence saison-eshop = sélection couleur instantanée, sans transition */
-.col-opt,.c-btn,.r-btn,.d-opt,.field,.field-select,.faq-toggle,.faq-a{transition:all .3s linear;}
-.pay-btn{transition:all .3s linear;}
+/* Slide — pleine surface */
+.slide {
+  min-width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
 
-/* NOUVEAU : prefers-reduced-motion */
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation-duration:0.01ms !important;
-    animation-iteration-count:1 !important;
-    transition-duration:0.01ms !important;
+/* Pagination — ronds 35px (diamètre moitié du carré d'origine, exigence client : boutons ronds) */
+.dot {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: var(--blanc);
+  border: 1px solid var(--blanc);
+  color: var(--noir);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 35px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .3s linear;
+}
+
+.dot.active {
+  background: var(--noir);
+  border-color: var(--noir);
+  color: var(--blanc);
+}
+
+.dot:hover:not(.active) {
+  background: var(--grisclair);
+}
+
+/* Transitions unifiées .3s linear (référence) — .col-btn retiré : référence saison-eshop = sélection couleur instantanée, sans transition */
+.col-opt,
+.c-btn,
+.r-btn,
+.d-opt,
+.field,
+.field-select,
+.faq-toggle,
+.faq-a {
+  transition: all .3s linear;
+}
+
+.pay-btn {
+  transition: all .3s linear;
+}
+
+/* prefers-reduced-motion */
+@media(prefers-reduced-motion:reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-  .slides{transition:none;}
+
+  .slides {
+    transition: none;
+  }
 }

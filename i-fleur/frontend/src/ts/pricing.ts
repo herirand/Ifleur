@@ -1,15 +1,15 @@
-// MODIFIÉ : Module calcul des prix et gestion des tailles/vases (+ frais de livraison)
+// Module calcul des prix et gestion des tailles/vases (+ frais de livraison)
 
 import { $, $$, formatPrice } from './utils.js';
 import { CONFIG } from './data.js';
 
-// NOUVEAU : État du pricing
+// État du pricing
 let basePrice = CONFIG.prices.S;
 let vasePrice = 0;
 let isDevis = false;
-let deliveryFee = 0; // NOUVEAU : frais de la zone sélectionnée (0 si retrait)
+let deliveryFee = 0; // frais de la zone sélectionnée (0 si retrait)
 
-// NOUVEAU : Fonction d'abonnement pour notifier les changements de total
+// Fonction d'abonnement pour notifier les changements de total
 // (utilisée par delivery.ts pour recalculer quand le quartier change)
 type TotalListener = (total: number, isDevis: boolean) => void;
 let listeners: TotalListener[] = [];
@@ -18,14 +18,14 @@ export function onTotalChange(fn: TotalListener): void {
   listeners.push(fn);
 }
 
-// NOUVEAU : Mettre à jour les frais de livraison (appelé par delivery.ts)
+// Mettre à jour les frais de livraison (appelé par delivery.ts)
 export function setDeliveryFee(fee: number): void {
   deliveryFee = fee;
   updateTotal();
   notify();
 }
 
-// NOUVEAU : Mettre à jour le mode livraison (retrait = 0 frais)
+// Mettre à jour le mode livraison (retrait = 0 frais)
 export function setDeliveryHome(home: boolean): void {
   if (!home) {
     deliveryFee = 0;
@@ -34,17 +34,17 @@ export function setDeliveryHome(home: boolean): void {
   }
 }
 
-// NOUVEAU : Calculer le total courant
+// Calculer le total courant
 export function getTotal(): number {
   return basePrice + vasePrice + deliveryFee;
 }
 
-// NOUVEAU : Récupérer les frais de livraison courant
+// Récupérer les frais de livraison courant
 export function getDeliveryFee(): number {
   return deliveryFee;
 }
 
-// NOUVEAU : Mettre à jour l'affichage du total
+// Mettre à jour l'affichage du total
 export function updateTotal(): void {
   const display = $('#total-display');
   if (display) {
@@ -52,7 +52,7 @@ export function updateTotal(): void {
   }
 }
 
-// MODIFIÉ : Gestion de la sélection de taille
+// Gestion de la sélection de taille
 export function selectSize(btn: HTMLElement): void {
   const buttons = $$('#size-row .c-btn');
   buttons.forEach(b => b.classList.remove('selected'));
@@ -67,7 +67,7 @@ export function selectSize(btn: HTMLElement): void {
     basePrice = parseInt(priceAttr, 10);
   }
 
-  // NOUVEAU : afficher le bloc « prix sur devis » quand le sur-mesure est choisi
+  // afficher le bloc « prix sur devis » quand le sur-mesure est choisi
   const smBlock = document.getElementById('size-surmesure-block');
   if (smBlock) smBlock.classList.toggle('visible', btn.dataset.price === '0');
 
@@ -75,9 +75,9 @@ export function selectSize(btn: HTMLElement): void {
   notify();
 }
 
-// MODIFIÉ : Gestion de la sélection de vase
+// Gestion de la sélection de vase
 export function selectVase(btn: HTMLElement): void {
-  // MODIFIÉ : vase en radio-boîtes (sélecteur .r-btn)
+  // vase en radio-boîtes (sélecteur .r-btn)
   const buttons = $$('#vase-row .r-btn');
   buttons.forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
@@ -87,28 +87,28 @@ export function selectVase(btn: HTMLElement): void {
   notify();
 }
 
-// NOUVEAU : Récupérer l'état courant du pricing
+// Récupérer l'état courant du pricing
 export function getPricingState() {
   return { basePrice, vasePrice, isDevis, deliveryFee, total: getTotal() };
 }
 
-// NOUVEAU : Notifier les écouteurs
+// Notifier les écouteurs
 function notify(): void {
   listeners.forEach(fn => fn(getTotal(), isDevis));
 }
 
-// MODIFIÉ : Initialiser les event listeners pricing + écouteur récap
+// Initialiser les event listeners pricing + écouteur récap
 export function initPricing(): void {
   $$('#size-row .c-btn').forEach(btn => {
     btn.addEventListener('click', () => selectSize(btn));
   });
 
-  // MODIFIÉ : vase en radio-boîtes (sélecteur .r-btn)
+  // vase en radio-boîtes (sélecteur .r-btn)
   $$('#vase-row .r-btn').forEach(btn => {
     btn.addEventListener('click', () => selectVase(btn));
   });
 
-  // NOUVEAU : synchroniser les lignes du récap quand le total change
+  // synchroniser les lignes du récap quand le total change
   onTotalChange(() => {
     const recap = $('#recap');
     if (recap) refreshRecap();
@@ -118,7 +118,7 @@ export function initPricing(): void {
   refreshRecap();
 }
 
-// MODIFIÉ : Remplir le récapitulatif (appelé aussi depuis billing.ts) — lecture robuste des nouvelles options
+// Remplir le récapitulatif (appelé aussi depuis billing.ts) — lecture robuste des nouvelles options
 export function refreshRecap(): void {
   const setText = (id: string, value: string): void => {
     const el = document.getElementById(id);
@@ -130,7 +130,7 @@ export function refreshRecap(): void {
     ? 'Sur-mesure / Custom'
     : (sizeBtn?.textContent?.trim().split('\n')[0] || '—');
   const colorClass = (document.querySelector('#color-row .col-btn.selected')?.closest('.col-opt') as HTMLElement | null)?.className?.split(' ')[0] || '—';
-  // MODIFIÉ : vase en radio-boîtes (sélecteur .r-btn)
+  // vase en radio-boîtes (sélecteur .r-btn)
   const vaseBtn = document.querySelector('#vase-row .r-btn.selected') as HTMLElement | null;
   const withVase = vaseBtn ? (parseInt(vaseBtn.dataset.price || '0', 10) || 0) > 0 : false;
   const message = (document.getElementById('message') as HTMLTextAreaElement)?.value?.trim() || '—';

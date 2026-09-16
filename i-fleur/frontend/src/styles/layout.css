@@ -1,9 +1,9 @@
-/* MODIFIÉ : Layout global */
+/* Layout global */
 .layout {
   min-height: 100vh;
 }
 
-/* MODIFIÉ : Colonne photo — fixe à gauche, 50% */
+/* Colonne photo — fixe à gauche, 50% */
 .col-photo {
   position: fixed;
   width: 50%;
@@ -14,24 +14,24 @@
   z-index: 0;
 }
 
-/* MODIFIÉ : Colonne contenu — à droite, scroll (padding-top:0 pour coller le logo en haut) */
+/* Colonne contenu — à droite, scroll (padding-top:0 pour coller le logo en haut) */
 .col-content {
   margin-left: 50%;
   padding: 0 var(--gutter) var(--gutter);
 }
 
-/* MODIFIÉ : Header logo + tagline (colonne droite desktop ; full-width et en HAUT en stacked) */
+/* Header logo + tagline (colonne droite desktop ; full-width et en HAUT en stacked) */
 .site-head {
   padding: 0 var(--gutter);
 }
 
-/* MODIFIÉ : Bloc logo — header référence (logo centré haut, sans padding haut : tout en haut) */
+/* Bloc logo — header référence (logo centré haut, sans padding haut : tout en haut) */
 .logo-block {
   text-align: center;
   padding: 0 var(--gutter);
 }
 
-/* MODIFIÉ : Logo agrandi — max-height 9vh (7vh → 9vh) */
+/* Logo agrandi — max-height 9vh (7vh → 9vh) */
 .logo-img {
   max-height: 15vh;
   width: auto;
@@ -39,8 +39,9 @@
   margin: 0 auto;
 }
 
-/* MODIFIÉ : Barre de titre "page-title" — exactement le h1 saison */
+/* Barre de titre "page-title" — exactement le h1 saison (gras 700, défaut navigateur h1) */
 .tagline {
+  font-weight: 700;
   font-size: var(--font80);
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -50,7 +51,7 @@
   margin-bottom: var(--gutter);
 }
 
-/* MODIFIÉ : Pagination numérotée — centrée bas de photo */
+/* Pagination numérotée — centrée bas de photo */
 .slide-dots {
   position: absolute;
   bottom: calc(var(--gutter)*2);

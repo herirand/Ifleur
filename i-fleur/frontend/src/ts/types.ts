@@ -1,29 +1,29 @@
-// MODIFIÉ : Types alignés sur la nouvelle config statique (remplace l'ancien schéma API config)
+// Types alignés sur la nouvelle config statique (remplace l'ancien schéma API config)
 
-// MODIFIÉ : Types de taille de commande (ajout mini + sur-mesure, conformité cahier des charges)
+// Types de taille de commande (ajout mini + sur-mesure, conformité cahier des charges)
 export type OrderSize = 'mini' | 'S' | 'M' | 'L' | 'sur-mesure';
 
-// MODIFIÉ : Types de couleur florale (conformité cahier des charges : pastel / chaud / surprenez-moi / neutre)
+// Types de couleur florale (conformité cahier des charges : pastel / chaud / surprenez-moi / neutre)
 export type OrderColor = 'pastel' | 'chaud' | 'surprenez-moi' | 'neutre';
 
-// NOUVEAU : Types de livraison
+// Types de livraison
 export type OrderDelivery = 'pickup' | 'home';
 
-// NOUVEAU : Interface zone de livraison (un groupe de quartiers + frais)
+// Interface zone de livraison (un groupe de quartiers + frais)
 export interface DeliveryZone {
   name: string;
   fee: number | null; // null = frais sur devis
   quartiers: string[];
 }
 
-// NOUVEAU : Interface FAQ
+// Interface FAQ
 export interface FaqItem {
   q: string;
   a: string;
 }
 
-// NOUVEAU : Interface configuration boutique (chargée depuis config.json)
-// MODIFIÉ : ajout des clés mini/surMesureMin pour les nouvelles tailles
+// Interface configuration boutique (chargée depuis config.json)
+// ajout des clés mini/surMesureMin pour les nouvelles tailles
 export interface Config {
   prices: { mini: number; S: number; M: number; L: number };
   vasePrice: number;
@@ -43,7 +43,7 @@ export interface Config {
   faq: FaqItem[];
 }
 
-// NOUVEAU : État de livraison sélectionné par l'utilisateur
+// État de livraison sélectionné par l'utilisateur
 export interface DeliverySelection {
   mode: OrderDelivery;
   date: string;
@@ -56,7 +56,7 @@ export interface DeliverySelection {
   zone: DeliveryZone | null;
 }
 
-// NOUVEAU : État de facturation sélectionné par l'utilisateur
+// État de facturation sélectionné par l'utilisateur
 export interface BillingSelection {
   nom: string;
   tel: string;

@@ -1,4 +1,4 @@
-// MODIFIÉ : Module paiement et WhatsApp (message enrichi type saison + validation)
+// Module paiement et WhatsApp (message enrichi type saison + validation)
 
 import { $, $$, formatPrice } from './utils.js';
 import { getPricingState, getDeliveryFee } from './pricing.js';
@@ -7,7 +7,7 @@ import { getDeliveryMode, getSelectedQuartier } from './delivery.js';
 import { getBilling } from './billing.js';
 import { CONFIG, findZoneForQuartier } from './data.js';
 
-// NOUVEAU : Toggle d'une boîte d'information de paiement
+// Toggle d'une boîte d'information de paiement
 export function toggleBox(id: string, others: string[]): void {
   others.forEach(o => {
     const el = document.getElementById(o);
@@ -24,7 +24,7 @@ export function toggleBox(id: string, others: string[]): void {
   }
 }
 
-// NOUVEAU : Construire le message WhatsApp complet de la commande
+// Construire le message WhatsApp complet de la commande
 function buildWhatsAppMessage(): string {
   const deliveryMode = getDeliveryMode();
   const quartier = getSelectedQuartier();
@@ -39,7 +39,7 @@ function buildWhatsAppMessage(): string {
     ? 'Sur-mesure / custom'
     : (sizeBtn?.textContent?.trim().split('\n')[0] || '—');
   const color = getSelectedColor();
-  // MODIFIÉ : vase en radio-boîtes (sélecteur .r-btn)
+  // vase en radio-boîtes (sélecteur .r-btn)
   const vaseBtn = document.querySelector('#vase-row .r-btn.selected') as HTMLElement | null;
   const withVase = vaseBtn ? (parseInt(vaseBtn.dataset.price || '0', 10) || 0) > 0 : false;
   const message = (document.getElementById('message') as HTMLTextAreaElement)?.value?.trim() || '—';
@@ -104,7 +104,7 @@ function buildWhatsAppMessage(): string {
   return lines.join('\n');
 }
 
-// NOUVEAU : Validation globale — liste des champs obligatoires visibles
+// Validation globale — liste des champs obligatoires visibles
 function getVisibleRequiredFields(): { id: string; validate: (v: string) => boolean }[] {
   const fields: { id: string; validate: (v: string) => boolean }[] = [
     { id: 'billing-name', validate: v => v.length > 0 },
@@ -128,7 +128,7 @@ function getVisibleRequiredFields(): { id: string; validate: (v: string) => bool
   return fields;
 }
 
-// NOUVEAU : Valider tous les champs visibles, marquer les vides en rouge, retourner le premier invalide
+// Valider tous les champs visibles, marquer les vides en rouge, retourner le premier invalide
 function validateAllFields(): HTMLElement | null {
   const fields = getVisibleRequiredFields();
   let firstInvalid: HTMLElement | null = null;
@@ -148,17 +148,17 @@ function validateAllFields(): HTMLElement | null {
   return firstInvalid;
 }
 
-// NOUVEAU : Supprimer la classe d'erreur quand l'utilisateur corrige un champ
+// Supprimer la classe d'erreur quand l'utilisateur corrige un champ
 function clearFieldError(id: string): void {
   const el = document.getElementById(id);
   if (el) el.classList.remove('field-error');
 }
 
-// MODIFIÉ : Ouvrir WhatsApp avec le message pré-rempli (après validation globale)
+// Ouvrir WhatsApp avec le message pré-rempli (après validation globale)
 export function openWhatsApp(e: Event): void {
   e.preventDefault();
 
-  // MODIFIÉ : Valider tous les champs visibles, marquer les vides en rouge + scroll au premier (pas de focus : évite d'ouvrir le pikcer date)
+  // Valider tous les champs visibles, marquer les vides en rouge + scroll au premier (pas de focus : évite d'ouvrir le pikcer date)
   const firstInvalid = validateAllFields();
   if (firstInvalid) {
     firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -170,7 +170,7 @@ export function openWhatsApp(e: Event): void {
   window.open(url, '_blank');
 }
 
-// MODIFIÉ : Initialiser les event listeners paiement
+// Initialiser les event listeners paiement
 export function initPayment(): void {
   const whatsappBtn = document.querySelector('.pay-btn.wa');
   if (whatsappBtn) {
@@ -196,7 +196,7 @@ export function initPayment(): void {
     btn.addEventListener('click', openWhatsApp);
   });
 
-  // NOUVEAU : Supprimer la bordure rouge dès que l'utilisateur corrige un champ
+  // Supprimer la bordure rouge dès que l'utilisateur corrige un champ
   const allRequiredIds = [
     'billing-name', 'billing-phone', 'billing-email',
     'pickup-date', 'delivery-date',

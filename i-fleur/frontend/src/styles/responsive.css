@@ -1,46 +1,71 @@
-/* MODIFIÉ : Responsive — layout et échelles typographiques alignés sur saison-eshop */
+/* Responsive — layout et échelles typographiques alignés sur saison-eshop */
 
-/* NOUVEAU : Grand écran (>= 1300px) */
-@media print,screen and (min-width:1300px){
-  :root{
-    --font300:5rem;
-    --font200:3rem;
-    --font150:1.8rem;
-    --font100:1.3rem;
-    --font80:0.8rem;
+/* Grand écran (>= 1300px) */
+@media print,
+screen and (min-width:1300px) {
+  :root {
+    --font300: 5rem;
+    --font200: 3rem;
+    --font150: 1.8rem;
+    --font100: 1.3rem;
+    --font80: 0.8rem;
   }
 }
 
-/* MODIFIÉ : Tablet (max-width:1024px) */
-@media print,screen and (max-width:1024px){
-  :root{
-    --gutter:20px;
-    --font300:3rem;
-    --font200:1.8rem;
-    --font150:1.3rem;
-    --font100:1rem;
-    --font90:0.9rem;
-    --logo_hauteur:80px;
+/* Tablet (max-width:1024px) */
+@media print,
+screen and (max-width:1024px) {
+  :root {
+    --gutter: 20px;
+    --font300: 3rem;
+    --font200: 1.8rem;
+    --font150: 1.3rem;
+    --font100: 1rem;
+    --font90: 0.9rem;
+    --logo_hauteur: 80px;
   }
-  .layout{display:block;}
-  .col-photo{position:relative;width:auto;top:auto;bottom:auto;height:60vh;}
-  .col-content{margin-left:0;}
+
+  .layout {
+    display: block;
+  }
+
+  .col-photo {
+    position: relative;
+    width: auto;
+    top: auto;
+    bottom: auto;
+    height: 60vh;
+  }
+
+  .col-content {
+    margin-left: 0;
+  }
 }
 
-/* MODIFIÉ : Mobile (max-width:768px) */
-@media print,screen and (max-width:768px){
-  :root{
-    --gutter:10px;
-    --font300:2rem;
-    --font200:1.5rem;
-    --font150:1.1rem;
-    --font100:0.9rem;
-    --font90:0.9rem;
-    --logo_hauteur:30px;
-    --hauteur_diapo:30vh;
+/* Mobile (max-width:768px) */
+@media print,
+screen and (max-width:768px) {
+  :root {
+    --gutter: 10px;
+    --font300: 2rem;
+    --font200: 1.5rem;
+    --font150: 1.1rem;
+    --font100: 0.9rem;
+    --font90: 0.9rem;
+    --logo_hauteur: 30px;
+    --hauteur_diapo: 30vh;
   }
-  .col-photo{height:50vh;}
-  /* MODIFIÉ : padding-top:0 — logo collé en haut (cohérent avec le layout desktop) */
-  .col-content{padding:0 var(--gutter) 3rem;}
-  .col-content.site-head{padding-bottom:0;}
+
+  .col-photo {
+    height: 50vh;
+  }
+
+  /* padding-top:0 — logo collé en haut (cohérent avec le layout desktop) */
+  .col-content {
+    padding: 0 var(--gutter) 3rem;
+  }
+
+  .col-content.site-head {
+    padding-bottom: 0;
+  }
 }

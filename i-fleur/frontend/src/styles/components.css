@@ -1,175 +1,703 @@
-/* MODIFIÉ : Composants UI — alignement pixel-perfect saison-eshop (noir & blanc, filets 1px, radius 0) */
+/* Composants UI — alignement pixel-perfect saison-eshop (noir & blanc, filets 1px, radius 0) */
 
 /* ========== DESCRIPTION / TITRES ========== */
-/* MODIFIÉ : Description — texte de présentation */
-.description{font-family:var(--font);font-size:var(--font85);line-height:1.7;color:var(--noir);}
-/* MODIFIÉ : Partie anglaise en italique — même couleur */
-.description em{font-style:italic;color:var(--noir);}
-/* MODIFIÉ : Headers de section — barre éditoriale avec filet, souffle sous le filet */
-.step-header{font-family:var(--font);font-size:var(--font80);letter-spacing:3px;text-transform:uppercase;color:var(--noir);margin-top:calc(var(--gutter)*2);margin-bottom:10px;padding-bottom:10px;border-bottom:var(--border);}
-/* MODIFIÉ : Note de taille — italique discrète, PLUS de marge négative (évite tout chevauchement avec le filet du titre) */
-.size-note{font-size:var(--font80);color:var(--noir);font-style:italic;margin:0 0 var(--gutter);}
+/* Description — texte de présentation, aéré (lh 1.6, espace inter-paragraphes 10px) comme l'intro de la référence */
+.description {
+  font-family: var(--font);
+  font-size: var(--font85);
+  line-height: 1.6;
+  color: var(--noir);
+  margin-bottom: 10px;
+}
+
+.description:last-child {
+  margin-bottom: 0;
+}
+
+/* Headers de section — barre éditoriale avec filet, gras 700 (défaut navigateur h2), souffle sous le filet */
+.step-header {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: var(--font80);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--noir);
+  margin-top: calc(var(--gutter)*2);
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: var(--border);
+}
+
+/* Note de taille — italique discrète, PLUS de marge négative (évite tout chevauchement avec le filet du titre) */
+.size-note {
+  font-size: var(--font80);
+  color: var(--noir);
+  font-style: italic;
+  margin: 0 0 var(--gutter);
+}
 
 /* ========== TAILLES ========== */
-/* MODIFIÉ : Rangée de tailles — filet traversant porté par le ::after */
-.circle-row{position:relative;display:flex;justify-content:space-between;margin-bottom:var(--gutter);}
-.circle-row::after{content:'';position:absolute;left:0;top:30px;right:0;border-bottom:var(--border);z-index:0;}
-/* MODIFIÉ : Option de taille — empilée, au-dessus du filet */
-.c-opt{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;margin:0;}
-/* MODIFIÉ : Bouton rond — 60px, actif noir */
-.c-btn{width:60px;height:60px;border-radius:60px;border:var(--border);background:var(--blanc);color:var(--noir);font-family:var(--font);font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding-top:4px;transition:all .3s linear;}
-.c-btn:hover{background:var(--grisclair);}
-.c-btn.selected{background:var(--noir);color:var(--blanc);}
-/* MODIFIÉ : Libellé de taille */
-.c-label{font-size:var(--font80);color:var(--noir);text-align:center;line-height:1.4;margin-top:10px;letter-spacing:1px;}
-/* MODIFIÉ : Filet de connexion — le filet est le ::after de .circle-row */
-.c-line{display:none;}
-/* MODIFIÉ : Sur-mesure (dernier cercle) — contenu "+" fourni par le HTML */
-.c-opt:last-child .c-btn{font-size:calc(var(--font100)*1.15);padding-top:0;}
+/* Rangée de tailles — filet traversant porté par le ::after */
+.circle-row {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--gutter);
+}
+
+.circle-row::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 30px;
+  right: 0;
+  border-bottom: var(--border);
+  z-index: 0;
+}
+
+/* Option de taille — empilée, au-dessus du filet */
+.c-opt {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 0;
+}
+
+/* Bouton rond — 60px, actif noir, taille 0.9rem (référence : héritée 14.4px) */
+.c-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 60px;
+  border: var(--border);
+  background: var(--blanc);
+  color: var(--noir);
+  font-family: var(--font);
+  font-size: var(--font85);
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4px;
+  transition: all .3s linear;
+}
+
+.c-btn:hover {
+  background: var(--grisclair);
+}
+
+.c-btn.selected {
+  background: var(--noir);
+  color: var(--blanc);
+}
+
+/* Libellé de taille — prix en 0.85em, sans letter-spacing (référence : .description 0.85em) */
+.c-label {
+  font-size: 0.85em;
+  color: var(--noir);
+  text-align: center;
+  line-height: 1.4;
+  margin-top: 10px;
+}
+
+/* Filet de connexion — le filet est le ::after de .circle-row */
+.c-line {
+  display: none;
+}
+
+/* Sur-mesure (dernier cercle) — contenu "+" fourni par le HTML */
+.c-opt:last-child .c-btn {
+  font-size: calc(var(--font100)*1.15);
+  padding-top: 0;
+}
 
 /* ========== COULEURS ========== */
-/* MODIFIÉ : Rangée de couleurs — filet traversant porté par le ::after */
-.color-row{position:relative;display:flex;justify-content:space-between;margin-bottom:var(--gutter);}
-.color-row::after{content:'';position:absolute;left:0;top:30px;right:0;border-bottom:var(--border);z-index:0;}
-/* MODIFIÉ : Option couleur — largeur quart, au-dessus du filet */
-.col-opt{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;width:25%;text-align:center;}
-/* MODIFIÉ : Cercle de couleur — 60px, bordure blanche à l'inactif */
-.col-btn{width:60px;height:60px;border-radius:60px;border:1px solid var(--blanc);cursor:pointer;transition:all .3s linear;}
-/* MODIFIÉ : Gradients EXACTS — copie de la référence saison-eshop (135°, 5 stops) */
-.neutre .col-btn{background:linear-gradient(135deg,#FFFFFF 0%,#F8F0F0 25%,#E0CACA 50%,#B59090 75%,#6A3C3C 100%);}
-.pastel .col-btn{background:linear-gradient(135deg,#FFFFFF 0%,#E0E8F2 25%,#C1CCDE 50%,#7B8C9E 75%,#303D4A 100%);}
-.chaud .col-btn{background:linear-gradient(135deg,#FFF055 0%,#FFD56B 25%,#FFB080 50%,#F48AB1 75%,#A04F6B 100%);}
-.surprenez-moi .col-btn{background:linear-gradient(135deg,#FFEA00 0%,#FFBC2C 25%,#FF9050 50%,#A070FF 75%,#6C00FF 100%);}
-/* MODIFIÉ : État actif — seul le filet passe au noir, le dégradé reste visible (background-color longhand : le background-image du dégradé le recouvre, miroir référence saison-eshop) */
-.color-row .col-btn.selected{background-color:var(--noir);border-color:var(--noir);}
-/* MODIFIÉ : Libellé couleur — majuscules espacées */
-.col-label{font-size:var(--font80);text-transform:uppercase;letter-spacing:2px;color:var(--noir);text-align:center;padding:2px 15px;}
-/* MODIFIÉ : Filet de connexion — le filet est le ::after de .color-row */
-.col-line{display:none;}
+/* Rangée de couleurs — filet traversant porté par le ::after */
+.color-row {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--gutter);
+}
+
+.color-row::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 30px;
+  right: 0;
+  border-bottom: var(--border);
+  z-index: 0;
+}
+
+/* Option couleur — largeur quart, au-dessus du filet */
+.col-opt {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 25%;
+  text-align: center;
+}
+
+/* Cercle de couleur — 60px, bordure blanche à l'inactif */
+.col-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 60px;
+  border: 1px solid var(--blanc);
+  cursor: pointer;
+  transition: all .3s linear;
+}
+
+/* Gradients EXACTS — copie de la référence saison-eshop (135°, 5 stops) */
+.neutre .col-btn {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F8F0F0 25%, #E0CACA 50%, #B59090 75%, #6A3C3C 100%);
+}
+
+.pastel .col-btn {
+  background: linear-gradient(135deg, #FFFFFF 0%, #E0E8F2 25%, #C1CCDE 50%, #7B8C9E 75%, #303D4A 100%);
+}
+
+.chaud .col-btn {
+  background: linear-gradient(135deg, #FFF055 0%, #FFD56B 25%, #FFB080 50%, #F48AB1 75%, #A04F6B 100%);
+}
+
+.surprenez-moi .col-btn {
+  background: linear-gradient(135deg, #FFEA00 0%, #FFBC2C 25%, #FF9050 50%, #A070FF 75%, #6C00FF 100%);
+}
+
+/* État actif — seul le filet passe au noir, le dégradé reste visible (background-color longhand : le background-image du dégradé le recouvre, miroir référence saison-eshop) */
+.color-row .col-btn.selected {
+  background-color: var(--noir);
+  border-color: var(--noir);
+}
+
+/* Libellé couleur — 0.7rem, minuscules, sans letter-spacing ni majuscules (référence : label couleur 0.7rem brut) */
+.col-label {
+  font-size: var(--font80);
+  color: var(--noir);
+  text-align: center;
+  padding: 2px 15px;
+}
+
+/* Filet de connexion — le filet est le ::after de .color-row */
+.col-line {
+  display: none;
+}
 
 /* ========== LÉGENDES + RADIOS VASE/LIVRAISON ========== */
-/* NOUVEAU : Petite légende grasse au-dessus des radios vase/livraison */
-.fieldset-legend{font-weight:bold;font-size:var(--font90);display:block;margin-bottom:12px;}
-/* MODIFIÉ : Rangée d'options radio — horizontale, gap 15px */
-.radio-row{display:flex;gap:15px;margin-bottom:var(--gutter);}
-/* MODIFIÉ : Option radio — carré 24px devant */
-.r-btn{position:relative;font-family:var(--font);font-size:var(--font90);color:var(--noir);cursor:pointer;text-align:left;background:none;border:none;border-radius:0;padding:0 0 0 35px;line-height:1.5;}
-.r-btn::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:24px;height:24px;border:1px solid var(--noir);background:var(--blanc);}
-.r-btn.selected::before{background:var(--noir);}
+/* Petite légende grasse au-dessus des radios vase/livraison — bold, 0.9rem, lh 1.4 (référence : .fieldset-legend) */
+.fieldset-legend {
+  font-family: var(--font);
+  font-weight: bold;
+  font-size: var(--font85);
+  line-height: 1.4;
+  display: block;
+  margin-bottom: 12px;
+}
+
+/* Rangée d'options radio — horizontale, gap 15px */
+.radio-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: var(--gutter);
+}
+
+/* Option radio — carré 24px devant, 0.9rem lh 1.4 (référence : label.option 14.4px/1.4) */
+.r-btn {
+  position: relative;
+  font-family: var(--font);
+  font-size: var(--font85);
+  color: var(--noir);
+  cursor: pointer;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 0 35px;
+  line-height: 1.4;
+}
+
+.r-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--noir);
+  background: var(--blanc);
+}
+
+.r-btn.selected::before {
+  background: var(--noir);
+}
 
 /* ========== LIVRAISON ========== */
-/* MODIFIÉ : Toggle livraison — horizontale, gap 15px */
-.delivery-toggle{display:flex;gap:15px;margin-bottom:var(--gutter);}
-/* MODIFIÉ : Option livraison — même logique radio carrée */
-.d-opt{position:relative;font-family:var(--font);font-size:var(--font90);color:var(--noir);cursor:pointer;text-align:left;background:none;border:none;border-radius:0;padding:0 0 0 35px;line-height:1.5;}
-.d-opt::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:24px;height:24px;border:1px solid var(--noir);background:var(--blanc);}
-.d-opt.active::before{background:var(--noir);}
+/* Toggle livraison — horizontale, gap 15px */
+.delivery-toggle {
+  display: flex;
+  gap: 15px;
+  margin-bottom: var(--gutter);
+}
+
+/* Option livraison — même logique radio carrée, 0.9rem lh 1.4 */
+.d-opt {
+  position: relative;
+  font-family: var(--font);
+  font-size: var(--font85);
+  color: var(--noir);
+  cursor: pointer;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 0 35px;
+  line-height: 1.4;
+}
+
+.d-opt::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--noir);
+  background: var(--blanc);
+}
+
+.d-opt.active::before {
+  background: var(--noir);
+}
 
 /* ========== BLOCS CONDITIONNELS ========== */
-/* MODIFIÉ : Blocs pickup / home / sur-mesure — fond gris clair, largeur contenue */
-#pickup-block,#home-block,#size-surmesure-block{background:var(--grisclair);padding:15px;margin-bottom:var(--gutter);display:flex;flex-direction:column;align-items:flex-start;width:fit-content;gap:8px;}
-/* NOUVEAU : Bloc sur-mesure — masqué par défaut, ouvert via la classe .visible (JS) */
-#size-surmesure-block{display:none;}
-#size-surmesure-block.visible{display:flex;}
+/* Blocs pickup / home / sur-mesure — fond gris clair, largeur contenue */
+#pickup-block,
+#home-block,
+#size-surmesure-block {
+  background: var(--grisclair);
+  padding: 15px;
+  margin-bottom: var(--gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+  gap: 8px;
+}
+
+/* Bloc sur-mesure — masqué par défaut, ouvert via la classe .visible (JS) */
+#size-surmesure-block {
+  display: none;
+}
+
+#size-surmesure-block.visible {
+  display: flex;
+}
 
 /* ========== CHAMPS ========== */
-/* MODIFIÉ : Champs de saisie — pleine largeur, fond gris clair, radius 0 */
-.field{width:100%;border:none;border-radius:0;background:var(--grisclair);padding:10px;font-family:var(--font);font-size:var(--font90);color:var(--noir);outline:none;margin-bottom:10px;transition:all .3s linear;}
-.field::placeholder{color:var(--gris);font-size:var(--font80);text-transform:lowercase;}
-/* MODIFIÉ : Zone de texte — redimensionnement vertical, hauteur minimale */
-textarea.field{resize:vertical;height:auto;min-height:80px;line-height:1.5;}
-/* MODIFIÉ : Rangée de champs — pleine largeur empilée (plus de grid 2 colonnes) */
-.field-row{display:block;}
-/* MODIFIÉ : Select — sans flèche native */
-.field-select{width:100%;border:none;border-radius:0;background:var(--grisclair);padding:10px;font-family:var(--font);font-size:var(--font90);color:var(--noir);outline:none;margin-bottom:10px;cursor:pointer;-webkit-appearance:none;appearance:none;}
-.field-select option,.field-select optgroup{color:var(--noir);background:var(--blanc);}
+/* Champs de saisie — pleine largeur, fond gris clair, radius 0, 0.9rem (référence : champs contact héritent 14.4px) */
+.field {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  background: var(--grisclair);
+  padding: 10px;
+  font-family: var(--font);
+  font-size: var(--font85);
+  color: var(--noir);
+  outline: none;
+  margin-bottom: 10px;
+  transition: all .3s linear;
+}
 
-/* NOUVEAU : Champ en erreur de validation — bordure rouge (référence saison-eshop : input.error → border:2px solid red) */
-.field.field-error,.field-select.field-error{border:2px solid #FF0000;}
+/* Suivi — récapitulatif */
+textarea.field {
+  resize: vertical;
+  height: auto;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+/* Rangée de champs — pleine largeur empilée (plus de grid 2 colonnes) */
+.field-row {
+  display: block;
+}
+
+/* Select — sans flèche native, 0.9rem */
+.field-select {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  background: var(--grisclair);
+  padding: 10px;
+  font-family: var(--font);
+  font-size: var(--font85);
+  color: var(--noir);
+  outline: none;
+  margin-bottom: 10px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.field-select option,
+.field-select optgroup {
+  color: var(--noir);
+  background: var(--blanc);
+}
+
+/* Champ en erreur de validation — bordure rouge (référence saison-eshop : input.error → border:2px solid red) */
+.field.field-error,
+.field-select.field-error {
+  border: 2px solid #FF0000;
+}
 
 /* ========== TOTAL ========== */
-/* MODIFIÉ : Ligne du total — prise entre deux filets, montant 2.5rem */
-.total-row{display:flex;justify-content:space-between;align-items:center;margin:30px 0;padding:20px 0 15px;border-top:var(--border);border-bottom:var(--border);font-size:var(--font200);}
-/* MODIFIÉ : Libellé du total */
-.total-label{font-size:var(--font80);letter-spacing:3px;text-transform:uppercase;font-weight:normal;}
-/* MODIFIÉ : Montant du total — grande échelle */
-.total-amount{font-family:var(--font);font-size:var(--font200);font-weight:normal;line-height:1;}
+/* Ligne du total — prise entre deux filets, montant 2.5rem */
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0;
+  padding: 20px 0 15px;
+  border-top: var(--border);
+  border-bottom: var(--border);
+  font-size: var(--font200);
+}
+
+/* Libellé du total — gras 700 (défaut navigateur label) */
+.total-label {
+  font-size: var(--font80);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Montant du total — grande échelle */
+.total-amount {
+  font-family: var(--font);
+  font-size: var(--font200);
+  font-weight: normal;
+  line-height: 1;
+}
 
 /* ========== RÉCAP "MA COMMANDE" ========== */
-/* MODIFIÉ : Bloc récap — fond gris clair, titre 1.6rem uppercase */
-.recap-block{margin-top:30px;padding:25px;background:var(--grisclair);text-transform:uppercase;font-size:var(--font80);letter-spacing:3px;text-align:center;}
-/* MODIFIÉ : Titre du récap */
-.recap-title{display:block;margin-bottom:20px;font-size:var(--font150);text-transform:uppercase;letter-spacing:3px;text-align:center;color:var(--noir);}
-/* MODIFIÉ : Grille du récap — simple empilement vertical (les lignes portent les filets) */
-.recap-grid{display:block;}
-/* MODIFIÉ : Ligne du récap — libellé/valeur, filet supérieur, padding 20/17 */
-.recap-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-top:var(--border);padding:20px 0 17px;text-align:left;}
-.recap-row:last-child{padding-bottom:0;}
-/* MODIFIÉ : Libellé de ligne */
-.recap-label{flex:0 0 auto;font-size:var(--font80);letter-spacing:3px;text-transform:uppercase;color:var(--noir);}
-/* MODIFIÉ : Valeur de ligne */
-.recap-value{flex:1;font-size:var(--font80);letter-spacing:3px;text-transform:uppercase;text-align:right;color:var(--noir);word-break:break-word;}
+/* Bloc récap — fond gris clair, titre 1.6rem uppercase */
+.recap-block {
+  margin-top: 30px;
+  padding: 25px;
+  background: var(--grisclair);
+  text-transform: uppercase;
+  font-size: var(--font80);
+  letter-spacing: 3px;
+  text-align: center;
+}
+
+/* Titre du récap — gras 700 (défaut navigateur label) */
+.recap-title {
+  display: block;
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-size: var(--font150);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-align: center;
+  color: var(--noir);
+}
+
+/* Grille du récap — simple empilement vertical (les lignes portent les filets) */
+.recap-grid {
+  display: block;
+}
+
+/* Ligne du récap — libellé/valeur, filet supérieur, padding 20/17 */
+.recap-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  border-top: var(--border);
+  padding: 20px 0 17px;
+  text-align: left;
+}
+
+.recap-row:last-child {
+  padding-bottom: 0;
+}
+
+/* Libellé de ligne */
+.recap-label {
+  flex: 0 0 auto;
+  font-size: var(--font80);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--noir);
+}
+
+/* Valeur de ligne */
+.recap-value {
+  flex: 1;
+  font-size: var(--font80);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: right;
+  color: var(--noir);
+  word-break: break-word;
+}
 
 /* ========== PAIEMENT ========== */
-/* MODIFIÉ : Intitulé — mode de paiement */
-.pay-label{font-size:var(--font80);letter-spacing:3px;text-transform:uppercase;margin-bottom:15px;}
-/* MODIFIÉ : Bouton principal — pleine largeur, padding 30/15/25, hover inversé */
-.pay-btn{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;margin-top:30px;padding:30px 15px 25px;background:var(--grisclair);color:var(--noir);border:none;border-radius:0;font-family:var(--font);font-size:var(--font150);letter-spacing:3px;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all .3s linear;text-align:left;white-space:normal;}
-/* MODIFIÉ : Bouton secondaire — plus léger */
-.pay-btn.secondary{font-size:var(--font80);letter-spacing:2px;padding:14px 15px;margin-top:8px;background:var(--blanc);}
-/* MODIFIÉ : Hover inversé — déclaré APRÈS .secondary (même spécificité (0,2,0)) pour que le fond noir gagne : sinon hover gardait le fond blanc + texte blanc = texte invisible au click */
-.pay-btn:hover{background:var(--noir);color:var(--blanc);}
+/* Intitulé — mode de paiement */
+.pay-label {
+  font-size: var(--font80);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+/* Bouton principal — pleine largeur, padding 30/15/25, hover inversé */
+.pay-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 30px;
+  padding: 30px 15px 25px;
+  background: var(--grisclair);
+  color: var(--noir);
+  border: none;
+  border-radius: 0;
+  font-family: var(--font);
+  font-size: var(--font150);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .3s linear;
+  text-align: left;
+  white-space: normal;
+}
+
+/* Bouton secondaire — plus léger */
+.pay-btn.secondary {
+  font-size: var(--font80);
+  letter-spacing: 2px;
+  padding: 14px 15px;
+  margin-top: 8px;
+  background: var(--blanc);
+}
+
+/* Hover inversé — déclaré APRÈS .secondary (même spécificité (0,2,0)) pour que le fond noir gagne : sinon hover gardait le fond blanc + texte blanc = texte invisible au click */
+.pay-btn:hover {
+  background: var(--noir);
+  color: var(--blanc);
+}
 
 /* ========== BOÎTES D'INFORMATION PAIEMENT ========== */
-/* MODIFIÉ : Boîtes info — fond gris clair, ouvertes uniquement via JS */
-.mm-box,.especes-box,.sendwave-box{display:none;background:var(--grisclair);border:none;border-radius:0;padding:15px;margin-bottom:15px;}
-/* MODIFIÉ : Nom du provider */
-.mm-provider{font-size:var(--font80);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
-/* MODIFIÉ : Numéro MVola — grande échelle */
-.mm-num{font-family:var(--font);font-size:var(--font200);font-weight:normal;margin-bottom:5px;}
-/* MODIFIÉ : Nom du bénéficiaire */
-.mm-name{font-size:var(--font85);margin-bottom:15px;}
-/* MODIFIÉ : Texte d'information */
-.mm-info,.especes-box p,.sendwave-box p{font-size:var(--font85);line-height:1.75;color:var(--noir);}
+/* Boîtes info — fond gris clair, ouvertes uniquement via JS */
+.mm-box,
+.especes-box,
+.sendwave-box {
+  display: none;
+  background: var(--grisclair);
+  border: none;
+  border-radius: 0;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+/* Nom du provider */
+.mm-provider {
+  font-size: var(--font80);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* Numéro MVola — grande échelle */
+.mm-num {
+  font-family: var(--font);
+  font-size: var(--font200);
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+
+/* Nom du bénéficiaire */
+.mm-name {
+  font-size: var(--font85);
+  margin-bottom: 15px;
+}
+
+/* Texte d'information */
+.mm-info,
+.especes-box p,
+.sendwave-box p {
+  font-size: var(--font85);
+  line-height: 1.75;
+  color: var(--noir);
+}
 
 /* ========== FAQ ========== */
-/* MODIFIÉ : Section FAQ */
-.faq-section{margin-top:calc(var(--gutter)*2);}
-/* MODIFIÉ : Item — séparé par des filets */
-.faq-item{border-bottom:var(--border);}
-.faq-item:first-child{border-top:var(--border);}
-/* MODIFIÉ : Question — rangée cliquable */
-.faq-q{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:10px 0;cursor:pointer;font-family:var(--font);font-size:var(--font90);color:var(--noir);background:none;border:none;border-radius:0;width:100%;text-align:left;}
-/* MODIFIÉ : Symbole + — rotation 45° à l'ouverture */
-.faq-toggle{font-size:20px;color:var(--noir);transition:transform .3s linear;flex-shrink:0;}
-.faq-item.open .faq-toggle{transform:rotate(45deg);}
-/* MODIFIÉ : Réponse — dépliage progressif (grid 0fr→1fr) */
-.faq-a{display:grid;grid-template-rows:0fr;transition:all .3s linear;overflow:hidden;}
-.faq-a-inner{overflow:hidden;min-height:0;padding:0;font-size:var(--font85);color:var(--noir);line-height:1.8;}
-.faq-item.open .faq-a{grid-template-rows:1fr;}
-.faq-item.open .faq-a-inner{padding:calc(var(--gutter)*0.5) 0;}
+/* Section FAQ */
+.faq-section {
+  margin-top: calc(var(--gutter)*2);
+}
+
+/* Item — séparé par des filets */
+.faq-item {
+  border-bottom: var(--border);
+}
+
+.faq-item:first-child {
+  border-top: var(--border);
+}
+
+/* Question — rangée cliquable */
+.faq-q {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: var(--font90);
+  color: var(--noir);
+  background: none;
+  border: none;
+  border-radius: 0;
+  width: 100%;
+  text-align: left;
+}
+
+/* Symbole + — rotation 45° à l'ouverture */
+.faq-toggle {
+  font-size: 20px;
+  color: var(--noir);
+  transition: transform .3s linear;
+  flex-shrink: 0;
+}
+
+.faq-item.open .faq-toggle {
+  transform: rotate(45deg);
+}
+
+/* Réponse — dépliage progressif (grid 0fr→1fr) */
+.faq-a {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: all .3s linear;
+  overflow: hidden;
+}
+
+.faq-a-inner {
+  overflow: hidden;
+  min-height: 0;
+  padding: 0;
+  font-size: var(--font85);
+  color: var(--noir);
+  line-height: 1.8;
+}
+
+.faq-item.open .faq-a {
+  grid-template-rows: 1fr;
+}
+
+.faq-item.open .faq-a-inner {
+  padding: calc(var(--gutter)*0.5) 0;
+}
 
 /* ========== CONTACT / FOOTER ========== */
-/* MODIFIÉ : Bloc contact — liens soulignés par filet */
-.contact-block{padding-top:15px;padding-bottom:15px;font-size:var(--font85);}
-.contact-block a{border-bottom:1px solid var(--noir);text-decoration:none;color:var(--noir);}
-.contact-block a:hover{color:var(--noir);}
-/* MODIFIÉ : Pied de page — filet supérieur, uppercase */
-.site-footer{margin-top:calc(var(--gutter)*2);padding-top:15px;border-top:var(--border);font-size:var(--font80);color:var(--noir);line-height:2.1;letter-spacing:2px;text-transform:uppercase;}
+/* Bloc contact — liens soulignés par filet */
+.contact-block {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-size: var(--font85);
+}
+
+.contact-block a {
+  border-bottom: 1px solid var(--noir);
+  text-decoration: none;
+  color: var(--noir);
+}
+
+.contact-block a:hover {
+  color: var(--noir);
+}
+
+/* Pied de page — filet supérieur, uppercase */
+.site-footer {
+  margin-top: calc(var(--gutter)*2);
+  padding-top: 15px;
+  border-top: var(--border);
+  font-size: var(--font80);
+  color: var(--noir);
+  line-height: 2.1;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
 
 /* ========== MÉDIAS COMPOSANTS ========== */
-/* MODIFIÉ : Tablet (<=1024) — cercles 45px, radios empilées */
-@media print,screen and (max-width:1024px){
-  .circle-row::after{top:22px;}
-  .color-row::after{top:23px;}
-  .c-btn{width:45px;height:45px;border-radius:45px;font-size:13px;padding-top:2px;}
-  .c-label{margin-top:8px;}
-  .col-btn{width:45px;height:45px;border-radius:45px;}
-  .radio-row,.delivery-toggle{flex-direction:column;align-items:flex-start;gap:0;}
-  .r-btn,.d-opt{margin-bottom:6px;}
+/* Tablet (<=1024) — cercles 45px, radios empilées */
+@media print,
+screen and (max-width:1024px) {
+  .circle-row::after {
+    top: 22px;
+  }
+
+  .color-row::after {
+    top: 23px;
+  }
+
+  .c-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 45px;
+    padding-top: 2px;
+  }
+
+  .c-label {
+    margin-top: 8px;
+  }
+
+  .col-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 45px;
+  }
+
+  .radio-row,
+  .delivery-toggle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .r-btn,
+  .d-opt {
+    margin-bottom: 6px;
+  }
 }
-/* MODIFIÉ : Mobile (<=768) — récap empilé */
-@media print,screen and (max-width:768px){
-  .recap-row{flex-direction:column;align-items:flex-start;gap:4px;}
-  .c-opt:last-child .c-btn{font-size:calc(var(--font100)*1.3);}
+
+/* Mobile (<=768) — récap empilé */
+@media print,
+screen and (max-width:768px) {
+  .recap-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .c-opt:last-child .c-btn {
+    font-size: calc(var(--font100)*1.3);
+  }
 }

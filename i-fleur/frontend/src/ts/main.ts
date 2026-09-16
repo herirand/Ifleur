@@ -1,4 +1,4 @@
-// MODIFIÉ : Point d'entrée du frontend i.fleur (vitrine 100% statique)
+// Point d'entrée du frontend i.fleur (vitrine 100% statique)
 
 import { initSlider } from './slider.js';
 import { initPricing } from './pricing.js';
@@ -9,7 +9,7 @@ import { initBilling } from './billing.js';
 import { CONFIG } from './data.js';
 import { $, $$ } from './utils.js';
 
-// NOUVEAU : Initialiser l'application (aucun appel réseau, config embarquée)
+// Initialiser l'application (aucun appel réseau, config embarquée)
 function init(): void {
   initSlider();
   initPricing();
@@ -20,7 +20,7 @@ function init(): void {
   applyShopConfig();
 }
 
-// NOUVEAU : Appliquer les infos boutique (nom, adresse, contact) depuis config.json
+// Appliquer les infos boutique (nom, adresse, contact) depuis config.json
 function applyShopConfig(): void {
   const setText = (id: string, value: string): void => {
     const el = document.getElementById(id);
@@ -33,7 +33,7 @@ function applyShopConfig(): void {
   if (CONFIG.shop.instagram) setText('shop-instagram', CONFIG.shop.instagram);
   if (CONFIG.shop.facebook) setText('shop-facebook', CONFIG.shop.facebook);
 
-  // NOUVEAU : construire la FAQ depuis config.json
+  // construire la FAQ depuis config.json
   const faqSection = $('#faq-container');
   if (faqSection) {
     faqSection.innerHTML = CONFIG.faq
@@ -47,7 +47,7 @@ function applyShopConfig(): void {
       .join('');
   }
 
-  // NOUVEAU : réattacher les listeners FAQ après construction dynamique
+  // réattacher les listeners FAQ après construction dynamique
   $$('.faq-q').forEach(btn => {
     btn.addEventListener('click', () => {
       const item = btn.closest('.faq-item');
@@ -56,5 +56,5 @@ function applyShopConfig(): void {
   });
 }
 
-// MODIFIÉ : Démarrer dès que le DOM est prêt (pas d'async, pas de fetch)
+// Démarrer dès que le DOM est prêt (pas d'async, pas de fetch)
 document.addEventListener('DOMContentLoaded', init);

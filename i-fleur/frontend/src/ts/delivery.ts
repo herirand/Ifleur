@@ -1,20 +1,20 @@
-// MODIFIÉ : Module mode de livraison + sélecteur de quartier + frais dynamiques
+// Module mode de livraison + sélecteur de quartier + frais dynamiques
 
 import { $, $$ } from './utils.js';
 import { getAllQuartiers, findZoneForQuartier, CONFIG } from './data.js';
 import { setDeliveryFee, setDeliveryHome, onTotalChange } from './pricing.js';
 import type { DeliveryZone, OrderDelivery } from './types.js';
 
-// NOUVEAU : Mode de livraison courant
+// Mode de livraison courant
 let deliveryMode: OrderDelivery = 'pickup';
 
-// NOUVEAU : Quartier sélectionné (pour livraison à domicile)
+// Quartier sélectionné (pour livraison à domicile)
 let selectedQuartier = '';
 
-// NOUVEAU : Détail de frais affiché sous le sélecteur de quartier
+// Détail de frais affiché sous le sélecteur de quartier
 const FRAIS_EL = 'delivery-fee-info';
 
-// MODIFIÉ : Basculer entre retrait et livraison à domicile
+// Basculer entre retrait et livraison à domicile
 export function setDelivery(mode: OrderDelivery, btn: HTMLElement): void {
   deliveryMode = mode;
 
@@ -32,7 +32,7 @@ export function setDelivery(mode: OrderDelivery, btn: HTMLElement): void {
     homeBlock.style.display = mode === 'home' ? 'block' : 'none';
   }
 
-  // NOUVEAU : retrait = gratuit, livraison = frais selon quartier
+  // retrait = gratuit, livraison = frais selon quartier
   if (mode === 'pickup') {
     setDeliveryHome(false);
     setDeliveryFee(0);
@@ -43,13 +43,13 @@ export function setDelivery(mode: OrderDelivery, btn: HTMLElement): void {
   }
 }
 
-// NOUVEAU : Appliquer les frais selon le quartier choisi
+// Appliquer les frais selon le quartier choisi
 function applyQuartierFee(quartier: string): void {
   const zone = findZoneForQuartier(quartier);
   if (zone && zone.fee !== null) {
     setDeliveryFee(zone.fee);
   } else if (zone && zone.fee === null) {
-    // NOUVEAU : hors zone => montant sur devis (frappe un montant symbolique pour le calcul)
+    // hors zone => montant sur devis (frappe un montant symbolique pour le calcul)
     setDeliveryFee(0);
   } else {
     setDeliveryFee(0);
@@ -58,7 +58,7 @@ function applyQuartierFee(quartier: string): void {
   updateFeeInfo();
 }
 
-// NOUVEAU : Afficher le détail des frais de livraison + libellé quartier
+// Afficher le détail des frais de livraison + libellé quartier
 export function updateFeeInfo(): void {
   const el = document.getElementById(FRAIS_EL);
   if (!el) return;
@@ -80,14 +80,14 @@ export function updateFeeInfo(): void {
   }
 }
 
-// NOUVEAU : Formater les frais (0 => Gratuit)
+// Formater les frais (0 => Gratuit)
 function formatFees(fee: number | null): string {
   if (fee === null) return 'sur devis';
   if (fee === 0) return 'gratuit';
   return fee.toLocaleString('fr-FR') + ' Ar';
 }
 
-// NOUVEAU : Construire la liste des quartiers dans le <select>
+// Construire la liste des quartiers dans le <select>
 function populateQuartiers(): void {
   const select = $('#quartier-select') as HTMLSelectElement | null;
   if (!select) return;
@@ -99,7 +99,7 @@ function populateQuartiers(): void {
   select.appendChild(placeholder);
 
   const all = getAllQuartiers();
-  // NOUVEAU : regroupe par zone, séparateur de zone en premier
+  // regroupe par zone, séparateur de zone en premier
   const seenZone = new Set<string>();
   for (const { quartier, zone } of all) {
     if (!seenZone.has(zone.name)) {
@@ -122,23 +122,23 @@ function populateQuartiers(): void {
   }
 }
 
-// NOUVEAU : Récupérer le mode de livraison courant
+// Récupérer le mode de livraison courant
 export function getDeliveryMode(): OrderDelivery {
   return deliveryMode;
 }
 
-// NOUVEAU : Récupérer le quartier sélectionné
+// Récupérer le quartier sélectionné
 export function getSelectedQuartier(): string {
   return selectedQuartier;
 }
 
-// NOUVEAU : L'utilisateur choisit son quartier
+// L'utilisateur choisit son quartier
 function onQuartierChange(e: Event): void {
   const select = e.target as HTMLSelectElement;
   applyQuartierFee(select.value);
 }
 
-// NOUVEAU : Initialiser les event listeners livraison
+// Initialiser les event listeners livraison
 export function initDelivery(): void {
   $$('.d-opt').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -155,10 +155,10 @@ export function initDelivery(): void {
   populateQuartiers();
   updateFeeInfo();
 
-  // NOUVEAU : garantir que le total reflète le mode initial
+  // garantir que le total reflète le mode initial
   setDeliveryHome(false);
   setDeliveryFee(0);
 
-  // NOUVEAU : on place le sélecteur de quartier dans le bloc livraison si présent ailleurs
+  // on place le sélecteur de quartier dans le bloc livraison si présent ailleurs
   onTotalChange(() => updateFeeInfo());
 }

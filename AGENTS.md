@@ -18,9 +18,10 @@ Repo for **i.fleur**, a flower boutique in Antananarivo, Madagascar. Contains TW
 ## Commands (run in `i-fleur/frontend/`)
 
 - **Dev**: `npm install && npm run dev` → bundles `src/ts/main.ts` → `dist/app.js` AND serves the dir on `:8000` (single command; don't run esbuild manually)
+- **Serve (no watch)**: `npm run serve` — build + serve once, same as `dev` minus `--watch`
 - **Build**: `npm run build` (esbuild minify → `dist/app.js`; Netlify runs this on deploy)
 - **Typecheck**: `npx tsc --noEmit` — only static check (no tests, no linter)
-- `dist/` is gitignored — never commit the bundle; always rebuild before testing/deploying
+- `dist/` is gitignored (ignore rules live in `i-fleur/.gitignore`, not the repo root) — never commit the bundle; always rebuild before testing/deploying
 
 ## Prices & config (high gotcha)
 
@@ -42,9 +43,8 @@ Repo for **i.fleur**, a flower boutique in Antananarivo, Madagascar. Contains TW
 - Mark every code change with a comment:
   - `// NOUVEAU : [desc]` for new code
   - `// MODIFIÉ : [desc]` for changed code
-- Comments in French; UI copy is bilingual FR/EN.
+- Comments in French; UI copy is bilingual FR/EN (e.g. "sur devis / on quote", "oui / yes").
 - Prices are in Ariary (`Ar`); ignore the euro figures from the pptx.
-- Backend is COPY-PASTE ONLY — never hand-edit archived backend source; hand the user ready-to-integrate code.
 
 ## Key facts
 

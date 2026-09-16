@@ -1,5 +1,10 @@
 {
-  "prices": { "mini": 100000, "S": 80000, "M": 120000, "L": 150000 },
+  "prices": {
+    "mini": 100000,
+    "S": 80000,
+    "M": 120000,
+    "L": 150000
+  },
   "vasePrice": 20000,
   "surMesureMin": 200000,
   "whatsappNumber": "261340476414",
@@ -38,7 +43,12 @@
       {
         "name": "Périphérie",
         "fee": 20000,
-        "quartiers": ["Ivato", "Iavoloha", "Ilafy", "Ambohibao"]
+        "quartiers": [
+          "Ivato",
+          "Iavoloha",
+          "Ilafy",
+          "Ambohibao"
+        ]
       },
       {
         "name": "Autre / hors zone",

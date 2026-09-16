@@ -8,7 +8,7 @@
   <meta name="description"
     content="i.fleur — bouquet d'anthuriums et fleurs de saison, livrés à Antananarivo. Retrait en boutique ou livraison à domicile, commande via WhatsApp. / anthurium bouquets and seasonal flowers, delivered in Antananarivo. Pick up in store or home delivery, order via WhatsApp.">
 
-  <!-- MODIFIÉ : polices locales Saison (plus de Google Fonts) -->
+  <!-- polices locales Saison (plus de Google Fonts) -->
   <link rel="stylesheet" href="src/styles/variables.css">
   <link rel="stylesheet" href="src/styles/layout.css">
   <link rel="stylesheet" href="src/styles/components.css">
@@ -19,10 +19,10 @@
 <body>
   <div class="layout">
 
-    <!-- MODIFIÉ : Header (logo + titre) en premier — en haut en stacked tablet/mobile, colonne droite sur desktop -->
+    <!-- Header (logo + titre) en premier — en haut en stacked tablet/mobile, colonne droite sur desktop -->
     <div class="col-content site-head">
 
-      <!-- MODIFIÉ : Logo block — image du logo PPTX au lieu du texte -->
+      <!-- Logo block — image du logo PPTX au lieu du texte -->
       <div class="logo-block">
         <img src="src/images/logo.png" alt="i.fleur" class="logo-img">
       </div>
@@ -38,7 +38,7 @@
         <div class="slide" style="background-image:url('src/images/bouquet-3.jpg')"></div>
         <div class="slide" style="background-image:url('src/images/bouquet-4.jpg')"></div>
       </div>
-      <!-- MODIFIÉ : flèches supprimées, pagination numérotée type saison -->
+      <!-- flèches supprimées, pagination numérotée type saison -->
       <div class="slide-dots">
         <button class="dot active" data-slide="0">1</button>
         <button class="dot" data-slide="1">2</button>
@@ -49,24 +49,25 @@
 
     <!-- CONTENT / FORMULAIRE -->
     <div class="col-content">
-      <p class="description">
-        Fleuriste spécialisée dans les anthuriums. Une fleur tropicale au caractère sculptural, séduisante par ses lignes
+      <p class="description">Fleuriste spécialisée dans les anthuriums. Une fleur tropicale au caractère sculptural,
+        séduisante par ses lignes
         graphiques, son éclat et sa longévité. À la frontière entre nature et architecture, elle incarne une élégance
-        singulière, contemporaine et intemporelle.<br><br>
-        Nos bouquets sont confectionnés également à partir des fleurs de saison disponibles ce jour. Ils peuvent donc
+        singulière, contemporaine et intemporelle.</p>
+      <p class="description">Nos bouquets sont confectionnés également à partir des fleurs de saison disponibles ce
+        jour. Ils peuvent donc
         varier selon les disponibilités et les saisons. Prise de commande en 24h. Pour une commande le jour même,
-        contactez-nous au +261 34 04 764 14.<br><br>
-        <em>A florist specializing in anthuriums — a tropical flower with a sculptural character, captivating for its
-          graphic lines, vibrant beauty and exceptional longevity. At the crossroads of nature and architecture, it
-          embodies a distinctive elegance that is both contemporary and timeless. Our bouquets are also crafted using
-          seasonal flowers available on the day; they may vary by availability and season. Orders must be placed at least
-          24 hours in advance. For same-day orders please contact us at +261 34 04 764 14.</em>
-      </p>
+        contactez-nous au +261 34 04 764 14.</p>
+      <p class="description">A florist specializing in anthuriums — a tropical flower with a sculptural character,
+        captivating for its
+        graphic lines, vibrant beauty and exceptional longevity. At the crossroads of nature and architecture, it
+        embodies a distinctive elegance that is both contemporary and timeless. Our bouquets are also crafted using
+        seasonal flowers available on the day; they may vary by availability and season. Orders must be placed at least
+        24 hours in advance. For same-day orders please contact us at +261 34 04 764 14.</p>
 
       <!-- 1. TAILLE -->
       <div class="step-header">1 — TAILLE / SIZE</div>
       <div class="size-note">Guide de taille / size guide : Mini ~15cm · S ~20cm · M ~30cm · L ~40cm</div>
-      <!-- MODIFIÉ : libellés tailles sur une seule ligne, bouton sur-mesure réduit au signe « + » -->
+      <!-- libellés tailles sur une seule ligne, bouton sur-mesure réduit au signe « + » -->
       <div class="circle-row" id="size-row">
         <div class="c-opt"><button class="c-btn" data-price="100000">Mini</button>
           <div class="c-label">100 000 Ar</div>
@@ -84,19 +85,20 @@
           <div class="c-label">150 000 Ar</div>
         </div>
         <div class="c-line"></div>
-        <!-- MODIFIÉ : bouton sur-mesure affiche uniquement « + » (data-price conservé) -->
+        <!-- bouton sur-mesure affiche uniquement « + » (data-price conservé) -->
         <div class="c-opt"><button class="c-btn" data-price="0">+</button>
           <div class="c-label">min 200 000 Ar</div>
         </div>
       </div>
-      <!-- NOUVEAU : bloc « prix sur devis » masqué par défaut, affiché quand le sur-mesure est choisi -->
+      <!-- bloc « prix sur devis » masqué par défaut, affiché quand le sur-mesure est choisi -->
       <div id="size-surmesure-block">à partir de 200 000 Ar — prix sur devis / from 200 000 Ar — quoted price</div>
-      <p style="font-size:11px;color:var(--noir);margin-top:0.3rem">* Sur-mesure à partir de 200 000 Ar / custom from 200
+      <p style="font-size:11px;color:var(--noir);margin-top:0.3rem">* Sur-mesure à partir de 200 000 Ar / custom from
+        200
         000 Ar.</p>
 
       <!-- 2. COULEUR -->
       <div class="step-header">2 — COULEUR / COLOR</div>
-      <!-- MODIFIÉ : libellés couleurs sur une seule ligne (sous-texte retiré, classes conservées) -->
+      <!-- libellés couleurs sur une seule ligne (sous-texte retiré, classes conservées) -->
       <div class="color-row" id="color-row">
         <div class="col-opt neutre"><button class="col-btn selected"></button>
           <div class="col-label">neutre / neutral</div>
@@ -117,9 +119,9 @@
 
       <!-- 3. VASE -->
       <div class="step-header">3 — VASE / POT</div>
-      <!-- NOUVEAU : légende du champ vase -->
+      <!-- légende du champ vase -->
       <div class="fieldset-legend">je souhaite un vase / i would like a vase</div>
-      <!-- MODIFIÉ : vase en radio-boîtes style saison -->
+      <!-- vase en radio-boîtes style saison -->
       <div class="radio-row" id="vase-row">
         <button class="r-btn" data-price="20000">oui / yes (+20 000 Ar)</button>
         <button class="r-btn selected" data-price="0">non / no</button>
@@ -132,14 +134,15 @@
 
       <!-- 5. LIVRAISON -->
       <div class="step-header">5 — LIVRAISON / DELIVERY</div>
-      <!-- NOUVEAU : légende du mode de livraison -->
+      <!-- légende du mode de livraison -->
       <div class="fieldset-legend">mode de livraison / delivery</div>
       <div class="delivery-toggle">
-        <button class="d-opt active" data-delivery="pickup">retrait en boutique (gratuit) / pick up in store (free)</button>
+        <button class="d-opt active" data-delivery="pickup">retrait en boutique (gratuit) / pick up in store
+          (free)</button>
         <button class="d-opt" data-delivery="home">livraison à domicile / home delivery</button>
       </div>
 
-      <!-- NOUVEAU : légende du retrait -->
+      <!-- légende du retrait -->
       <div id="pickup-block">
         <div class="fieldset-legend">retrait souhaitée le / pickup on</div>
         <input class="field" type="date" id="pickup-date">
@@ -147,7 +150,7 @@
           monday — saturday · 9am–6pm</p>
       </div>
 
-      <!-- NOUVEAU : légende de la livraison -->
+      <!-- légende de la livraison -->
       <div id="home-block" style="display:none">
         <div class="fieldset-legend">livraison souhaitée le / delivery on</div>
         <input class="field" type="date" id="delivery-date" placeholder="date souhaitée / desired date">
@@ -191,15 +194,21 @@
 
       <!-- RÉCAP -->
       <div class="recap-block" id="recap">
-        <!-- MODIFIÉ : titre du récap — « Ma commande / My order » -->
+        <!-- titre du récap — « Ma commande / My order » -->
         <div class="recap-title">Ma commande / My order</div>
         <div class="recap-grid">
-          <div class="recap-row"><span class="recap-label">Bouquet</span><span class="recap-value" id="recap-size">—</span></div>
-          <div class="recap-row"><span class="recap-label">Couleur / Color</span><span class="recap-value" id="recap-color">—</span></div>
-          <div class="recap-row"><span class="recap-label">Vase / Pot</span><span class="recap-value" id="recap-vase">—</span></div>
-          <div class="recap-row"><span class="recap-label">Message</span><span class="recap-value" id="recap-message">—</span></div>
-          <div class="recap-row"><span class="recap-label">Prix bouquet / Price</span><span class="recap-value" id="recap-prix">—</span></div>
-          <div class="recap-row"><span class="recap-label">Frais livraison / Delivery</span><span class="recap-value" id="recap-frais">—</span></div>
+          <div class="recap-row"><span class="recap-label">Bouquet</span><span class="recap-value"
+              id="recap-size">—</span></div>
+          <div class="recap-row"><span class="recap-label">Couleur / Color</span><span class="recap-value"
+              id="recap-color">—</span></div>
+          <div class="recap-row"><span class="recap-label">Vase / Pot</span><span class="recap-value"
+              id="recap-vase">—</span></div>
+          <div class="recap-row"><span class="recap-label">Message</span><span class="recap-value"
+              id="recap-message">—</span></div>
+          <div class="recap-row"><span class="recap-label">Prix bouquet / Price</span><span class="recap-value"
+              id="recap-prix">—</span></div>
+          <div class="recap-row"><span class="recap-label">Frais livraison / Delivery</span><span class="recap-value"
+              id="recap-frais">—</span></div>
         </div>
       </div>
 
@@ -207,7 +216,7 @@
       <div class="pay-label">MODE DE PAIEMENT / PAYMENT</div>
       <button class="pay-btn wa" id="btn-whatsapp"><span>WhatsApp · confirmer &amp; commander / confirm &amp;
           order</span><span>↗</span></button>
-      <!-- MODIFIÉ : boutons secondaires + gros CTA WhatsApp (style saison) -->
+      <!-- boutons secondaires + gros CTA WhatsApp (style saison) -->
       <button class="pay-btn secondary" id="btn-mvola"><span>MVola · 034 04 764 14</span><span>→</span></button>
       <button class="pay-btn especes secondary" id="btn-especes"><span>Espèces · à la livraison ou en boutique / cash on
           delivery or in store</span><span>→</span></button>
@@ -242,7 +251,8 @@
           directement sur WhatsApp pour obtenir les coordonnées de virement et confirmer votre commande.<br><br>Les
           frais de transfert international sont à la charge de l'expéditeur. / For transfers from abroad via
           <strong>Sendwave</strong> or <strong>PayPal</strong>, contact us directly on WhatsApp for the transfer details
-          and to confirm your order. International transfer fees are the responsibility of the sender.</p>
+          and to confirm your order. International transfer fees are the responsibility of the sender.
+        </p>
         <br>
         <button class="pay-btn sendwave btn-confirm-wa" style="margin-top:0.5rem"><span>Nous contacter pour
             le virement / Contact us for the transfer</span><span>↗</span></button>
@@ -278,7 +288,7 @@
     </div>
   </div>
 
-  <!-- MODIFIÉ : Bundle TypeScript compilé -->
+  <!-- Bundle TypeScript compilé -->
   <script type="module" src="dist/app.js"></script>
 </body>
 
