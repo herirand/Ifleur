@@ -115,7 +115,7 @@
 }
 
 /* ========== COULEURS ========== */
-/* Rangée de couleurs — filet traversant porté par le ::after */
+/* MODIFIÉ : Rangée de couleurs — filet traversant supprimé (référence saison : pas de trait au début ni à la fin des couleurs) */
 .color-row {
   position: relative;
   display: flex;
@@ -123,17 +123,7 @@
   margin-bottom: var(--gutter);
 }
 
-.color-row::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 30px;
-  right: 0;
-  border-bottom: var(--border);
-  z-index: 0;
-}
-
-/* Option couleur — largeur quart, au-dessus du filet */
+/* MODIFIÉ : Option couleur — largeur quart */
 .col-opt {
   position: relative;
   z-index: 1;
@@ -145,7 +135,7 @@
   text-align: center;
 }
 
-/* Cercle de couleur — 60px, bordure blanche à l'inactif */
+/* MODIFIÉ : Cercle de couleur — 60px. Fond noir comme le slide 6 du pptx ; par-dessus, UNIQUEMENT la photo exacte du cercle (anneau pointillé original + fleur sur surprenez) */
 .col-btn {
   width: 60px;
   height: 60px;
@@ -153,29 +143,32 @@
   border: 1px solid var(--blanc);
   cursor: pointer;
   transition: all .3s linear;
+  background-color: var(--noir);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-/* Gradients EXACTS — copie de la référence saison-eshop (135°, 5 stops) */
+/* MODIFIÉ : Photos exactes des cercles du pptx (slide 6) — rendues transparentes (traits seuls), aucun recolorisation ni réinterprétation */
 .neutre .col-btn {
-  background: linear-gradient(135deg, #FFFFFF 0%, #F8F0F0 25%, #E0CACA 50%, #B59090 75%, #6A3C3C 100%);
+  background-image: url('../images/color-neutre.png');
 }
 
 .pastel .col-btn {
-  background: linear-gradient(135deg, #FFFFFF 0%, #E0E8F2 25%, #C1CCDE 50%, #7B8C9E 75%, #303D4A 100%);
+  background-image: url('../images/color-pastel.png');
 }
 
 .chaud .col-btn {
-  background: linear-gradient(135deg, #FFF055 0%, #FFD56B 25%, #FFB080 50%, #F48AB1 75%, #A04F6B 100%);
+  background-image: url('../images/color-chaud.png');
 }
 
 .surprenez-moi .col-btn {
-  background: linear-gradient(135deg, #FFEA00 0%, #FFBC2C 25%, #FF9050 50%, #A070FF 75%, #6C00FF 100%);
+  background-image: url('../images/color-surprenez-moi.png');
 }
 
-/* État actif — seul le filet passe au noir, le dégradé reste visible (background-color longhand : le background-image du dégradé le recouvre, miroir référence saison-eshop) */
+/* MODIFIÉ : État actif — halo blanc distinct sur le fond noir (le visuel/photo reste intact) */
 .color-row .col-btn.selected {
-  background-color: var(--noir);
-  border-color: var(--noir);
+  box-shadow: 0 0 0 3px var(--blanc);
 }
 
 /* Libellé couleur — 0.7rem, minuscules, sans letter-spacing ni majuscules (référence : label couleur 0.7rem brut) */
@@ -186,7 +179,7 @@
   padding: 2px 15px;
 }
 
-/* Filet de connexion — le filet est le ::after de .color-row */
+/* MODIFIÉ : Séparateur .col-line (hérité du format initial) — masqué, aucun filet entre les couleurs */
 .col-line {
   display: none;
 }
@@ -561,16 +554,17 @@ textarea.field {
   border-top: var(--border);
 }
 
-/* Question — rangée cliquable */
+/* MODIFIÉ : Question — rangée cliquable, police réduite (font85) et padding resserré pour coller à la référence */
 .faq-q {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 15px;
-  padding: 10px 0;
+  padding: 8px 0;
   cursor: pointer;
   font-family: var(--font);
-  font-size: var(--font90);
+  font-size: var(--font85);
+  line-height: 1.4;
   color: var(--noir);
   background: none;
   border: none;
@@ -579,9 +573,9 @@ textarea.field {
   text-align: left;
 }
 
-/* Symbole + — rotation 45° à l'ouverture */
+/* MODIFIÉ : Symbole + — taille réduite en proportion de la question */
 .faq-toggle {
-  font-size: 20px;
+  font-size: 16px;
   color: var(--noir);
   transition: transform .3s linear;
   flex-shrink: 0;
@@ -599,13 +593,14 @@ textarea.field {
   overflow: hidden;
 }
 
+/* MODIFIÉ : Réponse — police plus petite (font80) et interligne resserré, rendu compact type référence */
 .faq-a-inner {
   overflow: hidden;
   min-height: 0;
   padding: 0;
-  font-size: var(--font85);
+  font-size: var(--font80);
   color: var(--noir);
-  line-height: 1.8;
+  line-height: 1.6;
 }
 
 .faq-item.open .faq-a {
@@ -652,10 +647,6 @@ textarea.field {
 screen and (max-width:1024px) {
   .circle-row::after {
     top: 22px;
-  }
-
-  .color-row::after {
-    top: 23px;
   }
 
   .c-btn {

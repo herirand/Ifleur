@@ -1,0 +1,26 @@
+{
+  "name": "i-fleur-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for i.fleur flower boutique",
+  "scripts": {
+    "dev": "tsx watch --ignore src/ts --ignore public src/app.ts",
+    "build": "esbuild src/ts/main.ts --bundle --outfile=public/dist/app.js --format=esm --minify",
+    "start": "NODE_ENV=production tsx src/app.ts",
+    "serve": "npm run build && NODE_ENV=production tsx src/app.ts",
+    "build:server": "esbuild src/app.ts --bundle --platform=node --format=cjs --outfile=dist/server.cjs --minify --external:esbuild",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.3",
+    "typescript": "^5.5.0"
+  },
+  "dependencies": {
+    "@emailjs/nodejs": "^5.0.2",
+    "@fastify/cors": "^11.3.0",
+    "@fastify/static": "^8.3.0",
+    "dotenv": "^18.0.1",
+    "esbuild": "^0.28.2",
+    "fastify": "^5.12.5",
+    "tsx": "^4.23.15"
+  }
+}

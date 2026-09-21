@@ -1,48 +1,50 @@
-# AGENTS.md
+# AGENTS.md — i-fleur/
 
-## What this repo is
+## What this is
 
-**i.fleur** is a single, **100% static** frontend for a flower boutique in Antananarivo, Madagascar. No backend lives in this repo — ordering is done over WhatsApp with a pre-filled message. There is **no `netlify.toml`, no `backend/`, no `ifleur.html` here**; those live in the parent `Ifleur/` repo. Deploy config, legacy spec, and pricing history are documented in the parent `Ifleur/AGENTS.md` — trust this file for code inside `frontend/`.
+**i.fleur** is a **monolith**: one Fastify server (`app/`) serves both the API
+(`POST /api/email/send` via EmailJS, clés privées côté serveur) and the static
+frontend (`app/public/`). Prod target = serveur cPanel (`node dist/server.cjs`),
+pas Netlify. La vue d'ensemble et l'historique prix sont dans le parent
+`Ifleur/AGENTS.md` — trust ce fichier pour le code dans `app/`.
 
-## Layout
+## Layout (`app/`)
 
-- `frontend/` — the whole app (TypeScript + esbuild, no framework, no runtime network calls)
-  - `src/ts/main.ts` — entrypoint, orchestration + shop config / FAQ rendering
-  - `src/ts/*.ts` — feature modules (pricing, delivery, billing, payment, slider, selectors)
-  - `src/ts/config.json` — **all prices, WhatsApp number, shop info, delivery zones, FAQ** (imported into the bundle)
-  - `src/ts/types.ts` — shared types
-  - `src/styles/*.css` — CSS split by section
-  - `index.html` — references the esbuild output `dist/app.js`
-  - `dist/` — build output, **gitignored** (CI/Netlify rebuilds it)
+- `public/` — **racine web servie** (index.html, `src/styles|images|fonts`, `dist/app.js`). Seule partie exposée : jamais `src/ts`, `.env`, `package.json`.
+- `src/app.ts` — ENTRYPOINT Fastify : `ensureFrontendBuilt()` (bundle esbuild src/ts/main.ts → public/dist/app.js, watch en dev) → CORS localhost → error handler (AppError + fallback 4xx/5xx) → routes `/api/*` → `@fastify/static` root=`public/` → SPA fallback (GET sans extension → index.html ; **404 réel** pour `/api/*`, fichiers à extension et dotfiles).
+- `src/buildStatic.ts` — contexte esbuild frontend (auto-build au démarrage).
+- `src/modules/email/` — **complet** (dto/service/controller/route). `src/modules/payment/` — **stubs vides** à remplir plus tard.
+- `src/ts/config.json` — **toutes les données business** (prix, WhatsApp, shop, zones, FAQ), baked dans le bundle.
+- `dist/server.cjs` — bundle serveur (`node dist/server.cjs`, entry cPanel).
 
-## Commands (run in `frontend/`)
+## Commands (run in `app/`)
 
 ```bash
-npm install
-npm run dev      # esbuild bundle --watch + file server on :8000 (single command)
-npm run build    # minified bundle -> dist/app.js
-npx tsc --noEmit # typecheck
+npm install                  # esbuild + @fastify/static sont des DEPS (requis à l'exécution)
+npm run dev                  # bundle esbuild watch + serveur :3000 (single command)
+npm run build                # esbuild frontend minifié -> public/dist/app.js
+npm run serve                # build + NODE_ENV=production tsx src/app.ts (une fois)
+npm run build:server         # esbuild serveur -> dist/server.cjs (entry cPanel)
+npx tsc --noEmit             # typecheck frontend only (no tests, no linter)
 ```
 
-- `dev` does **both** bundling and serving. Don't run esbuild manually.
-- No test framework, no linter configured. `npx tsc --noEmit` is the only static check.
-- `dist/` is gitignored and never committed — always rebuild before testing/deploying.
+- `dev` = `tsx watch --ignore src/ts --ignore public src/app.ts` : tsx watch (back) + esbuild watch (front) sur une seule commande.
+- `dist/` et `public/dist/` sont gitignorés — toujours rebuild avant test/déploy.
+- ⚠️ **Jamais `pkill -f "tsx"`/`pkill -f "src/app.ts"`** dans un shell interactif : le pattern matche la commande elle-même → tue le shell. Tuer par port : `ss -tlnp | grep :3000`.
 
-## Config data flow (important)
+## Config data flow
 
-Everything business-configurable lives in **`src/ts/config.json`**, imported directly into the bundle (`data.ts` exports `CONFIG`). There is no `fetch`/API — the JSON is baked into `app.js` at build time. **Changing delivery zones, prices, or FAQ requires editing that JSON, then `npm run build` (or `dev`), then redeploy** — editing the HTML/TS alone will not change behavior.
+Tout est dans `src/ts/config.json`, importé dans le bundle (`data.ts` → `CONFIG`). Aucun fetch : changement → éditer le JSON → rebuild.
 
-> `README.md` in this folder is stale (it claims vase = +8 000 Ar; code says +20 000 Ar, see `config.json` and the vase button in `index.html`). Trust code, not the README.
+**Pricing en 2 sources qui doivent rester synchronisées** : `src/ts/config.json` (seulement le total initial `basePrice = CONFIG.prices.S`, `vasePrice`, `surMesureMin`) et `public/index.html` (`data-price` sur boutons taille/vase + montants `c-label`). Désaccord ⇒ total/récap dérivent. Prix (Ar) : Mini 100 000 · S 80 000 · M 120 000 · L 150 000 · vase +20 000 · sur-mesure min 200 000.
 
-Delivery zones semantics (`.delivery.zones`):
-- `fee`: `0` = free, number = delivery fee, `null` = "sur devis" / hors zone.
-- A zone with empty `quartiers` **and** `fee: null` is treated as the hors-zone fallback and is **excluded** from the quartier `<select>` (`data.ts:findZoneForQuartier` / `getAllQuartiers`).
+> ⚠️ Divergence non commitée : `public/index.html` affiche Mini 80 000 / S 100 000 alors que `config.json` dit l'inverse. À trancher avant tout `POST /api/order`.
+
+Zones livraison (`.delivery.zones`) : `fee: 0` = gratuit, `fee: N` = frais, `fee: null` = "sur devis"/hors zone ; zone `quartiers` vides + `fee: null` = fallback hors-zone, exclue du `<select>` quartier.
 
 ## Conventions (mandatory)
 
-- Mark every code change with a comment:
-  - `// NOUVEAU : [desc]` for new code
-  - `// MODIFIÉ : [desc]` for changed code
-- Comments and UI copy are in **French** (Malagasy market).
-- Prices are in Ariary (`Ar`); the `€` figures in the legacy spec are wrong — trust `config.json`.
-- TypeScript imports use the explicit `.js` extension (Node/ESM resolution, e.g. `import './pricing.js'`).
+- Tout changement marqué `// NOUVEAU : [desc]` / `// MODIFIÉ : [desc]`.
+- Commentaires & UI en **Français** (marché malgache), labels FR/EN bilingues OK.
+- Prix en **Ariary (`Ar`)** — ignorer les € du pptx.
+- Imports frontend avec extension `.js` (`import './pricing.js'`); imports serveur sans extension.
