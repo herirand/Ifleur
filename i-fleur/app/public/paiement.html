@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>i.fleur · paiement / payment</title>
+  <meta name="description"
+    content="i.fleur — paiement de votre commande. / i.fleur — pay for your order.">
+
+  <!-- polices locales Saison — mêmes feuilles que la boutique -->
+  <link rel="stylesheet" href="src/styles/variables.css">
+  <link rel="stylesheet" href="src/styles/layout.css">
+  <link rel="stylesheet" href="src/styles/components.css">
+  <link rel="stylesheet" href="src/styles/animations.css">
+  <link rel="stylesheet" href="src/styles/responsive.css">
+</head>
+
+<body>
+  <!-- MODIFIÉ : page paiement au même design que la boutique (split-screen : header logo,
+       photo fixe à gauche + contenu défilant à droite). La commande (POST /api/order) part
+       toujours ici ; le processeur de paiement sera intégré plus tard. -->
+  <div class="layout">
+
+    <!-- Header (logo + titre) — même structure que la boutique -->
+    <div class="col-content site-head">
+      <div class="logo-block">
+        <img src="src/images/logo.png" alt="i.fleur" class="logo-img">
+      </div>
+      <div class="tagline">PAIEMENT / PAYMENT</div>
+    </div>
+
+    <!-- PHOTO — même slider que la boutique -->
+    <div class="col-photo">
+      <div class="slides" id="slider">
+        <div class="slide" style="background-image:url('src/images/bouquet-1.jpg')"></div>
+        <div class="slide" style="background-image:url('src/images/bouquet-2.jpg')"></div>
+        <div class="slide" style="background-image:url('src/images/bouquet-3.jpg')"></div>
+        <div class="slide" style="background-image:url('src/images/bouquet-4.jpg')"></div>
+      </div>
+      <button class="slide-arrow prev" aria-label="Précédent / Previous">←</button>
+      <button class="slide-arrow next" aria-label="Suivant / Next">→</button>
+      <div class="slide-dots">
+        <button class="dot active" data-slide="0">1</button>
+        <button class="dot" data-slide="1">2</button>
+        <button class="dot" data-slide="2">3</button>
+        <button class="dot" data-slide="3">4</button>
+      </div>
+    </div>
+
+    <!-- CONTENT / RÉCAP + PAIEMENT -->
+    <div class="col-content">
+      <div id="checkout-page">
+        <!-- retour vers le configurateur -->
+        <a class="checkout-back" href="/">← retour / back to order</a>
+
+        <!-- RÉCAP COMMANDE -->
+        <div class="step-header">MA COMMANDE / MY ORDER</div>
+        <div class="recap-block">
+          <span class="recap-title">Récapitulatif / Summary</span>
+          <div class="recap-grid" id="co-recap-grid"></div>
+        </div>
+
+        <!-- TOTAL (recalculé côté backend à l'arrivée) -->
+        <div class="total-row">
+          <span class="total-label">TOTAL</span>
+          <span class="total-amount" id="co-total-display">—</span>
+        </div>
+
+        <!-- MODE DE PAIEMENT -->
+        <div class="pay-label">MODE DE PAIEMENT / PAYMENT</div>
+        <div class="radio-row">
+          <button class="r-btn selected" data-pay="Mvola">MVola · 034 04 764 14</button>
+          <button class="r-btn" data-pay="carte">Carte bancaire / bank card</button>
+        </div>
+
+        <!-- MVola box -->
+        <div class="mm-box" id="co-mv-box" style="display:block">
+          <div class="mm-provider">MVOLA</div>
+          <div class="mm-num">034 04 764 14</div>
+          <div class="mm-name">i.fleur</div>
+          <div class="mm-info">Envoyez le montant exact après validation de votre commande ; nous confirmons la réception
+            du paiement avant livraison. / Send the exact amount after validating your order; we confirm payment receipt
+            before delivery.</div>
+        </div>
+
+        <!-- Carte box -->
+        <div class="mm-box" id="co-card-box">
+          <div class="mm-provider">CARTE BANCAIRE / BANK CARD</div>
+          <div class="mm-info">Le paiement par carte sera finalisé via notre partenaire sécurisé. Nous vous recontactons
+            pour confirmer votre commande. / Card payment will be finalized via our secure partner. We will contact you to
+            confirm your order.</div>
+        </div>
+
+        <!-- NOUVEAU : « Payer » — envoie la commande au backend. Le processeur de paiement
+             sera branché dans #co-pay-placeholder lors de l'intégration. -->
+        <button class="pay-btn" id="btn-pay"><span>Payer / Pay</span><span>✓</span></button>
+        <div id="co-order-status" aria-live="polite"></div>
+
+        <!-- NOUVEAU : emplacement réservé à l'intégration du paiement réel (affiché après succès) -->
+        <div id="co-pay-placeholder">
+          <div class="mm-provider">Paiement sécurisé / Secure payment</div>
+          <p class="mm-info">
+            Votre commande est bien reçue. Le paiement de <span class="co-placeholder-total">—</span> sera
+            très prochainement finalisé ici (MVola · Carte bancaire). Nous vous contactons pour confirmer.
+            / Your order has been received. The payment of <span class="co-placeholder-total">—</span> will
+            shortly be finalized here (MVola · bank card). We will contact you to confirm.
+          </p>
+        </div>
+
+        <!-- Retour -->
+        <button class="pay-btn secondary" id="btn-back"><span>← Retour / Back</span><span></span></button>
+      </div>
+
+      <div class="site-footer">
+        <strong style="font-size:13px;color:var(--noir);letter-spacing:0.08em;">i.fleur</strong><br>
+        Antananarivo, Madagascar<br>
+        MVola : 034 04 764 14
+      </div>
+    </div>
+  </div>
+
+  <!-- Même bundle que la boutique (main.ts route la page via #checkout-page) -->
+  <script type="module" src="dist/app.js"></script>
+</body>
+
+</html>

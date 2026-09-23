@@ -1,44 +1,47 @@
-// Module d'accès à la configuration statique (config.json surchargé par esbuild)
+// MODIFIÉ : charge la config depuis le backend (GET /api/config) — plus d'import config.json
 
 import type { Config, DeliveryZone } from './types.js';
 
-// Import direct du JSON (remplace l'ancien appel GET /api/config)
-import config from './config.json';
+let CONFIG: Config | null = null;
 
-// Référence partagée vers la configuration
-export const CONFIG: Config = config;
+// Charger la config depuis le serveur (appelée une fois, avant init*)
+export async function loadConfig(): Promise<Config> {
+  const res = await fetch('/api/config');
+  if (!res.ok) throw new Error('Impossible de charger la configuration');
+  const data = await res.json();
+  const config: Config = data.config ?? data;
+  CONFIG = config;
+  return config;
+}
 
-// Accéder à une zone de livraison pour un quartier donné
-// Retourne null si le quartier n'est assigné à aucune zone
+// Accès à la config chargée (erreur si loadConfig() pas encore résolu)
+export function getConfig(): Config {
+  if (!CONFIG) throw new Error('Configuration non chargée');
+  return CONFIG;
+}
+
+// NOUVEAU : localiser la zone de livraison d'un quartier donné
 export function findZoneForQuartier(quartier: string): DeliveryZone | null {
-  if (!quartier) return null;
+  if (!CONFIG || !quartier) return null;
   const q = quartier.trim().toLowerCase();
   let fallback: DeliveryZone | null = null;
 
   for (const zone of CONFIG.delivery.zones) {
-    if (zone.quartiers.some(item => item.toLowerCase() === q)) {
-      return zone;
-    }
-    // la zone "Autre / hors zone" sert de fallback si elle existe
-    if (zone.quartiers.length === 0 && zone.fee === null) {
-      fallback = zone;
-    }
+    if (zone.quartiers.some(item => item.toLowerCase() === q)) return zone;
+    if (zone.quartiers.length === 0 && zone.fee === null) fallback = zone;
   }
 
   return fallback;
 }
 
-// Aplatir tous les quartiers de toutes les zones (pour le <select>)
+// NOUVEAU : liste à plat de tous les quartiers (pour le <select>)
 export function getAllQuartiers(): { quartier: string; zone: DeliveryZone }[] {
   const list: { quartier: string; zone: DeliveryZone }[] = [];
+  if (!CONFIG) return list;
+
   for (const zone of CONFIG.delivery.zones) {
-    if (zone.quartiers.length === 0 && zone.fee === null) {
-      // la zone "hors zone" n'apparaît pas comme un quartier choisissable
-      continue;
-    }
-    for (const quartier of zone.quartiers) {
-      list.push({ quartier, zone });
-    }
+    if (zone.quartiers.length === 0 && zone.fee === null) continue;
+    for (const quartier of zone.quartiers) list.push({ quartier, zone });
   }
   return list;
 }

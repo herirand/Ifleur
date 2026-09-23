@@ -17,7 +17,7 @@
 /* Headers de section — barre éditoriale avec filet, gras 700 (défaut navigateur h2), souffle sous le filet */
 .step-header {
   font-family: var(--font);
-  font-weight: 700;
+  font-weight: 800;
   font-size: var(--font80);
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -115,12 +115,25 @@
 }
 
 /* ========== COULEURS ========== */
-/* MODIFIÉ : Rangée de couleurs — filet traversant supprimé (référence saison : pas de trait au début ni à la fin des couleurs) */
+/* MODIFIÉ : Rangée de couleurs — filet traversant intérieur seulement (début/fin rognés), comme la section SIZE */
 .color-row {
   position: relative;
   display: flex;
   justify-content: space-between;
   margin-bottom: var(--gutter);
+}
+
+/* NOUVEAU : filet traversant entre les couleurs — passe derrière les cercles (z-index),
+   rogné aux centres des 1er/ dernier cercles (12.5% = centre d'un col-opt de 25%) :
+   pas de trait au début ni à la fin de la rangée */
+.color-row::after {
+  content: '';
+  position: absolute;
+  left: 12.5%;
+  right: 12.5%;
+  top: 30px;
+  border-bottom: var(--border);
+  z-index: 0;
 }
 
 /* MODIFIÉ : Option couleur — largeur quart */
@@ -135,40 +148,58 @@
   text-align: center;
 }
 
-/* MODIFIÉ : Cercle de couleur — 60px. Fond noir comme le slide 6 du pptx ; par-dessus, UNIQUEMENT la photo exacte du cercle (anneau pointillé original + fleur sur surprenez) */
+/* MODIFIÉ : Cercle de couleur — 60px (taille référence saison-eshop). Dégradés CSS pour
+   pastel / neutre / chaud ; surprenez-moi = photo locale. État sélectionné = bordure noire. */
 .col-btn {
   width: 60px;
   height: 60px;
   border-radius: 60px;
-  border: 1px solid var(--blanc);
+  /* MODIFIÉ : bordure transparente par défaut — états non sélectionnés « sans bordure »
+     (référence saison : bordure blanche invisible sur fond blanc) ; 1px réservé pour éviter le shift */
+  border: 1px solid transparent;
   cursor: pointer;
   transition: all .3s linear;
-  background-color: var(--noir);
+  /* MODIFIÉ : retrait du fond noir + background-clip padding-box — l'anneau GRIS FONCÉ des
+     flancs (antialiasing border-radius) disparaît ; la couleur s'arrête 1px avant le bord */
+  background-clip: padding-box;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-/* MODIFIÉ : Photos exactes des cercles du pptx (slide 6) — rendues transparentes (traits seuls), aucun recolorisation ni réinterprétation */
-.neutre .col-btn {
-  background-image: url('../images/color-neutre.png');
+/* NOUVEAU : dégradés utilisateur — .cercle-1 pastel (blanc→rose), .cercle-2 neutre (blanc→vert), .cercle-3 chaud (pourpre→grenat) */
+.pastel .col-btn {
+  background-image: linear-gradient(180deg, #ffffff 0%, #ff9aa2 100%);
 }
 
-.pastel .col-btn {
-  background-image: url('../images/color-pastel.png');
+.neutre .col-btn {
+  background-image: linear-gradient(180deg, #ffffff 0%, #b5e7a0 100%);
 }
 
 .chaud .col-btn {
-  background-image: url('../images/color-chaud.png');
+  background-image: linear-gradient(180deg, #9b2d38 0%, #631722 100%);
 }
 
+/* MODIFIÉ : surprenez-moi — photo locale sur fond dégradé radial (voir règles ci-dessous) */
 .surprenez-moi .col-btn {
-  background-image: url('../images/color-surprenez-moi.png');
+  /* Conserve la forme circulaire */
+  overflow: hidden;
+  /* Masque tout ce qui dépasse */
+
+  /* MODIFIÉ : le fond dégradé radial (beige→bronze) est maintenant visible DERRIÈRE la photo
+     de la fleur — les 2 couches sont empilées sur le même background-image (1re = premier plan) */
+  background-image: url('../images/color-surprenez-moi.png'),
+    radial-gradient(circle, #e6ded0 0%, #bca78c 100%);
+  background-size: 70%, auto;
+  /* 70% = fleur ; auto = le dégradé couvre tout le cercle */
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-/* MODIFIÉ : État actif — halo blanc distinct sur le fond noir (le visuel/photo reste intact) */
+/* MODIFIÉ : État sélectionné — bordure NOIRE (référence saison : border-color: var(--noir)),
+   animée par la transition .3s du .col-btn ; halo blanc supprimé */
 .color-row .col-btn.selected {
-  box-shadow: 0 0 0 3px var(--blanc);
+  border-color: var(--noir);
 }
 
 /* Libellé couleur — 0.7rem, minuscules, sans letter-spacing ni majuscules (référence : label couleur 0.7rem brut) */
@@ -539,6 +570,99 @@ textarea.field {
   color: var(--noir);
 }
 
+/* NOUVEAU : message d'état de la commande (envoi / succès / erreur) — doublons fusionnés */
+#order-status {
+  display: none;
+  margin-top: 15px;
+  padding: 15px;
+  font-size: var(--font85);
+  line-height: 1.7;
+  background: var(--grisclair);
+}
+
+#order-status:not(:empty) {
+  display: block;
+}
+
+#order-status.status-ok {
+  color: var(--noir);
+  border-left: 3px solid var(--noir);
+}
+
+#order-status.status-error {
+  color: var(--noir);
+  background: #f7e7e7;
+  border-left: 3px solid #b33;
+}
+
+/* ========== PAGE PAIEMENT (/paiement.html) ========== */
+/* MODIFIÉ : la page paiement reprend le layout split-screen de la boutique (.col-photo
+   fixe à gauche + .col-content à droite) — la colonne centrée .col-checkout est supprimée. */
+#checkout-page {
+  padding-bottom: var(--gutter);
+}
+
+/* NOUVEAU : lien retour discret (référence : lien souligné par filet) */
+.checkout-back {
+  display: inline-block;
+  margin: var(--gutter) 0;
+  padding-bottom: 2px;
+  font-size: var(--font80);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--noir);
+  border-bottom: 1px solid var(--noir);
+  text-decoration: none;
+  transition: all .3s linear;
+}
+
+.checkout-back:hover {
+  background: var(--noir);
+  color: var(--blanc);
+}
+
+/* NOUVEAU : statut de la page paiement — même logique que #order-status */
+#co-order-status {
+  display: none;
+  margin-top: 15px;
+  padding: 15px;
+  font-size: var(--font85);
+  line-height: 1.7;
+  background: var(--grisclair);
+}
+
+#co-order-status:not(:empty) {
+  display: block;
+}
+
+#co-order-status.status-ok {
+  color: var(--noir);
+  border-left: 3px solid var(--noir);
+}
+
+#co-order-status.status-error {
+  color: var(--noir);
+  background: #f7e7e7;
+  border-left: 3px solid #b33;
+}
+
+/* NOUVEAU : placeholder d'intégration du paiement (révélé par la classe .visible) */
+#co-pay-placeholder {
+  display: none;
+  background: var(--grisclair);
+  padding: 15px;
+  margin-top: 15px;
+  border-left: 3px solid var(--noir);
+}
+
+#co-pay-placeholder.visible {
+  display: block;
+}
+
+.co-placeholder-total {
+  font-weight: 700;
+}
+
 /* ========== FAQ ========== */
 /* Section FAQ */
 .faq-section {
@@ -646,6 +770,10 @@ textarea.field {
 @media print,
 screen and (max-width:1024px) {
   .circle-row::after {
+    top: 22px;
+  }
+
+  .color-row::after {
     top: 22px;
   }
 

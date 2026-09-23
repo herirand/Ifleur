@@ -1,76 +1,48 @@
-// Module carrousel d'images (slider)
+// MODIFIÉ : module carrousel type saison-eshop — crossfade (fade), loop, puces numérotées.
+// Plus d'autoplay (référence : Swiper effect fade, speed 100 ms, PAS d'autoplay).
 
 import { $, $$ } from './utils.js';
 
-// Index courant du slide actif
+// Index du slide actif
 let current = 0;
 
 // Nombre total de slides
 const SLIDE_COUNT = 4;
 
-// Intervalle auto-play en ms
-const AUTOPLAY_MS = 4500;
-
-// Timer de l'auto-play
-let autoplayTimer: ReturnType<typeof setInterval> | null = null;
-
-// Naviguer vers un slide spécifique
+// Naviguer vers un slide spécifique (loop géré par le modulo)
 export function goTo(n: number): void {
-  current = n;
+  current = (n + SLIDE_COUNT) % SLIDE_COUNT;
 
-  const slider = $('#slider') as HTMLElement | null;
-  const dots = $$('.dot');
+  $$('#slider .slide').forEach((slide, i) => {
+    slide.classList.toggle('active', i === current);
+  });
 
-  if (slider) {
-    slider.style.transform = `translateX(-${n * 100}%)`;
-  }
-
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('active', i === n);
+  $$('.dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === current);
   });
 }
 
-// Avancer au slide suivant
-function next(): void {
-  goTo((current + 1) % SLIDE_COUNT);
+// Avancer au slide suivant (loop)
+export function next(): void {
+  goTo(current + 1);
 }
 
-// Reculer au slide précédent
-function prev(): void {
-  goTo((current - 1 + SLIDE_COUNT) % SLIDE_COUNT);
+// Reculer au slide précédent (loop)
+export function prev(): void {
+  goTo(current - 1);
 }
 
-// Action navigation (stop l'auto-play puis navigue)
-function manualNavigate(fn: () => void): void {
-  stopAutoplay();
-  fn();
-  startAutoplay();
-}
-
-// Démarrer l'auto-play
-export function startAutoplay(): void {
-  stopAutoplay();
-  autoplayTimer = setInterval(next, AUTOPLAY_MS);
-}
-
-// Arrêter l'auto-play
-export function stopAutoplay(): void {
-  if (autoplayTimer !== null) {
-    clearInterval(autoplayTimer);
-    autoplayTimer = null;
-  }
-}
-
-// slider sans flèches (pagination numérotée seule, style saison)
+// init — puces numérotées + flèches prev/next, navigation manuelle seule (pas d'autoplay)
 export function initSlider(): void {
-  const dots = $$('.dot');
-
-  dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => {
-      manualNavigate(() => goTo(i));
-    });
+  $$('.dot').forEach((dot, i) => {
+    dot.addEventListener('click', () => goTo(i));
   });
+
+  const prevBtn = $('.slide-arrow.prev');
+  if (prevBtn) prevBtn.addEventListener('click', () => prev());
+
+  const nextBtn = $('.slide-arrow.next');
+  if (nextBtn) nextBtn.addEventListener('click', () => next());
 
   goTo(0);
-  startAutoplay();
 }

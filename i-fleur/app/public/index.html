@@ -38,7 +38,10 @@
         <div class="slide" style="background-image:url('src/images/bouquet-3.jpg')"></div>
         <div class="slide" style="background-image:url('src/images/bouquet-4.jpg')"></div>
       </div>
-      <!-- flèches supprimées, pagination numérotée type saison -->
+      <!-- MODIFIÉ : flèches prev/next rondes (référence saison : .swiper-button-prev/next) -->
+      <button class="slide-arrow prev" aria-label="Précédent / Previous">←</button>
+      <button class="slide-arrow next" aria-label="Suivant / Next">→</button>
+      <!-- pagination numérotée type saison -->
       <div class="slide-dots">
         <button class="dot active" data-slide="0">1</button>
         <button class="dot" data-slide="1">2</button>
@@ -68,31 +71,33 @@
       <div class="step-header">1 — TAILLE / SIZE</div>
       <div class="size-note">Guide de taille / size guide : Mini ~15cm · S ~20cm · M ~30cm · L ~40cm</div>
       <!-- libellés tailles sur une seule ligne, bouton sur-mesure réduit au signe « + » -->
+      <!-- MODIFIÉ : data-price → data-size (le prix est calculé par le backend) -->
       <div class="circle-row" id="size-row">
-        <div class="c-opt"><button class="c-btn" data-price="80000">Mini</button>
-          <div class="c-label">80 000 Ar</div>
+        <div class="c-opt"><button class="c-btn" data-size="mini">Mini</button>
+          <div class="c-label" data-price-label="mini">80 000 Ar</div>
         </div>
         <div class="c-line"></div>
-        <div class="c-opt"><button class="c-btn selected" data-price="100000">S</button>
-          <div class="c-label">100 000 Ar</div>
+        <div class="c-opt"><button class="c-btn selected" data-size="S">S</button>
+          <div class="c-label" data-price-label="S">100 000 Ar</div>
         </div>
         <div class="c-line"></div>
-        <div class="c-opt"><button class="c-btn" data-price="120000">M</button>
-          <div class="c-label">120 000 Ar</div>
+        <div class="c-opt"><button class="c-btn" data-size="M">M</button>
+          <div class="c-label" data-price-label="M">120 000 Ar</div>
         </div>
         <div class="c-line"></div>
-        <div class="c-opt"><button class="c-btn" data-price="150000">L</button>
-          <div class="c-label">150 000 Ar</div>
+        <div class="c-opt"><button class="c-btn" data-size="L">L</button>
+          <div class="c-label" data-price-label="L">150 000 Ar</div>
         </div>
         <div class="c-line"></div>
-        <!-- bouton sur-mesure affiche uniquement « + » (data-price conservé) -->
-        <div class="c-opt"><button class="c-btn" data-price="0">+</button>
-          <div class="c-label">min 200 000 Ar</div>
+        <!-- bouton sur-mesure affiche uniquement « + » -->
+        <div class="c-opt"><button class="c-btn" data-size="custom">+</button>
+          <div class="c-label" data-price-label="surmesure">min 200 000 Ar</div>
         </div>
       </div>
       <!-- bloc « prix sur devis » masqué par défaut, affiché quand le sur-mesure est choisi -->
       <div id="size-surmesure-block">à partir de 200 000 Ar — prix sur devis / from 200 000 Ar — quoted price</div>
-      <p style="font-size:11px;color:var(--noir);margin-top:0.3rem">* Sur-mesure à partir de 200 000 Ar / custom from
+      <p class="surmesure-note" style="font-size:11px;color:var(--noir);margin-top:0.3rem">* Sur-mesure à partir de 200
+        000 Ar / custom from
         200
         000 Ar.</p>
 
@@ -100,12 +105,12 @@
       <div class="step-header">2 — COULEUR / COLOR</div>
       <!-- libellés couleurs sur une seule ligne (sous-texte retiré, classes conservées) -->
       <div class="color-row" id="color-row">
-        <div class="col-opt neutre"><button class="col-btn selected"></button>
-          <div class="col-label">neutre / neutral</div>
-        </div>
-        <div class="col-line"></div>
         <div class="col-opt pastel"><button class="col-btn"></button>
           <div class="col-label">pastel</div>
+        </div>
+        <div class="col-line"></div>
+        <div class="col-opt neutre"><button class="col-btn selected"></button>
+          <div class="col-label">neutre / neutral</div>
         </div>
         <div class="col-line"></div>
         <div class="col-opt chaud"><button class="col-btn"></button>
@@ -123,8 +128,8 @@
       <div class="fieldset-legend">je souhaite un vase / i would like a vase</div>
       <!-- vase en radio-boîtes style saison -->
       <div class="radio-row" id="vase-row">
-        <button class="r-btn" data-price="20000">oui / yes (+20 000 Ar)</button>
-        <button class="r-btn selected" data-price="0">non / no</button>
+        <button class="r-btn" data-vase="1" data-price-label="vase">oui / yes (+20 000 Ar)</button>
+        <button class="r-btn selected" data-vase="0">non / no</button>
       </div>
 
       <!-- 4. MESSAGE -->
@@ -146,8 +151,9 @@
       <div id="pickup-block">
         <div class="fieldset-legend">retrait souhaitée le / pickup on</div>
         <input class="field" type="date" id="pickup-date">
-        <p style="font-size:11px;color:var(--noir);margin-top:-0.5rem;margin-bottom:1rem">lundi — samedi · 9h–18h /
-          monday — saturday · 9am–6pm</p>
+        <!-- MODIFIÉ : horaires servies par la config (GET /api/config) — plus de texte en dur -->
+        <p style="font-size:11px;color:var(--noir);margin-top:-0.5rem;margin-bottom:1rem" id="shop-pickup-hours">lundi — samedi · 10h–16h /
+          monday — saturday · 10am–4pm</p>
       </div>
 
       <!-- légende de la livraison -->
@@ -212,51 +218,14 @@
         </div>
       </div>
 
-      <!-- PAIEMENT -->
-      <div class="pay-label">MODE DE PAIEMENT / PAYMENT</div>
-      <button class="pay-btn wa" id="btn-whatsapp"><span>WhatsApp · confirmer &amp; commander / confirm &amp;
-          order</span><span>↗</span></button>
-      <!-- boutons secondaires + gros CTA WhatsApp (style saison) -->
-      <button class="pay-btn secondary" id="btn-mvola"><span>MVola · 034 04 764 14</span><span>→</span></button>
-      <button class="pay-btn especes secondary" id="btn-especes"><span>Espèces · à la livraison ou en boutique / cash on
-          delivery or in store</span><span>→</span></button>
-      <button class="pay-btn sendwave secondary" id="btn-sendwave"><span>Sendwave / PayPal · virement international /
-          international transfer</span><span>→</span></button>
+      <!-- MODIFIÉ : paiement géré sur la page dédiée /paiement.html (récap + total requoté backend +
+      bouton Payer). La commande (POST /api/order) part uniquement au clic « Payer ». -->
+      <button class="pay-btn" id="btn-checkout"><span>Paiement / Checkout</span><span>→</span></button>
+      <div id="order-status" aria-live="polite"></div>
 
-      <!-- MVola box -->
-      <div class="mm-box" id="mm-box">
-        <div class="mm-provider">MVOLA</div>
-        <div class="mm-num">034 04 764 14</div>
-        <div class="mm-name">i.fleur</div>
-        <div class="mm-info">Envoyez le montant exact, puis contactez-nous sur WhatsApp avec votre capture d'écran pour
-          confirmer votre commande. / Send the exact amount, then contact us on WhatsApp with your screenshot to confirm
-          your order.</div>
-        <button class="pay-btn wa btn-confirm-wa"><span>Envoyer la confirmation / Send the
-            confirmation</span><span>↗</span></button>
-      </div>
-
-      <!-- Espèces box -->
-      <div class="especes-box" id="especes-box">
-        <p>Paiement en espèces accepté lors du retrait en boutique ou à la livraison. Votre commande sera confirmée par
-          WhatsApp avant la livraison. / Cash payment accepted on pick up in store or on delivery. Your order will be
-          confirmed by WhatsApp before delivery.</p>
-        <br>
-        <button class="pay-btn wa btn-confirm-wa" style="margin-top:0.5rem"><span>Confirmer ma commande / Confirm my
-            order</span><span>↗</span></button>
-      </div>
-
-      <!-- Sendwave box -->
-      <div class="sendwave-box" id="sendwave-box">
-        <p>Pour les envois depuis l'étranger via <strong>Sendwave</strong> ou <strong>PayPal</strong>, contactez-nous
-          directement sur WhatsApp pour obtenir les coordonnées de virement et confirmer votre commande.<br><br>Les
-          frais de transfert international sont à la charge de l'expéditeur. / For transfers from abroad via
-          <strong>Sendwave</strong> or <strong>PayPal</strong>, contact us directly on WhatsApp for the transfer details
-          and to confirm your order. International transfer fees are the responsibility of the sender.
-        </p>
-        <br>
-        <button class="pay-btn sendwave btn-confirm-wa" style="margin-top:0.5rem"><span>Nous contacter pour
-            le virement / Contact us for the transfer</span><span>↗</span></button>
-      </div>
+      <!-- WhatsApp = contact uniquement -->
+      <button class="pay-btn secondary" id="btn-whatsapp"><span>WhatsApp · nous contacter / contact
+          us</span><span>↗</span></button>
 
       <!-- FAQ -->
       <div class="faq-section">
@@ -282,7 +251,8 @@
             id="shop-name">i.fleur</span></strong><br>
         <span id="shop-address">Antananarivo, Madagascar</span><br>
         MVola : 034 04 764 14<br><br>
-        <span id="shop-hours">lundi — samedi · 9h–18h / monday — saturday · 9am–6pm</span>
+        <!-- MODIFIÉ : fallback synchronisé avec la config (écrasé par applyShopConfig) -->
+        <span id="shop-hours">lundi — samedi · 10h–16h / monday — saturday · 10am–4pm</span>
       </div>
 
     </div>

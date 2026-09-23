@@ -1,4 +1,4 @@
-// Module coordonnées de facturation et récapitulatif
+// MODIFIÉ : coordonnées de facturation + récapitulatif (dépendance pricing backend)
 
 import { $, $$ } from './utils.js';
 import { refreshRecap } from './pricing.js';

@@ -1,20 +1,16 @@
-// Module mode de livraison + sélecteur de quartier + frais dynamiques
+// MODIFIÉ : le module envoie mode + quartier au backend (quote) et affiche les frais serveur.
+// Aucun calcul local des frais de livraison.
 
-import { $, $$ } from './utils.js';
-import { getAllQuartiers, findZoneForQuartier, CONFIG } from './data.js';
-import { setDeliveryFee, setDeliveryHome, onTotalChange } from './pricing.js';
-import type { DeliveryZone, OrderDelivery } from './types.js';
+import { $, $$, formatPrice } from './utils.js';
+import { getAllQuartiers } from './data.js';
+import { setSelection, getQuoteResult, onQuoteChange } from './pricing.js';
+import type { OrderDelivery } from './types.js';
 
-// Mode de livraison courant
 let deliveryMode: OrderDelivery = 'pickup';
-
-// Quartier sélectionné (pour livraison à domicile)
 let selectedQuartier = '';
 
-// Détail de frais affiché sous le sélecteur de quartier
 const FRAIS_EL = 'delivery-fee-info';
 
-// Basculer entre retrait et livraison à domicile
 export function setDelivery(mode: OrderDelivery, btn: HTMLElement): void {
   deliveryMode = mode;
 
@@ -25,40 +21,26 @@ export function setDelivery(mode: OrderDelivery, btn: HTMLElement): void {
   const pickupBlock = $('#pickup-block') as HTMLElement | null;
   const homeBlock = $('#home-block') as HTMLElement | null;
 
-  if (pickupBlock) {
-    pickupBlock.style.display = mode === 'pickup' ? 'block' : 'none';
-  }
-  if (homeBlock) {
-    homeBlock.style.display = mode === 'home' ? 'block' : 'none';
-  }
+  if (pickupBlock) pickupBlock.style.display = mode === 'pickup' ? 'block' : 'none';
+  if (homeBlock) homeBlock.style.display = mode === 'home' ? 'block' : 'none';
 
-  // retrait = gratuit, livraison = frais selon quartier
   if (mode === 'pickup') {
-    setDeliveryHome(false);
-    setDeliveryFee(0);
-    updateFeeInfo();
+    selectedQuartier = '';
+    setSelection({ deliveryMode: mode, quartier: '' });
   } else {
-    setDeliveryHome(true);
-    applyQuartierFee(selectedQuartier);
+    setSelection({ deliveryMode: mode, quartier: selectedQuartier });
   }
-}
-
-// Appliquer les frais selon le quartier choisi
-function applyQuartierFee(quartier: string): void {
-  const zone = findZoneForQuartier(quartier);
-  if (zone && zone.fee !== null) {
-    setDeliveryFee(zone.fee);
-  } else if (zone && zone.fee === null) {
-    // hors zone => montant sur devis (frappe un montant symbolique pour le calcul)
-    setDeliveryFee(0);
-  } else {
-    setDeliveryFee(0);
-  }
-  selectedQuartier = quartier;
   updateFeeInfo();
 }
 
-// Afficher le détail des frais de livraison + libellé quartier
+function onQuartierChange(e: Event): void {
+  const select = e.target as HTMLSelectElement;
+  selectedQuartier = select.value;
+  setSelection({ quartier: select.value });
+  updateFeeInfo();
+}
+
+// MODIFIÉ : affiche les frais calculés par le backend
 export function updateFeeInfo(): void {
   const el = document.getElementById(FRAIS_EL);
   if (!el) return;
@@ -68,26 +50,17 @@ export function updateFeeInfo(): void {
     return;
   }
 
-  const zone = findZoneForQuartier(selectedQuartier);
+  const q = getQuoteResult();
   if (!selectedQuartier) {
     el.textContent = 'Sélectionnez votre quartier pour calculer les frais. / Select your district to calculate the fees.';
-  } else if (zone && zone.fee === null) {
-    el.textContent = `${selectedQuartier} — frais sur devis (nous vous contactons). / fee on quote (we will contact you).`;
-  } else if (zone) {
-    el.textContent = `${selectedQuartier} — frais de livraison : ${formatFees(zone.fee)}. / delivery fee: ${formatFees(zone.fee)}.`;
+  } else if (q.deliveryIsDevis) {
+    el.textContent = `${selectedQuartier} — frais sur devis (nous vous contacterons). / fee on quote (we will contact you).`;
   } else {
-    el.textContent = 'Quartier non reconnu — frais sur devis. / District not recognized — fee on quote.';
+    const fee = q.deliveryFee === 0 ? 'gratuit / free' : formatPrice(q.deliveryFee);
+    el.textContent = `${selectedQuartier} — frais de livraison : ${fee}.`;
   }
 }
 
-// Formater les frais (0 => Gratuit)
-function formatFees(fee: number | null): string {
-  if (fee === null) return 'sur devis';
-  if (fee === 0) return 'gratuit';
-  return fee.toLocaleString('fr-FR') + ' Ar';
-}
-
-// Construire la liste des quartiers dans le <select>
 function populateQuartiers(): void {
   const select = $('#quartier-select') as HTMLSelectElement | null;
   if (!select) return;
@@ -99,66 +72,46 @@ function populateQuartiers(): void {
   select.appendChild(placeholder);
 
   const all = getAllQuartiers();
-  // regroupe par zone, séparateur de zone en premier
   const seenZone = new Set<string>();
   for (const { quartier, zone } of all) {
-    if (!seenZone.has(zone.name)) {
-      seenZone.add(zone.name);
-      const optgroup = document.createElement('optgroup');
-      optgroup.label = zone.name + (zone.fee !== null ? ` (${formatFees(zone.fee)})` : '');
-      select.appendChild(optgroup);
+    if (seenZone.has(zone.name)) continue;
+    seenZone.add(zone.name);
+
+    const group = document.createElement('optgroup');
+    const feeTxt = zone.fee === null ? 'sur devis' : zone.fee === 0 ? 'gratuit' : formatPrice(zone.fee);
+    group.label = `${zone.name} (${feeTxt})`;
+
+    for (const { quartier: q, zone: z } of all) {
+      if (z.name !== zone.name) continue;
       const opt = document.createElement('option');
-      opt.value = quartier;
-      opt.textContent = quartier;
-      optgroup.appendChild(opt);
-    } else {
-      const groups = select.querySelectorAll('optgroup');
-      const lastGroup = groups[groups.length - 1];
-      const opt = document.createElement('option');
-      opt.value = quartier;
-      opt.textContent = quartier;
-      lastGroup.appendChild(opt);
+      opt.value = q;
+      opt.textContent = q;
+      group.appendChild(opt);
     }
+    select.appendChild(group);
   }
 }
 
-// Récupérer le mode de livraison courant
 export function getDeliveryMode(): OrderDelivery {
   return deliveryMode;
 }
 
-// Récupérer le quartier sélectionné
 export function getSelectedQuartier(): string {
   return selectedQuartier;
 }
 
-// L'utilisateur choisit son quartier
-function onQuartierChange(e: Event): void {
-  const select = e.target as HTMLSelectElement;
-  applyQuartierFee(select.value);
-}
-
-// Initialiser les event listeners livraison
 export function initDelivery(): void {
   $$('.d-opt').forEach(btn => {
     btn.addEventListener('click', () => {
-      const mode = btn.textContent?.includes('retrait') ? 'pickup' : 'home';
+      const mode = btn.textContent?.toLowerCase().includes('retrait') ? 'pickup' : 'home';
       setDelivery(mode, btn);
     });
   });
 
   const quartierSelect = $('#quartier-select') as HTMLSelectElement | null;
-  if (quartierSelect) {
-    quartierSelect.addEventListener('change', onQuartierChange);
-  }
+  if (quartierSelect) quartierSelect.addEventListener('change', onQuartierChange);
 
   populateQuartiers();
   updateFeeInfo();
-
-  // garantir que le total reflète le mode initial
-  setDeliveryHome(false);
-  setDeliveryFee(0);
-
-  // on place le sélecteur de quartier dans le bloc livraison si présent ailleurs
-  onTotalChange(() => updateFeeInfo());
+  onQuoteChange(() => updateFeeInfo());
 }

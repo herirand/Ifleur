@@ -24,6 +24,9 @@ export async function sendOrderEmail(dto: SendEmailDto): Promise<void> {
   }
 
   try {
+    // MODIFIÉ : template HTML structurée — chaque champ est une variable EmailJS
+    // (plus de bloc « order » illisible). Les conditionnels {{#isHome}}/{{#isPickup}}
+    // de la template décident des sections affichées.
     await emailjs.send(
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_ID,
@@ -31,8 +34,25 @@ export async function sendOrderEmail(dto: SendEmailDto): Promise<void> {
         to_email: dto.to,
         to_name: dto.name,
         from_name: 'i.fleur',
-        name: dto.name,
-        order: dto.order,
+        customer_name: dto.customer_name,
+        size: dto.size,
+        color: dto.color,
+        vase: dto.vase,
+        message: dto.message,
+        isPickup: dto.isPickup,
+        isHome: dto.isHome,
+        pickup_date: dto.pickup_date,
+        delivery_date: dto.delivery_date,
+        recipient_name: dto.recipient_name,
+        recipient_phone: dto.recipient_phone,
+        recipient_address: dto.recipient_address,
+        recipient_city: dto.recipient_city,
+        quartier: dto.quartier,
+        delivery_fee: dto.delivery_fee,
+        billing_name: dto.billing_name,
+        billing_phone: dto.billing_phone,
+        billing_email: dto.billing_email,
+        payment_method: dto.payment_method,
         total: dto.total,
       },
       {

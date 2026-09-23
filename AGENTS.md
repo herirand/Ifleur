@@ -1,54 +1,81 @@
-# AGENTS.md
+# AGENTS.md — Ifleur (i.fleur flower boutique, Antananarivo)
 
-## What This Is
+## What this repo is
 
-Repo for **i.fleur**, a flower boutique in Antananarivo, Madagascar. Contains TWO distinct sites:
+Active product = **`i-fleur/`**: a monolith — one Fastify server (`app/`) serves the API
+(`/api/*`) and the static frontend (`app/public/`). No database. Prod target = serveur cPanel
+(`node dist/server.cjs`).
 
-1. **`ifleur.html`** — legacy static single-file page (inline CSS/JS, base64 images, no build). Not the working app; ignore for new work.
-2. **`i-fleur/frontend/`** — the ACTIVE app: 100% static, TypeScript + esbuild, deployed to Netlify. This is the primary working directory.
+**`i-fleur/AGENTS.md` is authoritative for everything under `i-fleur/`** — it is
+auto-loaded in that subtree and carries the exact layout/flow. Trust it over this file's summary.
 
-## Layout
+Docs to trust:
+- `MIGRATION-PRIX-BACKEND.md` (root) — completed spec: **all price computation now lives
+  server-side** (`POST /api/order/quote`); the frontend has no price arithmetic.
 
-- `ifleur.html` — legacy self-contained page (Google Fonts only external dependency)
-- `site web.pptx` — spec / cahier des charges (design reference: saison-eshop.com). **Its euro prices are wrong — trust the Ariary figures in code.**
-- `netlify.toml` — Netlify deploy: build `cd i-fleur/frontend && npm run build`, publish `i-fleur/frontend`, Node 20
-- `i-fleur/` — active site (see `i-fleur/AGENTS.md` for code-level detail)
-- No backend anywhere in this repo (the Fastify backend was removed/archived). Do not create or restore one.
+Stale sources to NOT trust:
+- `i-fleur/README.md` — describes the removed static-only `frontend/` architecture
+  (no backend, Netlify, localhost:8000). Ignore it.
+- `site web.pptx` (design spec) — **euro prices are WRONG**; trust the Ariary values in code.
+- `ifleur.html` (root) — legacy single-file page, hardcoded prices, not synchronized with the app.
+- `INTEGRATION-EMAILJS.md` (root) — EmailJS integration doc, already implemented.
 
-## Commands (run in `i-fleur/frontend/`)
+## Commands (run in `i-fleur/app/`)
 
-- **Dev**: `npm install && npm run dev` → bundles `src/ts/main.ts` → `dist/app.js` AND serves the dir on `:8000` (single command; don't run esbuild manually)
-- **Serve (no watch)**: `npm run serve` — build + serve once, same as `dev` minus `--watch`
-- **Build**: `npm run build` (esbuild minify → `dist/app.js`; Netlify runs this on deploy)
-- **Typecheck**: `npx tsc --noEmit` — only static check (no tests, no linter)
-- `dist/` is gitignored (ignore rules live in `i-fleur/.gitignore`, not the repo root) — never commit the bundle; always rebuild before testing/deploying
+| Command | What it does |
+|---------|--------------|
+| `npm install` | deps — esbuild + `@fastify/static` are **runtime deps**, required to run |
+| `npm run dev` | `tsx watch --ignore src/ts --ignore public src/app.ts` — esbuild watch + server :3000 (single command) |
+| `npm run build` | esbuild frontend → `public/dist/app.js` (minified) |
+| `npm run serve` | build + `NODE_ENV=production tsx src/app.ts` (once, no watch) |
+| `npm run build:server` | esbuild server → `dist/server.cjs` (entry cPanel `node dist/server.cjs`) |
+| `npm run typecheck` (alias `npx tsc --noEmit`) | typecheck frontend only (`src/ts/**`); no tests, no linter |
 
-## Prices & config (high gotcha)
+Gotchas:
+- Server auto-builds the frontend bundle on start (`ensureFrontendBuilt`): watch in dev, once in prod.
+- `dist/` and `public/dist/` are gitignored → always rebuild before testing/deploying.
+- 🚫 Never run `pkill -f "tsx"` / `pkill -f "src/app.ts"` from an interactive shell — the pattern
+  matches the shell's own command and kills it. Kill by port: `ss -tlnp | grep :3000`.
 
-- All business data lives in **`src/ts/config.json`** (prices, vase price, sur-mesure min, WhatsApp number, shop info, delivery zones, FAQ). It is baked into the bundle at build time — no runtime network calls. Edit the JSON → rebuild → redeploy.
-- Product prices are actually read from the `data-price` attributes on the size/vase buttons in **`index.html`**, so a price change must be made in **two places (`index.html` + `config.json`)** — keep them in sync or the total/recap will drift.
-- Current prices (Ar): Mini 100 000 · S 80 000 · M 120 000 · L 150 000 · vase +20 000 · sur-mesure min 200 000.
-- `i-fleur/README.md` is stale: it says vase is +8 000 Ar (wrong — actual is +20 000 Ar). Trust `config.json`/`index.html`, not the README.
-- Delivery zones in `config.json`: `fee` `0` = free, `null` = "sur devis"/hors zone, plus a list of `quartiers`; périphérie = +20 000 Ar.
+## Architecture / API (post-migration)
 
-## Code layout
+Backend `app/src/` — modules are service/controller/route/dto pairs:
+- `GET /api/config` — serves `src/config/config.json` (prices, WhatsApp, shop, delivery zones, FAQ).
+  This is the single config endpooint: `src/ts/config.json` no longer exists.
+- `POST /api/order/quote` — **the only price computation**. Input size/vase/deliveryMode/quartier
+  → basePrice, vasePrice, deliveryFee, total (`null` = devis).
+- `POST /api/order` — validates, recalcs quote, sends the confirmation email to the client
+  (`billing.email`) via EmailJS (`modules/email`, keys in `.env` server-side).
+- `POST /api/payment` — placeholder (`status:'pending'`); the real external payment API goes at
+  `// TODO API externe` in `modules/payment/payment.service.ts`.
 
-- Modules in `src/ts/`: `main.ts` (entrypoint), `data.ts` (config access), `pricing.ts` (total = size + vase + delivery), `delivery.ts` (quartier select), `billing.ts` (fields + validation), `payment.ts` (WhatsApp message), `selectors.ts`, `slider.ts`, `types.ts`, `utils.ts`.
-- CSS split across `src/styles/*.css`.
-- Imports use explicit `.js` extensions (e.g. `import { CONFIG } from './data.js';`).
-- Ordering = WhatsApp only (`wa.me/261340476414` with a pre-filled message). No order storage / no back-office.
+Frontend `app/src/ts/`: config loaded via `loadConfig()` (GET /api/config); `pricing.ts` sends
+the selection to the quote API (debounced **150 ms**) and renders the server result.
+
+Order flow: home configurator → `payment.ts` stores the pending order in
+`sessionStorage['ifleur_order']` → redirect `/paiement.html` → `checkout.ts` re-quotes at the
+backend, picks MVola/carte, « Payer » → `POST /api/order`. `main.ts` dispatches the checkout page
+on presence of `#checkout-page`. WhatsApp button = **contact only** (no order payload).
+Offered payment methods: **MVola + carte only** (especes/sendwave removed).
+
+## Pricing (verify, don't trust HTML)
+
+Source of truth = `app/src/config/config.json` (server). The `data-price-label` amounts hardcoded
+in `public/index.html` are only pre-JS fallbacks — `renderPricesFromConfig()` overwrites them —
+but keep them matching anyway. Prices (Ar): Mini 80 000 · S 100 000 · M 120 000 ·
+L 150 000 · vase +20 000 · sur-mesure min 200 000.
+Formula: `total = basePrice + vasePrice + deliveryFee`; `custom` → `isDevis: true`;
+out-of-zone (`fee: null`) → `deliveryIsDevis: true, deliveryFee: 0`.
+
+Delivery zones (`config.json .delivery.zones`): `fee: 0` = free, `fee: N` = fee,
+`fee: null` = "sur devis"/hors zone; zone with empty `quartiers` + `fee: null` = out-of-zone
+fallback (excluded from the quartier `<select>`).
 
 ## Conventions (mandatory)
 
-- Mark every code change with a comment:
-  - `// NOUVEAU : [desc]` for new code
-  - `// MODIFIÉ : [desc]` for changed code
-- Comments in French; UI copy is bilingual FR/EN (e.g. "sur devis / on quote", "oui / yes").
-- Prices are in Ariary (`Ar`); ignore the euro figures from the pptx.
-
-## Key facts
-
-- Payment: order via the WhatsApp form, pay by MVola, Sendwave/PayPal, or cash on delivery.
-- Delivery: Antananarivo only; pickup free or home delivery (fee by quartier zone); 24h advance notice, same-day via phone.
-- WhatsApp +261 34 04 764 14 · Instagram @ifleurmdg · Facebook @ifleurmadagascar.
-- Legacy `ifleur.html`: prices hardcoded in `data-price` attributes + JS vars, NOT synced with the active site.
+- Every code change marked: `// NOUVEAU : [desc]` / `// MODIFIÉ : [desc]`.
+- Comments & UI in **French** (Malagasy market); FR/EN bilingual labels OK.
+- Prices in **Ariary (`Ar`)**.
+- Frontend imports use explicit `.js` (`import './pricing.js'`); server imports use extension-less paths.
+- Backend code is shipped copy-paste and integrated by the user (per `MIGRATION-PRIX-BACKEND.md`);
+  never modify server code without explicit consent.

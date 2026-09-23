@@ -1,16 +1,18 @@
-// Point d'entrée du frontend i.fleur (vitrine 100% statique)
+// MODIFIÉ : routeur — la boutique (/) et la page paiement (/paiement.html) partagent le
+// même bundle. La page paiement est détectée via #checkout-page (id jugé absent sur la home).
 
 import { initSlider } from './slider.js';
 import { initPricing } from './pricing.js';
 import { initSelectors } from './selectors.js';
 import { initDelivery } from './delivery.js';
-import { initPayment } from './payment.js';
 import { initBilling } from './billing.js';
-import { CONFIG } from './data.js';
-import { $, $$ } from './utils.js';
+import { initPayment } from './payment.js';
+import { initCheckout } from './checkout.js';
+import { loadConfig, getConfig } from './data.js';
+import { $, $$, formatPrice } from './utils.js';
 
-// Initialiser l'application (aucun appel réseau, config embarquée)
-function init(): void {
+async function init(): Promise<void> {
+  await loadConfig();
   initSlider();
   initPricing();
   initSelectors();
@@ -18,10 +20,12 @@ function init(): void {
   initBilling();
   initPayment();
   applyShopConfig();
+  renderPricesFromConfig();
 }
 
-// Appliquer les infos boutique (nom, adresse, contact) depuis config.json
+// MODIFIÉ : applique les infos boutique depuis la config chargée (plus de CONFIG global)
 function applyShopConfig(): void {
+  const CONFIG = getConfig();
   const setText = (id: string, value: string): void => {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
@@ -29,11 +33,14 @@ function applyShopConfig(): void {
 
   if (CONFIG.shop.name) setText('shop-name', CONFIG.shop.name);
   if (CONFIG.shop.address) setText('shop-address', CONFIG.shop.address);
-  if (CONFIG.shop.hours) setText('shop-hours', CONFIG.shop.hours);
+  if (CONFIG.shop.hours) {
+    setText('shop-hours', CONFIG.shop.hours);
+    // MODIFIÉ : horaires du retrait-atelier servies par la config aussi (plus de texte en dur)
+    setText('shop-pickup-hours', CONFIG.shop.hours);
+  }
   if (CONFIG.shop.instagram) setText('shop-instagram', CONFIG.shop.instagram);
   if (CONFIG.shop.facebook) setText('shop-facebook', CONFIG.shop.facebook);
 
-  // construire la FAQ depuis config.json
   const faqSection = $('#faq-container');
   if (faqSection) {
     faqSection.innerHTML = CONFIG.faq
@@ -47,7 +54,6 @@ function applyShopConfig(): void {
       .join('');
   }
 
-  // réattacher les listeners FAQ après construction dynamique
   $$('.faq-q').forEach(btn => {
     btn.addEventListener('click', () => {
       const item = btn.closest('.faq-item');
@@ -56,5 +62,42 @@ function applyShopConfig(): void {
   });
 }
 
-// Démarrer dès que le DOM est prêt (pas d'async, pas de fetch)
-document.addEventListener('DOMContentLoaded', init);
+// NOUVEAU : les montants affichés (c-label) viennent du serveur — aucun data-price HTML
+function renderPricesFromConfig(): void {
+  const CONFIG = getConfig();
+
+  document.querySelectorAll<HTMLElement>('#size-row .c-btn').forEach(btn => {
+    const size = btn.dataset.size as keyof typeof CONFIG.prices | 'custom' | undefined;
+    const label = btn.querySelector<HTMLElement>('.c-label') ||
+      btn.closest('.c-opt')?.querySelector<HTMLElement>('.c-label');
+    if (label) {
+      if (size && size !== 'custom' && CONFIG.prices[size] !== undefined) {
+        label.textContent = formatPrice(CONFIG.prices[size]);
+      }
+      if (size === 'custom') label.textContent = 'min ' + formatPrice(CONFIG.surMesureMin);
+    }
+  });
+
+  const vaseOui = document.querySelector<HTMLElement>('#vase-row .r-btn[data-vase="1"]');
+  if (vaseOui) vaseOui.textContent = `oui / yes (+${formatPrice(CONFIG.vasePrice)})`;
+
+  const smBlock = $('#size-surmesure-block');
+  if (smBlock) smBlock.textContent =
+    `à partir de ${formatPrice(CONFIG.surMesureMin)} — prix sur devis / from ${formatPrice(CONFIG.surMesureMin)} — quoted price`;
+}
+
+// MODIFIÉ : démarrage — route page paiement sinon boutique
+// MODIFIÉ : la page paiement reprend le design boutique (header logo + photo split-screen)
+// donc le slider (mêmes IDs que la home) y est aussi initialisé.
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.querySelector('#checkout-page')) {
+    initSlider();
+    initCheckout();
+    return;
+  }
+  init().catch(err => {
+    console.error(err);
+    const status = $('#order-status');
+    if (status) status.textContent = 'Erreur de chargement / load error';
+  });
+});

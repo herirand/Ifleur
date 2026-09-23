@@ -1,7 +1,7 @@
 {
   "prices": {
-    "mini": 100000,
-    "S": 80000,
+    "mini": 80000,
+    "S": 100000,
     "M": 120000,
     "L": 150000
   },
@@ -11,7 +11,7 @@
   "shop": {
     "name": "i.fleur",
     "address": "Antananarivo, Madagascar",
-    "hours": "lundi — samedi · 9h–18h / monday — saturday · 9am–6pm",
+    "hours": "lundi — samedi · 10h–16h / monday — saturday · 10am–4pm",
     "instagram": "@ifleurmdg",
     "facebook": "@ifleurmadagascar"
   },
@@ -19,35 +19,78 @@
     "retraitGratuit": true,
     "zones": [
       {
-        "name": "Centre Antananarivo",
+        "name": "Zone A — Centre-ville et alentours",
         "fee": 0,
         "quartiers": [
-          "Ivandry",
-          "Ankorondrano",
-          "Ambatobe",
-          "Nanisana",
-          "Ankerana",
-          "Analakely",
-          "Behoririka",
           "Alarobia",
+          "Amboditsiry",
+          "Ambodivona",
+          "Ampandrana",
+          "Ampefiloha",
+          "Analakely",
+          "Analamahitsy",
+          "Andohalo",
           "Andraharo",
-          "Isoraka",
-          "Antaninarina",
+          "Andravoahangy",
+          "Ankadifotsy",
+          "Ankorondrano",
+          "Anosy",
+          "Antaninarenina",
           "Antanimena",
-          "Analamahisty",
+          "Behoririka",
+          "Faravohitra",
+          "Isoraka",
+          "Ivandry",
+          "Mahamasina",
+          "Manjakaray",
+          "Nanisana",
+          "Tsaralalàna",
+          "Ankerana",
           "Cité Planton",
-          "Betongolo",
-          "Mahamasina"
+          "Betongolo"
         ]
       },
       {
-        "name": "Périphérie",
+        "name": "Zone B — Première couronne",
+        "fee": 0,
+        "quartiers": [
+          "Akoor Digue",
+          "Ambatobe",
+          "Ambatomaro",
+          "Ambohimanarina",
+          "Ankadikely Ilafy",
+          "Ankadimbahoaka",
+          "Ankatso / Ambohipo",
+          "Anosizato",
+          "Mandroseza"
+        ]
+      },
+      {
+        "name": "Zone C — Périphérie",
         "fee": 20000,
         "quartiers": [
-          "Ivato",
+          "Alasora",
+          "Ambohidratrimo",
+          "Ambohijanaka",
+          "Ambohimanambola",
+          "Andoharanofotsy",
           "Iavoloha",
           "Ilafy",
+          "Itaosy",
+          "Ivato",
+          "Manazary Ilafy",
+          "Talatamaty",
+          "Tanjombato",
           "Ambohibao"
+        ]
+      },
+      {
+        "name": "Zone D — Grande périphérie",
+        "fee": 20000,
+        "quartiers": [
+          "Ambatomirahavavy",
+          "Ambohimanga",
+          "Vontovorona"
         ]
       },
       {
@@ -64,7 +107,7 @@
     },
     {
       "q": "Quand sera livré mon bouquet ? / When will my bouquet be delivered ?",
-      "a": "Suite à votre commande, votre bouquet sera livré entre 10h et 18h du lundi au samedi. / Following your order, your bouquet will be delivered between 10am and 6pm, Monday to Saturday."
+      "a": "Suite à votre commande, votre bouquet sera livré entre 10h et 16h du lundi au samedi. / Following your order, your bouquet will be delivered between 10am and 4pm, Monday to Saturday."
     },
     {
       "q": "Comment est composé mon bouquet ? / What is my bouquet made of ?",
