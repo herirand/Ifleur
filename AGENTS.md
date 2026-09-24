@@ -9,16 +9,15 @@ Active product = **`i-fleur/`**: a monolith — one Fastify server (`app/`) serv
 **`i-fleur/AGENTS.md` is authoritative for everything under `i-fleur/`** — it is
 auto-loaded in that subtree and carries the exact layout/flow. Trust it over this file's summary.
 
-Docs to trust:
-- `MIGRATION-PRIX-BACKEND.md` (root) — completed spec: **all price computation now lives
-  server-side** (`POST /api/order/quote`); the frontend has no price arithmetic.
-
-Stale sources to NOT trust:
+Stale / absent sources to NOT trust:
 - `i-fleur/README.md` — describes the removed static-only `frontend/` architecture
   (no backend, Netlify, localhost:8000). Ignore it.
 - `site web.pptx` (design spec) — **euro prices are WRONG**; trust the Ariary values in code.
 - `ifleur.html` (root) — legacy single-file page, hardcoded prices, not synchronized with the app.
-- `INTEGRATION-EMAILJS.md` (root) — EmailJS integration doc, already implemented.
+- `INTEGRATION-EMAILJS.md` and `MIGRATION-PRIX-BACKEND.md` — cited by `i-fleur/AGENTS.md` but
+  **absent from the repo** (never committed). Their content is captured inline here and in
+  `i-fleur/AGENTS.md`: EmailJS is already wired; **all price computation lives server-side**
+  (`POST /api/order/quote`), the frontend has no price arithmetic. Don't hunt for these files.
 
 ## Commands (run in `i-fleur/app/`)
 
@@ -32,6 +31,8 @@ Stale sources to NOT trust:
 | `npm run typecheck` (alias `npx tsc --noEmit`) | typecheck frontend only (`src/ts/**`); no tests, no linter |
 
 Gotchas:
+- Run (and deploy) from `i-fleur/app/`: paths (`public/`, `src/ts/main.ts`, `.env`) are relative to
+  `process.cwd()`, so `node dist/server.cjs` must be launched from `i-fleur/app/`.
 - Server auto-builds the frontend bundle on start (`ensureFrontendBuilt`): watch in dev, once in prod.
 - `dist/` and `public/dist/` are gitignored → always rebuild before testing/deploying.
 - 🚫 Never run `pkill -f "tsx"` / `pkill -f "src/app.ts"` from an interactive shell — the pattern
@@ -41,7 +42,7 @@ Gotchas:
 
 Backend `app/src/` — modules are service/controller/route/dto pairs:
 - `GET /api/config` — serves `src/config/config.json` (prices, WhatsApp, shop, delivery zones, FAQ).
-  This is the single config endpooint: `src/ts/config.json` no longer exists.
+  This is the single config endpoint: `src/ts/config.json` no longer exists.
 - `POST /api/order/quote` — **the only price computation**. Input size/vase/deliveryMode/quartier
   → basePrice, vasePrice, deliveryFee, total (`null` = devis).
 - `POST /api/order` — validates, recalcs quote, sends the confirmation email to the client
@@ -77,5 +78,5 @@ fallback (excluded from the quartier `<select>`).
 - Comments & UI in **French** (Malagasy market); FR/EN bilingual labels OK.
 - Prices in **Ariary (`Ar`)**.
 - Frontend imports use explicit `.js` (`import './pricing.js'`); server imports use extension-less paths.
-- Backend code is shipped copy-paste and integrated by the user (per `MIGRATION-PRIX-BACKEND.md`);
-  never modify server code without explicit consent.
+- Backend code is shipped copy-paste and integrated by the user — never modify server code
+  without explicit consent (rule enforced by the root `~/.config/opencode/AGENTS.md` as well).
