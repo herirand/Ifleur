@@ -1,5 +1,5 @@
 // NOUVEAU : page paiement dédiée (/paiement.html) — récap de la commande en attente,
-// total REQUOTÉ au backend (temps réel), choix MVola/carte, bouton « Payer » qui envoie
+// total REQUOTÉ au backend (temps réel), choix MVola/carte, bouton « Confirmer le paiement » qui envoie
 // la commande (POST /api/order). Le processeur de paiement réel sera branché plus tard.
 // Aucun calcul de prix local.
 
@@ -149,10 +149,10 @@ async function requote(): Promise<void> {
 
   renderRecap(pending.payload, currentQuote);
   const totalTxt = currentQuote.isDevis ? 'sur devis / on quote' : formatPrice(currentQuote.total ?? 0);
-  setStatus(`Total à payer : ${totalTxt} — vérifiez vos informations puis cliquez « Payer ». / Amount due: ${totalTxt} — review your details then click "Pay".`);
+  setStatus(`Total à payer : ${totalTxt} — vérifiez vos informations puis cliquez sur « modifier votre commande » ou « Confirmer le paiement ». / Amount due: ${totalTxt} — review your details then click "Pay".`);
 }
 
-// NOUVEAU : « Payer » → POST /api/order (email client). Point d'intégration du processeur de paiement.
+// MODIFIÉ : « Confirmer le paiement » → POST /api/order (email client). Point d'intégration du processeur de paiement.
 async function onPay(e: Event): Promise<void> {
   e.preventDefault();
   const payBtn = $('#btn-pay') as HTMLButtonElement | null;
@@ -165,6 +165,13 @@ async function onPay(e: Event): Promise<void> {
 
   // Le mode de paiement choisi sur CETTE page est ajouté au payload
   pending.payload.paymentMethod = paymentMethod;
+
+  // MODIFIÉ : en mode carte, validation locale des champs (comportement de l'élément
+  // de paiement de la référence) — blocage si invalide. L'API réelle sera branchée ici :
+  // TODO API paiement carte (Stripe / partenaire bancaire) — remplacer la validation
+  // locale par la création du PaymentIntent (les données de carte ne sont jamais
+  // stockées ni envoyées au backend /i.fleur).
+  if (paymentMethod === 'carte' && !validateCard()) return;
 
   if (payBtn) payBtn.disabled = true;
   setStatus('Envoi de la commande… / Sending your order…');
@@ -216,6 +223,75 @@ function switchPaymentMethod(method: PaymentMethod): void {
   if (other) other.style.display = 'none';
 }
 
+// NOUVEAU : expiration valide — format MM/AA et non échue
+function isExpiryValid(value: string): boolean {
+  const m = value.match(/^(0[1-9]|1[0-2])\s*\/\s*(\d{2})$/);
+  if (!m) return false;
+  const month = Number(m[1]);
+  const year = 2000 + Number(m[2]);
+  const now = new Date();
+  return year > now.getFullYear() || (year === now.getFullYear() && month >= now.getMonth() + 1);
+}
+
+// NOUVEAU : validation locale des champs carte (façon référence saison/Stripe).
+// Encadre chaque champ invalide et affiche un message FR ; les données de carte ne
+// sont jamais stockées (sessionStorage) ni envoyées au backend. Seront remplacées
+// par l'API réelle (voir TODO API paiement carte dans onPay).
+function validateCard(): boolean {
+  const fields: Array<{ el: HTMLInputElement | null; ok: boolean }> = [
+    {
+      el: $('#card-name') as HTMLInputElement | null,
+      ok: false,
+    },
+    {
+      el: $('#card-number') as HTMLInputElement | null,
+      ok: false,
+    },
+    {
+      el: $('#card-expiry') as HTMLInputElement | null,
+      ok: false,
+    },
+    {
+      el: $('#card-cvc') as HTMLInputElement | null,
+      ok: false,
+    },
+  ];
+
+  if (fields.some(f => !f.el)) return false;
+
+  fields[0].ok = fields[0].el!.value.trim().length >= 2;
+  fields[1].ok = /^\d{13,19}$/.test(fields[1].el!.value.replace(/\s+/g, ''));
+  fields[2].ok = isExpiryValid(fields[2].el!.value.trim());
+  fields[3].ok = /^\d{3,4}$/.test(fields[3].el!.value.trim());
+
+  fields.forEach(f => {
+    if (f.ok) {
+      f.el!.classList.remove('error');
+    } else {
+      f.el!.classList.add('error');
+    }
+  });
+
+  // Premier champ invalide (aucune assignation via closure — évite CDB TS "never")
+  const firstInvalid = fields.find(f => !f.ok)?.el ?? null;
+  const status = $('#co-card-status');
+  if (firstInvalid) {
+    if (status) status.textContent =
+      'Informations de carte invalides — vérifiez le n°, la date d\'expiration et le CVC. / Invalid card details — please check the number, the expiry date and the CVC.';
+    firstInvalid.focus();
+    return false;
+  }
+  if (status) status.textContent = '';
+  return true;
+}
+
+// NOUVEAU : efface l'état d'erreur d'un champ carte à la saisie
+function clearCardError(input: HTMLInputElement): void {
+  input.classList.remove('error');
+  const status = $('#co-card-status');
+  if (status && status.textContent) status.textContent = '';
+}
+
 // Charger la commande en attente (sessionStorage partagé avec la home)
 function loadPending(): PendingOrder | null {
   try {
@@ -233,7 +309,6 @@ function loadPending(): PendingOrder | null {
 export function initCheckout(): void {
   pending = loadPending();
   const payBtn = $('#btn-pay') as HTMLButtonElement | null;
-  const backBtn = $('#btn-back');
 
   if (!pending) {
     const grid = $('#co-recap-grid');
@@ -242,6 +317,15 @@ export function initCheckout(): void {
     if (payBtn) payBtn.disabled = true;
     return;
   }
+
+  // MODIFIÉ : « modifier votre commande » — retour au configurateur en gardant la
+  // commande en attente (la home restaure la sélection via restore.ts)
+  $$('.modifier-btn').forEach(btn => {
+    btn.addEventListener('click', (e: Event) => {
+      e.preventDefault();
+      window.location.href = '/';
+    });
+  });
 
   // Sélection MVola / carte
   $$('.r-btn[data-pay]').forEach(btn => {
@@ -252,11 +336,12 @@ export function initCheckout(): void {
     });
   });
 
-  if (payBtn) payBtn.addEventListener('click', onPay);
-  if (backBtn) backBtn.addEventListener('click', (e: Event) => {
-    e.preventDefault();
-    window.location.href = '/';
+  // NOUVEAU : efface l'erreur carte à la saisie (validation locale façon référence)
+  $$('.card-input').forEach(input => {
+    input.addEventListener('input', () => clearCardError(input as HTMLInputElement));
   });
+
+  if (payBtn) payBtn.addEventListener('click', onPay);
 
   // Requote backend + rendu du récap (temps réel)
   requote();

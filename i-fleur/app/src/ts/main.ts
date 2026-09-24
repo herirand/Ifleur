@@ -8,6 +8,7 @@ import { initDelivery } from './delivery.js';
 import { initBilling } from './billing.js';
 import { initPayment } from './payment.js';
 import { initCheckout } from './checkout.js';
+import { restoreSelection } from './restore.js';
 import { loadConfig, getConfig } from './data.js';
 import { $, $$, formatPrice } from './utils.js';
 
@@ -19,6 +20,7 @@ async function init(): Promise<void> {
   initDelivery();
   initBilling();
   initPayment();
+  restoreSelection();
   applyShopConfig();
   renderPricesFromConfig();
 }

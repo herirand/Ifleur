@@ -51,19 +51,24 @@
     <!-- CONTENT / RÉCAP + PAIEMENT -->
     <div class="col-content">
       <div id="checkout-page">
-        <!-- retour vers le configurateur -->
-        <a class="checkout-back" href="/">← retour / back to order</a>
+        <!-- MODIFIÉ : page paiement calée sur l'étape paiement de saison-eshop —
+             récap « Ma commande », UN bouton « modifier votre commande » (pastille animée),
+             total TTC, mode de paiement puis « Confirmer le paiement ». -->
 
-        <!-- RÉCAP COMMANDE -->
-        <div class="step-header">MA COMMANDE / MY ORDER</div>
+        <!-- RÉCAP COMMANDE (design saison-eshop : boîte gris clair) -->
         <div class="recap-block">
-          <span class="recap-title">Récapitulatif / Summary</span>
+          <span class="recap-title">Ma commande / my order</span>
           <div class="recap-grid" id="co-recap-grid"></div>
         </div>
 
+        <!-- NOUVEAU : « modifier votre commande » — UN SEUL, directement sous le récap
+             (comme saison : pastille pleine largeur fond gris clair, texte gris, animée)
+             → retour au configurateur avec la sélection restaurée (restore.ts) -->
+        <button class="modifier-btn" id="co-modify">modifier votre commande</button>
+
         <!-- TOTAL (recalculé côté backend à l'arrivée) -->
         <div class="total-row">
-          <span class="total-label">TOTAL</span>
+          <span class="total-label">Total TTC / total incl. tax</span>
           <span class="total-amount" id="co-total-display">—</span>
         </div>
 
@@ -84,17 +89,44 @@
             before delivery.</div>
         </div>
 
-        <!-- Carte box -->
-        <div class="mm-box" id="co-card-box">
-          <div class="mm-provider">CARTE BANCAIRE / BANK CARD</div>
-          <div class="mm-info">Le paiement par carte sera finalisé via notre partenaire sécurisé. Nous vous recontactons
-            pour confirmer votre commande. / Card payment will be finalized via our secure partner. We will contact you to
-            confirm your order.</div>
+        <!-- NOUVEAU : section « carte » façon référence (saison/Stripe) — SANS boîte ni fond gris,
+             posée directement sur le fond blanc, espacée du total par 30px comme l'élément
+             de paiement saison. Champs compacts NB : validés localement uniquement, jamais
+             stockés ni envoyés (l'API réelle sera branchée via TODO API paiement carte). -->
+        <div id="co-card-box">
+          <div class="card-fields">
+            <label class="card-field">
+              <span class="card-field-label">Nom sur la carte / name on card</span>
+              <input type="text" id="card-name" class="card-input" autocomplete="cc-name"
+                spellcheck="false" placeholder="ex : RAKOTO Jean">
+            </label>
+            <label class="card-field">
+              <span class="card-field-label">N° de carte / card number</span>
+              <input type="text" id="card-number" class="card-input" inputmode="numeric"
+                autocomplete="cc-number" placeholder="4242 4242 4242 4242">
+            </label>
+            <div class="card-row">
+              <label class="card-field">
+                <span class="card-field-label">Expiration / expiry</span>
+                <input type="text" id="card-expiry" class="card-input" inputmode="numeric"
+                  autocomplete="cc-exp" placeholder="MM/AA">
+              </label>
+              <label class="card-field">
+                <span class="card-field-label">CVC</span>
+                <input type="text" id="card-cvc" class="card-input" inputmode="numeric"
+                  autocomplete="cc-csc" placeholder="123">
+              </label>
+            </div>
+            <div class="card-error" id="co-card-status" aria-live="polite"></div>
+          </div>
+          <div class="mm-info">Vos informations de carte sont protégées : elles seront transmises directement à notre
+            partenaire sécurisé lors de la finalisation du paiement. / Your card details are safe: they will be sent
+            directly to our secure partner when the payment is finalized.</div>
         </div>
 
-        <!-- NOUVEAU : « Payer » — envoie la commande au backend. Le processeur de paiement
-             sera branché dans #co-pay-placeholder lors de l'intégration. -->
-        <button class="pay-btn" id="btn-pay"><span>Payer / Pay</span><span>✓</span></button>
+        <!-- NOUVEAU : « Confirmer le paiement » (design saison) — fond gris `--gris`,
+             texte noir, pleine largeur, hover animé. Envoie POST /api/order. -->
+        <button class="pay-btn" id="btn-pay">Confirmer le paiement</button>
         <div id="co-order-status" aria-live="polite"></div>
 
         <!-- NOUVEAU : emplacement réservé à l'intégration du paiement réel (affiché après succès) -->
@@ -107,9 +139,6 @@
             shortly be finalized here (MVola · bank card). We will contact you to confirm.
           </p>
         </div>
-
-        <!-- Retour -->
-        <button class="pay-btn secondary" id="btn-back"><span>← Retour / Back</span><span></span></button>
       </div>
 
       <div class="site-footer">

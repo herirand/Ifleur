@@ -100,6 +100,15 @@ export function getSelectedQuartier(): string {
   return selectedQuartier;
 }
 
+// NOUVEAU : restauration — applique un quartier (contenu du select) et relance le quote
+export function setQuartier(quartier: string): void {
+  const select = $('#quartier-select') as HTMLSelectElement | null;
+  if (select) select.value = quartier;
+  selectedQuartier = quartier;
+  setSelection({ quartier });
+  updateFeeInfo();
+}
+
 export function initDelivery(): void {
   $$('.d-opt').forEach(btn => {
     btn.addEventListener('click', () => {
