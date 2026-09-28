@@ -66,7 +66,6 @@
         <div class="pay-label">MODE DE PAIEMENT / PAYMENT</div>
         <div class="radio-row">
           <button class="r-btn selected" data-pay="Mvola">MVola · 034 04 764 14</button>
-          <button class="r-btn" data-pay="carte">Carte bancaire / bank card</button>
         </div>
 
         <!-- MVola box -->
@@ -94,37 +93,7 @@
           </div>
         </div>
 
-        <!-- section « carte » -->
-        <div id="co-card-box">
-          <div class="card-fields">
-            <label class="card-field">
-              <span class="card-field-label">Nom sur la carte / name on card</span>
-              <input type="text" id="card-name" class="card-input" autocomplete="cc-name" spellcheck="false"
-                placeholder="ex : RAKOTO Jean">
-            </label>
-            <label class="card-field">
-              <span class="card-field-label">N° de carte / card number</span>
-              <input type="text" id="card-number" class="card-input" inputmode="numeric" autocomplete="cc-number"
-                placeholder="4242 4242 4242 4242">
-            </label>
-            <div class="card-row">
-              <label class="card-field">
-                <span class="card-field-label">Expiration / expiry</span>
-                <input type="text" id="card-expiry" class="card-input" inputmode="numeric" autocomplete="cc-exp"
-                  placeholder="MM/AA">
-              </label>
-              <label class="card-field">
-                <span class="card-field-label">CVC</span>
-                <input type="text" id="card-cvc" class="card-input" inputmode="numeric" autocomplete="cc-csc"
-                  placeholder="123">
-              </label>
-            </div>
-            <div class="card-error" id="co-card-status" aria-live="polite"></div>
-          </div>
-          <div class="mm-info">Vos informations de carte sont protégées : elles seront transmises directement à notre
-            partenaire sécurisé lors de la finalisation du paiement. / Your card details are safe: they will be sent
-            directly to our secure partner when the payment is finalized.</div>
-        </div>
+        <!-- MODIFIÉ : paiement par carte retiré (présentation) — seul MVola ne subsiste -->
 
         <!-- « Confirmer le paiement » (design saison) — fond gris `--gris`,
              texte noir, pleine largeur, hover animé. Envoie POST /api/order. -->
@@ -136,9 +105,9 @@
           <div class="mm-provider">Paiement sécurisé / Secure payment</div>
           <p class="mm-info">
             Votre commande est bien reçue. Le paiement de <span class="co-placeholder-total">—</span> sera
-            très prochainement finalisé ici (MVola · Carte bancaire). Nous vous contactons pour confirmer.
+            très prochainement finalisé ici (MVola). Nous vous contactons pour confirmer.
             / Your order has been received. The payment of <span class="co-placeholder-total">—</span> will
-            shortly be finalized here (MVola · bank card). We will contact you to confirm.
+            shortly be finalized here (MVola). We will contact you to confirm.
           </p>
         </div>
       </div>

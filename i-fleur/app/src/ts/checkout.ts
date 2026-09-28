@@ -1,6 +1,7 @@
 // : page paiement dédiée (/paiement.html) — récap de la commande en attente,
-// total REQUOTÉ au backend (temps réel), choix MVola/carte, bouton « Confirmer le paiement » qui envoie
+// total REQUOTÉ au backend (temps réel), choix MVola, bouton « Confirmer le paiement » qui envoie
 // la commande (POST /api/order). Le processeur de paiement réel sera branché plus tard.
+// MODIFIÉ : paiement par carte retiré (présentation) — MVola est le seul mode de paiement.
 // Aucun calcul de prix local.
 
 import { $, $$, formatPrice, setText } from './utils.js';
@@ -188,14 +189,9 @@ async function onPay(e: Event): Promise<void> {
   }
 
   // Le mode de paiement choisi sur CETTE page est ajouté au payload
+  // MODIFIÉ : seul MVola subsiste, le mode est déjà fixé au chargement de la page —
+  // le contrôle local des champs carte a été supprimé avec le formulaire.
   pending.payload.paymentMethod = paymentMethod;
-
-  // en mode carte, validation locale des champs (comportement de l'élément
-  // de paiement de la référence) — blocage si invalide. L'API réelle sera branchée ici :
-  // TODO API paiement carte (Stripe / partenaire bancaire) — remplacer la validation
-  // locale par la création du PaymentIntent (les données de carte ne sont jamais
-  // stockées ni envoyées au backend /i.fleur).
-  if (paymentMethod === 'carte' && !validateCard()) return;
 
   if (payBtn) payBtn.disabled = true;
   setStatus('Envoi de la commande… / Sending your order…');
@@ -212,7 +208,7 @@ async function onPay(e: Event): Promise<void> {
       throw new Error(data.message || 'order failed');
     }
 
-    // : emplacement réservé où le processeur de paiement sera intégré (Stripe / MVola API)
+    // : emplacement réservé où le processeur MVola sera intégré (API MVola)
     const placeholder = $('#co-pay-placeholder');
     if (placeholder) {
       const totalTxt = data.isDevis ? 'sur devis / on quote' : formatPrice(currentQuote.total ?? 0);
@@ -236,84 +232,12 @@ async function onPay(e: Event): Promise<void> {
   }
 }
 
-// Toggle MVola / carte sur la page paiement
+// Toggle MVola sur la page paiement
+// MODIFIÉ : seul MVola existe — le bloc carte (#co-card-box) a été retiré du HTML.
 function switchPaymentMethod(method: PaymentMethod): void {
   paymentMethod = method;
-  const boxId = method === 'Mvola' ? 'co-mv-box' : 'co-card-box';
-  const otherId = method === 'Mvola' ? 'co-card-box' : 'co-mv-box';
-  const box = document.getElementById(boxId);
-  const other = document.getElementById(otherId);
+  const box = document.getElementById('co-mv-box');
   if (box) box.style.display = 'block';
-  if (other) other.style.display = 'none';
-}
-
-// : expiration valide — format MM/AA et non échue
-function isExpiryValid(value: string): boolean {
-  const m = value.match(/^(0[1-9]|1[0-2])\s*\/\s*(\d{2})$/);
-  if (!m) return false;
-  const month = Number(m[1]);
-  const year = 2000 + Number(m[2]);
-  const now = new Date();
-  return year > now.getFullYear() || (year === now.getFullYear() && month >= now.getMonth() + 1);
-}
-
-// : validation locale des champs carte (façon référence saison/Stripe).
-// Encadre chaque champ invalide et affiche un message FR ; les données de carte ne
-// sont jamais stockées (sessionStorage) ni envoyées au backend. Seront remplacées
-// par l'API réelle (voir TODO API paiement carte dans onPay).
-function validateCard(): boolean {
-  const fields: Array<{ el: HTMLInputElement | null; ok: boolean }> = [
-    {
-      el: $('#card-name') as HTMLInputElement | null,
-      ok: false,
-    },
-    {
-      el: $('#card-number') as HTMLInputElement | null,
-      ok: false,
-    },
-    {
-      el: $('#card-expiry') as HTMLInputElement | null,
-      ok: false,
-    },
-    {
-      el: $('#card-cvc') as HTMLInputElement | null,
-      ok: false,
-    },
-  ];
-
-  if (fields.some(f => !f.el)) return false;
-
-  fields[0].ok = fields[0].el!.value.trim().length >= 2;
-  fields[1].ok = /^\d{13,19}$/.test(fields[1].el!.value.replace(/\s+/g, ''));
-  fields[2].ok = isExpiryValid(fields[2].el!.value.trim());
-  fields[3].ok = /^\d{3,4}$/.test(fields[3].el!.value.trim());
-
-  fields.forEach(f => {
-    if (f.ok) {
-      f.el!.classList.remove('error');
-    } else {
-      f.el!.classList.add('error');
-    }
-  });
-
-  // Premier champ invalide (aucune assignation via closure — évite CDB TS "never")
-  const firstInvalid = fields.find(f => !f.ok)?.el ?? null;
-  const status = $('#co-card-status');
-  if (firstInvalid) {
-    if (status) status.textContent =
-      'Informations de carte invalides — vérifiez le n°, la date d\'expiration et le CVC. / Invalid card details — please check the number, the expiry date and the CVC.';
-    firstInvalid.focus();
-    return false;
-  }
-  if (status) status.textContent = '';
-  return true;
-}
-
-// : efface l'état d'erreur d'un champ carte à la saisie
-function clearCardError(input: HTMLInputElement): void {
-  input.classList.remove('error');
-  const status = $('#co-card-status');
-  if (status && status.textContent) status.textContent = '';
 }
 
 // Charger la commande en attente (sessionStorage partagé avec la home)
@@ -351,18 +275,13 @@ export function initCheckout(): void {
     });
   });
 
-  // Sélection MVola / carte
+  // Sélection MVola
   $$('.r-btn[data-pay]').forEach(btn => {
     btn.addEventListener('click', () => {
       $$('.r-btn[data-pay]').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
       switchPaymentMethod((btn.dataset.pay as PaymentMethod) || 'Mvola');
     });
-  });
-
-  // : efface l'erreur carte à la saisie (validation locale façon référence)
-  $$('.card-input').forEach(input => {
-    input.addEventListener('input', () => clearCardError(input as HTMLInputElement));
   });
 
   if (payBtn) payBtn.addEventListener('click', onPay);

@@ -572,89 +572,7 @@ textarea.field {
   color: var(--noir);
 }
 
-/* ========== SECTION CARTE (champs à remplir, façon référence saison/Stripe) ========== */
-/* : conteneur carte — SANS fond ni bordure, posé sur le fond blanc, séparé du
-   total par 30px (référence : .StripeElement{border:none;box-shadow:none;margin-top:30px}).
-   Ouvert via JS selon le mode de paiement (comme les anciennes boîtes). */
-#co-card-box {
-  display: none;
-  margin-top: 30px;
-}
-
-/* : conteneur des champs carte — interligne resserré (spacingUnit 4px saison) */
-.card-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 15px;
-}
-
-/* : rangée 2 colonnes — expiration + CVC (1 colonne sur mobile) */
-.card-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-/* : un champ carte = libellé + input empilés */
-.card-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  cursor: text;
-}
-
-/* : libellé du champ carte — petite étiquette majuscules */
-.card-field-label {
-  font-size: var(--font80);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--noir);
-}
-
-/* : input carte — compact, style de l'élément de paiement Stripe de saison :
-   bordure grise #E0E6EB, ombre légère, coins droits, texte noir */
-.card-input {
-  width: 100%;
-  border: 1px solid #E0E6EB;
-  border-radius: 0;
-  background: var(--blanc);
-  padding: 11px 12px;
-  font-family: var(--font);
-  font-size: var(--font90);
-  color: var(--noir);
-  outline: none;
-  box-sizing: border-box;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.03), 0 3px 6px rgba(18, 42, 66, 0.02);
-  transition: all .3s linear;
-}
-
-.card-input::placeholder {
-  color: var(--noir);
-  opacity: .45;
-}
-
-.card-input:focus {
-  border-color: var(--noir);
-}
-
-/* : input carte en erreur — bordure rouge (référence .StripeElement--invalid) */
-.card-input.error {
-  border: 2px solid #FF0000;
-  box-shadow: none;
-}
-
-/* : message d'erreur carte */
-.card-error {
-  display: none;
-  font-size: var(--font85);
-  line-height: 1.6;
-  color: #b33;
-}
-
-.card-error:not(:empty) {
-  display: block;
-}
+/* MODIFIÉ : SECTION CARTE supprimée (présentation) — le paiement par carte a été retiré. */
 
 /* : message d'état de la commande (envoi / succès / erreur) — doublons fusionnés */
 #order-status {
@@ -902,18 +820,13 @@ screen and (max-width:1024px) {
   }
 }
 
-/* Mobile (<=768) — récap empilé, champs carte empilés */
+/* Mobile (<=768) — récap empilé */
 @media print,
 screen and (max-width:768px) {
   .recap-row {
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
-  }
-
-  /* : expiration + CVC passent sur une colonne en mobile */
-  .card-row {
-    grid-template-columns: 1fr;
   }
 
   .c-opt:last-child .c-btn {
