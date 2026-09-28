@@ -1,49 +1,67 @@
-/* MODIFIÉ : Polices — typeface Saison (woff2/woff) comme saison-eshop */
-@font-face{
-  font-family:'Saison';
-  src:url('../fonts/Saison.woff2') format('woff2'),
-      url('../fonts/Saison.woff') format('woff');
-  font-weight:normal;
-  font-style:normal;
-  font-display:swap;
-}
-@font-face{
-  font-family:'Saison';
-  src:url('../fonts/Saison.woff2') format('woff2'),
-      url('../fonts/Saison.woff') format('woff');
-  font-weight:bold;
-  font-style:normal;
-  font-display:swap;
+/* Polices — typeface Saison (woff2/woff) comme saison-eshop */
+@font-face {
+  font-family: 'Saison';
+  src: url('../fonts/Saison.woff2') format('woff2'),
+    url('../fonts/Saison.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-/* MODIFIÉ : Reset universel */
-*{box-sizing:border-box;margin:0;padding:0;}
-
-/* MODIFIÉ : Variables globales — tokens exacts de la référence saison-eshop */
-:root{
-  --font_base:'Saison',sans-serif;
-  --font:'Saison',sans-serif;
-  --noir:#000;
-  --blanc:#FFF;
-  --grisclair:#F5F5F5;
-  --gris:#D9D9D9;
-  --gutter:25px;
-  --font300:4rem;
-  --font200:2.5rem;
-  --font150:1.6rem;
-  --font100:1.1rem;
-  --font90:1rem;
-  --font85:0.9rem;
-  --font80:0.7rem;
-  --logo_hauteur:150px;
-  --hauteur_diapo:70vh;
-  --border:1px solid var(--noir);
-  --bord:1px solid var(--noir);
+@font-face {
+  font-family: 'Saison';
+  src: url('../fonts/Saison.woff2') format('woff2'),
+    url('../fonts/Saison.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 
-/* MODIFIÉ : Base document — line-height 1.4 (référence : aucune valeur sur body, texte compact) */
-html,body{height:100%;}
-body{font-family:var(--font_base);font-weight:normal;font-size:var(--font85);line-height:1.4;color:var(--noir);background:var(--blanc);}
+/* Reset universel */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-/* MODIFIÉ : Placeholder global — couleur seule (la page shop de la référence ne définit que la couleur ; taille héritée 0.9rem, pas de lowercase) */
-::placeholder{color:var(--gris);}
+/* Variables globales — tokens exacts de la référence saison-eshop */
+:root {
+  --font_base: 'Saison', sans-serif;
+  --font: 'Saison', sans-serif;
+  --noir: #000;
+  --blanc: #FFF;
+  --grisclair: #F5F5F5;
+  --gris: #D9D9D9;
+  --gutter: 25px;
+  --font300: 4rem;
+  --font200: 2.5rem;
+  --font150: 1.6rem;
+  --font100: 1.1rem;
+  --font90: 1rem;
+  --font85: 0.9rem;
+  --font80: 0.7rem;
+  --logo_hauteur: 150px;
+  --hauteur_diapo: 70vh;
+  --border: 1px solid var(--noir);
+  --bord: 1px solid var(--noir);
+}
+
+/* Base document — line-height 1.4 (référence : aucune valeur sur body, texte compact) */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font_base);
+  font-weight: normal;
+  font-size: var(--font85);
+  line-height: 1.4;
+  color: var(--noir);
+  background: var(--blanc);
+}
+
+/* Placeholder global — couleur seule (la page shop de la référence ne définit que la couleur ; taille héritée 0.9rem, pas de lowercase) */
+::placeholder {
+  color: var(--gris);
+}

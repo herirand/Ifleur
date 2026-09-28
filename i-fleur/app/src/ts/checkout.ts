@@ -1,14 +1,16 @@
-// NOUVEAU : page paiement dédiée (/paiement.html) — récap de la commande en attente,
+// : page paiement dédiée (/paiement.html) — récap de la commande en attente,
 // total REQUOTÉ au backend (temps réel), choix MVola/carte, bouton « Confirmer le paiement » qui envoie
 // la commande (POST /api/order). Le processeur de paiement réel sera branché plus tard.
 // Aucun calcul de prix local.
 
-import { $, $$, formatPrice } from './utils.js';
+import { $, $$, formatPrice, setText } from './utils.js';
+import { getConfig } from './data.js';
 import type { QuoteResult, OrderSize } from './types.js';
 import type { PaymentMethod } from './types-payment.js';
 import { STORAGE_KEY } from './payment.js';
 
-export interface PendingOrder {
+// plus exporté — PendingOrder n'est consommé qu'ici
+interface PendingOrder {
   payload: Record<string, unknown>;
   quote: QuoteResult;
 }
@@ -34,11 +36,11 @@ let currentQuote: QuoteResult = {
   basePrice: 0, vasePrice: 0, deliveryFee: 0, total: null, isDevis: false, deliveryIsDevis: false,
 };
 
-function setText(id: string, value: string): void {
-  const el = document.getElementById(id);
-  if (el) el.textContent = value;
-}
-
+// : libellé de taille. Volontairement SANS getConfig() : cette fonction est
+// appelée sur /paiement.html, chemin où loadConfig() n'est jamais exécuté
+// (main.ts retourne avant init()) — getConfig() y lèverait 'Configuration non chargé'.
+// L'écart avec le libellé backend (« min … ») est assumé : le récap affiche le type,
+// le minimum est communiqué dans l'email de confirmation.
 function sizeLabel(size: OrderSize): string {
   const map: Record<OrderSize, string> = {
     mini: 'Mini', S: 'S', M: 'M', L: 'L', custom: 'Sur-mesure / Custom',
@@ -50,6 +52,27 @@ function sizeLabel(size: OrderSize): string {
 function hasValidBilling(): boolean {
   const b = (pending?.payload.billing || {}) as BillingLike;
   return Boolean(b.nom && b.tel && b.email && b.email.includes('@'));
+}
+
+// : lien WhatsApp « envoyer la capture de paiement ». Le numéro vient de la
+// config (GET /api/config) et le montant du quote serveur — aucune arithmétique locale.
+function initWhatsappProof(): void {
+  const link = document.querySelector<HTMLAnchorElement>('#co-wa-proof');
+  if (!link) return;
+
+  let number = '';
+  try {
+    number = getConfig().whatsappNumber;
+  } catch {
+    return; // config non chargée : on laisse le lien tel quel
+  }
+  if (!number) return;
+
+  // : montant nu (sans préposition) — la préposition est posée dans chaque
+  // langue (« de » en FR, « of » en EN) pour éviter qu'une fuite dans l'autre.
+  const amount = currentQuote.isDevis ? '' : ` ${formatPrice(currentQuote.total ?? 0)}`;
+  const msg = `Bonjour i.fleur, je viens d'envoyer le paiement de${amount}. Voici la capture de mon paiement : / Hello i.fleur, I just sent the payment of${amount}. Here is my payment screenshot:`;
+  link.href = `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
 }
 
 // Afficher le statut (même style que la home)
@@ -116,7 +139,7 @@ function renderTotal(quote: QuoteResult): void {
       : (quote.total === null ? '—' : formatPrice(quote.total)));
 }
 
-// NOUVEAU : re-quoter au backend à l'arrivée sur la page (temps réel, calcul serveur)
+// : re-quoter au backend à l'arrivée sur la page (temps réel, calcul serveur)
 async function requote(): Promise<void> {
   if (!pending) return;
   const p = pending.payload as PayloadLike;
@@ -148,11 +171,12 @@ async function requote(): Promise<void> {
   }
 
   renderRecap(pending.payload, currentQuote);
+  initWhatsappProof();
   const totalTxt = currentQuote.isDevis ? 'sur devis / on quote' : formatPrice(currentQuote.total ?? 0);
   setStatus(`Total à payer : ${totalTxt} — vérifiez vos informations puis cliquez sur « modifier votre commande » ou « Confirmer le paiement ». / Amount due: ${totalTxt} — review your details then click "Pay".`);
 }
 
-// MODIFIÉ : « Confirmer le paiement » → POST /api/order (email client). Point d'intégration du processeur de paiement.
+// « Confirmer le paiement » → POST /api/order (email client). Point d'intégration du processeur de paiement.
 async function onPay(e: Event): Promise<void> {
   e.preventDefault();
   const payBtn = $('#btn-pay') as HTMLButtonElement | null;
@@ -166,7 +190,7 @@ async function onPay(e: Event): Promise<void> {
   // Le mode de paiement choisi sur CETTE page est ajouté au payload
   pending.payload.paymentMethod = paymentMethod;
 
-  // MODIFIÉ : en mode carte, validation locale des champs (comportement de l'élément
+  // en mode carte, validation locale des champs (comportement de l'élément
   // de paiement de la référence) — blocage si invalide. L'API réelle sera branchée ici :
   // TODO API paiement carte (Stripe / partenaire bancaire) — remplacer la validation
   // locale par la création du PaymentIntent (les données de carte ne sont jamais
@@ -188,7 +212,7 @@ async function onPay(e: Event): Promise<void> {
       throw new Error(data.message || 'order failed');
     }
 
-    // NOUVEAU : emplacement réservé où le processeur de paiement sera intégré (Stripe / MVola API)
+    // : emplacement réservé où le processeur de paiement sera intégré (Stripe / MVola API)
     const placeholder = $('#co-pay-placeholder');
     if (placeholder) {
       const totalTxt = data.isDevis ? 'sur devis / on quote' : formatPrice(currentQuote.total ?? 0);
@@ -223,7 +247,7 @@ function switchPaymentMethod(method: PaymentMethod): void {
   if (other) other.style.display = 'none';
 }
 
-// NOUVEAU : expiration valide — format MM/AA et non échue
+// : expiration valide — format MM/AA et non échue
 function isExpiryValid(value: string): boolean {
   const m = value.match(/^(0[1-9]|1[0-2])\s*\/\s*(\d{2})$/);
   if (!m) return false;
@@ -233,7 +257,7 @@ function isExpiryValid(value: string): boolean {
   return year > now.getFullYear() || (year === now.getFullYear() && month >= now.getMonth() + 1);
 }
 
-// NOUVEAU : validation locale des champs carte (façon référence saison/Stripe).
+// : validation locale des champs carte (façon référence saison/Stripe).
 // Encadre chaque champ invalide et affiche un message FR ; les données de carte ne
 // sont jamais stockées (sessionStorage) ni envoyées au backend. Seront remplacées
 // par l'API réelle (voir TODO API paiement carte dans onPay).
@@ -285,7 +309,7 @@ function validateCard(): boolean {
   return true;
 }
 
-// NOUVEAU : efface l'état d'erreur d'un champ carte à la saisie
+// : efface l'état d'erreur d'un champ carte à la saisie
 function clearCardError(input: HTMLInputElement): void {
   input.classList.remove('error');
   const status = $('#co-card-status');
@@ -318,7 +342,7 @@ export function initCheckout(): void {
     return;
   }
 
-  // MODIFIÉ : « modifier votre commande » — retour au configurateur en gardant la
+  // « modifier votre commande » — retour au configurateur en gardant la
   // commande en attente (la home restaure la sélection via restore.ts)
   $$('.modifier-btn').forEach(btn => {
     btn.addEventListener('click', (e: Event) => {
@@ -336,7 +360,7 @@ export function initCheckout(): void {
     });
   });
 
-  // NOUVEAU : efface l'erreur carte à la saisie (validation locale façon référence)
+  // : efface l'erreur carte à la saisie (validation locale façon référence)
   $$('.card-input').forEach(input => {
     input.addEventListener('input', () => clearCardError(input as HTMLInputElement));
   });

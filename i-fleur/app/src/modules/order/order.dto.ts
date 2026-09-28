@@ -1,9 +1,9 @@
-// MODIFIÉ : cohérence paymentMethod (paiement Mvola + carte), champ recipient.ville corrigé
+import { PAYMENT_METHODS } from '../payment/payment.dto'
 import type { PaymentMethod } from '../payment/payment.dto'
 
 export type OrderSize = 'mini' | 'S' | 'M' | 'L' | 'custom';
-export type OrderDelivery = 'pickup' | 'home';
-export type OrderColor = 'pastel' | 'chaud' | 'surprenez-moi' | 'neutre';
+type OrderDelivery = 'pickup' | 'home';
+type OrderColor = 'pastel' | 'chaud' | 'surprenez-moi' | 'neutre';
 
 export interface QuoteOrderDto {
   size: OrderSize
@@ -41,7 +41,6 @@ export interface OrderDto {
 const SizeEnum = ['mini', 'S', 'M', 'L', 'custom'];
 const DeliveryEnum = ['pickup', 'home'];
 const ColorEnum = ['pastel', 'chaud', 'surprenez-moi', 'neutre'];
-const PaymentEnum = ['Mvola', 'carte'];
 
 export const QuoteSchema = {
   body: {
@@ -94,7 +93,7 @@ export const OrderSchema = {
           ville: { type: 'string' },
         },
       },
-      paymentMethod: { type: 'string', enum: PaymentEnum },
+      paymentMethod: { type: 'string', enum: PAYMENT_METHODS },
     },
   },
 } as const

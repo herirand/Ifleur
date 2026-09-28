@@ -1,8 +1,8 @@
-// MODIFIÉ : bouton « Paiement » → redirection vers /paiement.html.
+// bouton « Paiement » → redirection vers /paiement.html.
 // La commande (POST /api/order) ne part PLUS ici : elle part au clic « Payer » sur la page paiement.
 // Le calcul du prix reste 100% backend (quote débouncée dans pricing.ts).
 
-import { $, $$ } from './utils.js';
+import { $ } from './utils.js';
 import { getConfig } from './data.js';
 import { getSelection, getQuoteResult } from './pricing.js';
 import { getDeliveryMode, getSelectedQuartier } from './delivery.js';
@@ -10,7 +10,7 @@ import { getBilling } from './billing.js';
 import { getSelectedColor } from './selectors.js';
 import type { OrderDelivery, OrderSize } from './types.js';
 
-// NOUVEAU : clé du stockage de la commande en attente (partagée avec la page paiement)
+// : clé du stockage de la commande en attente (partagée avec la page paiement)
 export const STORAGE_KEY = 'ifleur_order';
 
 const val = (id: string): string =>
@@ -89,7 +89,7 @@ function clearFieldError(id: string): void {
   if (el) el.classList.remove('field-error');
 }
 
-// NOUVEAU : valider, stocker la commande en attente (sélection + quote backend) puis rediriger
+// : valider, stocker la commande en attente (sélection + quote backend) puis rediriger
 function goToCheckout(e: Event): void {
   e.preventDefault();
 
@@ -130,10 +130,12 @@ export function initPayment(): void {
   if (waBtn) waBtn.addEventListener('click', openWhatsAppContact);
 
   // Supprimer la bordure rouge dès que l'utilisateur corrige un champ
+  // : 'quartier-select' retiré — il n'est jamais validé par validateAllFields(),
+  // donc la classe 'field-error' ne pouvait jamais y être posée (2 listeners morts).
   const allRequiredIds = [
     'billing-name', 'billing-phone', 'billing-email',
     'pickup-date', 'delivery-date',
-    'deliver-nom', 'deliver-tel', 'deliver-address', 'deliver-city', 'quartier-select',
+    'deliver-nom', 'deliver-tel', 'deliver-address', 'deliver-city',
   ];
   allRequiredIds.forEach(id => {
     const el = document.getElementById(id);

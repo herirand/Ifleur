@@ -1,8 +1,8 @@
-// MODIFIÉ : le module envoie mode + quartier au backend (quote) et affiche les frais serveur.
+// le module envoie mode + quartier au backend (quote) et affiche les frais serveur.
 // Aucun calcul local des frais de livraison.
 
 import { $, $$, formatPrice } from './utils.js';
-import { getAllQuartiers } from './data.js';
+import { getAllQuartiers, getConfig } from './data.js';
 import { setSelection, getQuoteResult, onQuoteChange } from './pricing.js';
 import type { OrderDelivery } from './types.js';
 
@@ -40,13 +40,17 @@ function onQuartierChange(e: Event): void {
   updateFeeInfo();
 }
 
-// MODIFIÉ : affiche les frais calculés par le backend
+// affiche les frais calculés par le backend
 export function updateFeeInfo(): void {
   const el = document.getElementById(FRAIS_EL);
   if (!el) return;
 
   if (deliveryMode === 'pickup') {
-    el.textContent = 'Retrait en boutique : gratuit / pick up in store: free';
+    // : le message vient de la config (delivery.retraitGratuit) au lieu d'un
+    // « gratuit » en dur — la config redevient la source de vérité du texte.
+    el.textContent = getConfig().delivery.retraitGratuit
+      ? 'Retrait en boutique : gratuit / pick up in store: free'
+      : 'Retrait en boutique : voir en boutique / pick up in store: see in store';
     return;
   }
 
@@ -71,18 +75,25 @@ function populateQuartiers(): void {
   placeholder.textContent = '— choisir un quartier / choose a district —';
   select.appendChild(placeholder);
 
-  const all = getAllQuartiers();
-  const seenZone = new Set<string>();
-  for (const { quartier, zone } of all) {
-    if (seenZone.has(zone.name)) continue;
-    seenZone.add(zone.name);
+  // : regroupement par zone en UN seul passage (Map). L'ancienne version
+  // re-filtrait toute la liste à chaque zone => O(n²) sur ~50 quartiers (~2 500 itérations).
+  // Ici : 1 parcours pour construire, 1 pour rendre => O(n).
+  // Aucun calcul de prix : `fee` vient de la config, il est juste affiché.
+  const byZone = new Map<string, { fee: number | null; quartiers: string[] }>();
+  for (const { quartier, zone } of getAllQuartiers()) {
+    let entry = byZone.get(zone.name);
+    if (!entry) {
+      entry = { fee: zone.fee, quartiers: [] };
+      byZone.set(zone.name, entry);
+    }
+    entry.quartiers.push(quartier);
+  }
 
+  for (const [name, { fee, quartiers }] of byZone) {
     const group = document.createElement('optgroup');
-    const feeTxt = zone.fee === null ? 'sur devis' : zone.fee === 0 ? 'gratuit' : formatPrice(zone.fee);
-    group.label = `${zone.name} (${feeTxt})`;
-
-    for (const { quartier: q, zone: z } of all) {
-      if (z.name !== zone.name) continue;
+    const feeTxt = fee === null ? 'sur devis' : fee === 0 ? 'gratuit' : formatPrice(fee);
+    group.label = `${name} (${feeTxt})`;
+    for (const q of quartiers) {
       const opt = document.createElement('option');
       opt.value = q;
       opt.textContent = q;
@@ -100,7 +111,7 @@ export function getSelectedQuartier(): string {
   return selectedQuartier;
 }
 
-// NOUVEAU : restauration — applique un quartier (contenu du select) et relance le quote
+// : restauration — applique un quartier (contenu du select) et relance le quote
 export function setQuartier(quartier: string): void {
   const select = $('#quartier-select') as HTMLSelectElement | null;
   if (select) select.value = quartier;
