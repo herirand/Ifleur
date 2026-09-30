@@ -68,9 +68,10 @@ app.setNotFoundHandler((request, reply) => {
 const start = async () => {
   try {
     // : builde le bundle frontend au démarrage (watch en dev, once en prod)
+    const PORT = Number(process.env.PORT) || 3000
     await ensureFrontendBuilt({ watch: process.env.NODE_ENV !== 'production' })
-    await app.listen({ port: 3000, host: '0.0.0.0' });
-    console.log(`serveur listening at port: 3000`);
+    await app.listen({ port: PORT, host: '0.0.0.0' });
+    console.log(`serveur listening at port: ${PORT}`);
   } catch (error) {
     app.log.error(error);
     console.log('Serveur exiting');

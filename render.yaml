@@ -1,0 +1,37 @@
+# Blueprint Render — RACINE du dépôt (herirand/Ifleur), pas dans i-fleur/
+# Dashboard Render > Blueprints > New > selects ce dépôt.
+services:
+  - type: web
+    name: ifleur
+    runtime: node
+    plan: free
+    region: frankfurt        # plus proche UE de Madagascar ; singapore = alternative à tester
+    branch: main             # main est 6 commits devant prod
+    rootDir: i-fleur/app     # OBLIGATOIRE : cwd = PUBLIC_DIR = process.cwd()/public
+    buildCommand: npm ci && npm run build:server
+    startCommand: node dist/server.cjs
+    healthCheckPath: /api/config
+    autoDeploy: true
+
+    envVars:
+      # Fastify 5 exige Node >= 20 ; 22 = LTS largement supporté par Render
+      - key: NODE_VERSION
+        value: "22"
+      # force once=true dans buildStatic.ts -> bundle front minifié, pas de watch
+      - key: NODE_ENV
+        value: production
+      # fonctionne AVEC ou SANS le patch app.ts :
+      #  - sans patch : le serveur écoute 3000 en dur, Render route vers 3000 -> OK
+      #  - avec patch : le serveur lit PORT, donc 3000 -> OK
+      #  - si le patch est posé, cette ligne peut être supprimée (Render met 10000 par défaut)
+      - key: PORT
+        value: "3000"
+      # secrets : Render les demande au premier deploy, jamais dans le dépôt
+      - key: EMAILJS_SERVICE_ID
+        sync: false
+      - key: EMAILJS_TEMPLATE_ID
+        sync: false
+      - key: EMAILJS_PUBLIC_KEY
+        sync: false
+      - key: EMAILJS_PRIVATE_KEY
+        sync: false
