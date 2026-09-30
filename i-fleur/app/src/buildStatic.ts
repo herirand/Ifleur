@@ -1,4 +1,4 @@
-// NOUVEAU : bundle du frontend (esbuild) au démarrage du serveur monolithe
+// : bundle du frontend (esbuild) au démarrage du serveur monolithe
 // src/ts/main.ts → public/dist/app.js (racine web = public/)
 // En dev : rebuild à chaud (watch). En production : build unique au démarrage.
 import * as esbuild from 'esbuild';

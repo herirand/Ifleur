@@ -1,9 +1,12 @@
-// MODIFIÉ : OrderSize + 'custom', nouveaux types Config/QuoteResult (réponse backend)
+// OrderSize + 'custom', nouveaux types Config/QuoteResult (réponse backend)
 export type OrderSize = 'mini' | 'S' | 'M' | 'L' | 'custom';
 
-export type OrderColor = 'pastel' | 'chaud' | 'surprenez-moi' | 'neutre';
-
 export type OrderDelivery = 'pickup' | 'home';
+
+// : source unique des couleurs — remplace les 3 listes littérales
+// dupliquées (selectors.ts, pricing.ts, order.dto.ts côté serveur).
+export const ORDER_COLORS = ['pastel', 'chaud', 'surprenez-moi', 'neutre'] as const;
+export type OrderColor = typeof ORDER_COLORS[number];
 
 export interface DeliveryZone {
   name: string;
@@ -35,12 +38,6 @@ export interface Config {
   faq: FaqItem[];
 }
 
-export interface DeliverySelection {
-  mode: OrderDelivery;
-  date: string;
-  quartier: string;
-}
-
 export interface BillingSelection {
   nom: string;
   tel: string;
@@ -49,7 +46,7 @@ export interface BillingSelection {
   ville: string;
 }
 
-// NOUVEAU : résultat du calcul de prix backend
+// : résultat du calcul de prix backend
 export interface QuoteResult {
   basePrice: number;
   vasePrice: number;

@@ -115,7 +115,7 @@
 }
 
 /* ========== COULEURS ========== */
-/* MODIFIÉ : Rangée de couleurs — filet traversant intérieur seulement (début/fin rognés), comme la section SIZE */
+/* Rangée de couleurs — filet traversant intérieur seulement (début/fin rognés), comme la section SIZE */
 .color-row {
   position: relative;
   display: flex;
@@ -123,7 +123,7 @@
   margin-bottom: var(--gutter);
 }
 
-/* NOUVEAU : filet traversant entre les couleurs — passe derrière les cercles (z-index),
+/* : filet traversant entre les couleurs — passe derrière les cercles (z-index),
    rogné aux centres des 1er/ dernier cercles (12.5% = centre d'un col-opt de 25%) :
    pas de trait au début ni à la fin de la rangée */
 .color-row::after {
@@ -136,7 +136,7 @@
   z-index: 0;
 }
 
-/* MODIFIÉ : Option couleur — largeur quart */
+/* Option couleur — largeur quart */
 .col-opt {
   position: relative;
   z-index: 1;
@@ -148,18 +148,18 @@
   text-align: center;
 }
 
-/* MODIFIÉ : Cercle de couleur — 60px (taille référence saison-eshop). Dégradés CSS pour
+/* Cercle de couleur — 60px (taille référence saison-eshop). Dégradés CSS pour
    pastel / neutre / chaud ; surprenez-moi = photo locale. État sélectionné = bordure noire. */
 .col-btn {
   width: 60px;
   height: 60px;
   border-radius: 60px;
-  /* MODIFIÉ : bordure transparente par défaut — états non sélectionnés « sans bordure »
+  /* bordure transparente par défaut — états non sélectionnés « sans bordure »
      (référence saison : bordure blanche invisible sur fond blanc) ; 1px réservé pour éviter le shift */
   border: 1px solid transparent;
   cursor: pointer;
   transition: all .3s linear;
-  /* MODIFIÉ : retrait du fond noir + background-clip padding-box — l'anneau GRIS FONCÉ des
+  /* retrait du fond noir + background-clip padding-box — l'anneau GRIS FONCÉ des
      flancs (antialiasing border-radius) disparaît ; la couleur s'arrête 1px avant le bord */
   background-clip: padding-box;
   background-size: cover;
@@ -167,7 +167,7 @@
   background-position: center;
 }
 
-/* NOUVEAU : dégradés utilisateur — .cercle-1 pastel (blanc→rose), .cercle-2 neutre (blanc→vert), .cercle-3 chaud (pourpre→grenat) */
+/* : dégradés utilisateur — .cercle-1 pastel (blanc→rose), .cercle-2 neutre (blanc→vert), .cercle-3 chaud (pourpre→grenat) */
 .pastel .col-btn {
   background-image: linear-gradient(180deg, #ffffff 0%, #ff9aa2 100%);
 }
@@ -180,13 +180,13 @@
   background-image: linear-gradient(180deg, #9b2d38 0%, #631722 100%);
 }
 
-/* MODIFIÉ : surprenez-moi — photo locale sur fond dégradé radial (voir règles ci-dessous) */
+/* surprenez-moi — photo locale sur fond dégradé radial (voir règles ci-dessous) */
 .surprenez-moi .col-btn {
   /* Conserve la forme circulaire */
   overflow: hidden;
   /* Masque tout ce qui dépasse */
 
-  /* MODIFIÉ : le fond dégradé radial (beige→bronze) est maintenant visible DERRIÈRE la photo
+  /* le fond dégradé radial (beige→bronze) est maintenant visible DERRIÈRE la photo
      de la fleur — les 2 couches sont empilées sur le même background-image (1re = premier plan) */
   background-image: url('../images/color-surprenez-moi.png'),
     radial-gradient(circle, #e6ded0 0%, #bca78c 100%);
@@ -196,7 +196,7 @@
   background-position: center;
 }
 
-/* MODIFIÉ : État sélectionné — bordure NOIRE (référence saison : border-color: var(--noir)),
+/* État sélectionné — bordure NOIRE (référence saison : border-color: var(--noir)),
    animée par la transition .3s du .col-btn ; halo blanc supprimé */
 .color-row .col-btn.selected {
   border-color: var(--noir);
@@ -210,7 +210,7 @@
   padding: 2px 15px;
 }
 
-/* MODIFIÉ : Séparateur .col-line (hérité du format initial) — masqué, aucun filet entre les couleurs */
+/* Séparateur .col-line (hérité du format initial) — masqué, aucun filet entre les couleurs */
 .col-line {
   display: none;
 }
@@ -487,7 +487,7 @@ textarea.field {
   margin-bottom: 15px;
 }
 
-/* MODIFIÉ : bouton principal — pleine largeur, fond gris `--gris`, hover inversé
+/* bouton principal — pleine largeur, fond gris `--gris`, hover inversé
    (style du bouton « Confirmer le paiement » de saison-eshop) */
 .pay-btn {
   display: flex;
@@ -512,7 +512,7 @@ textarea.field {
   white-space: normal;
 }
 
-/* MODIFIÉ : variante légère — désormais réservée au bouton WhatsApp contact (index.html) */
+/* variante légère — désormais réservée au bouton WhatsApp contact (index.html) */
 .pay-btn.secondary {
   font-size: var(--font80);
   letter-spacing: 2px;
@@ -572,91 +572,9 @@ textarea.field {
   color: var(--noir);
 }
 
-/* ========== SECTION CARTE (champs à remplir, façon référence saison/Stripe) ========== */
-/* NOUVEAU : conteneur carte — SANS fond ni bordure, posé sur le fond blanc, séparé du
-   total par 30px (référence : .StripeElement{border:none;box-shadow:none;margin-top:30px}).
-   Ouvert via JS selon le mode de paiement (comme les anciennes boîtes). */
-#co-card-box {
-  display: none;
-  margin-top: 30px;
-}
+/* MODIFIÉ : SECTION CARTE supprimée (présentation) — le paiement par carte a été retiré. */
 
-/* NOUVEAU : conteneur des champs carte — interligne resserré (spacingUnit 4px saison) */
-.card-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 15px;
-}
-
-/* NOUVEAU : rangée 2 colonnes — expiration + CVC (1 colonne sur mobile) */
-.card-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-/* NOUVEAU : un champ carte = libellé + input empilés */
-.card-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  cursor: text;
-}
-
-/* NOUVEAU : libellé du champ carte — petite étiquette majuscules */
-.card-field-label {
-  font-size: var(--font80);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--noir);
-}
-
-/* NOUVEAU : input carte — compact, style de l'élément de paiement Stripe de saison :
-   bordure grise #E0E6EB, ombre légère, coins droits, texte noir */
-.card-input {
-  width: 100%;
-  border: 1px solid #E0E6EB;
-  border-radius: 0;
-  background: var(--blanc);
-  padding: 11px 12px;
-  font-family: var(--font);
-  font-size: var(--font90);
-  color: var(--noir);
-  outline: none;
-  box-sizing: border-box;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.03), 0 3px 6px rgba(18, 42, 66, 0.02);
-  transition: all .3s linear;
-}
-
-.card-input::placeholder {
-  color: var(--noir);
-  opacity: .45;
-}
-
-.card-input:focus {
-  border-color: var(--noir);
-}
-
-/* NOUVEAU : input carte en erreur — bordure rouge (référence .StripeElement--invalid) */
-.card-input.error {
-  border: 2px solid #FF0000;
-  box-shadow: none;
-}
-
-/* NOUVEAU : message d'erreur carte */
-.card-error {
-  display: none;
-  font-size: var(--font85);
-  line-height: 1.6;
-  color: #b33;
-}
-
-.card-error:not(:empty) {
-  display: block;
-}
-
-/* NOUVEAU : message d'état de la commande (envoi / succès / erreur) — doublons fusionnés */
+/* : message d'état de la commande (envoi / succès / erreur) — doublons fusionnés */
 #order-status {
   display: none;
   margin-top: 15px;
@@ -682,13 +600,13 @@ textarea.field {
 }
 
 /* ========== PAGE PAIEMENT (/paiement.html) ========== */
-/* MODIFIÉ : la page paiement reprend le layout split-screen de la boutique (.col-photo
+/* la page paiement reprend le layout split-screen de la boutique (.col-photo
    fixe à gauche + .col-content à droite) — la colonne centrée .col-checkout est supprimée. */
 #checkout-page {
   padding-bottom: var(--gutter);
 }
 
-/* NOUVEAU : bouton « modifier votre commande » — UN SEUL, sous le récap.
+/* : bouton « modifier votre commande » — UN SEUL, sous le récap.
    Même pastille que le bouton confirm (référence saison `.modifier`) : pleine
    largeur, fond `--grisclair`, texte `--gris` en 1.1rem, transition all .3s →
    au survol fond noir / texte blanc. */
@@ -716,7 +634,7 @@ textarea.field {
   color: var(--blanc);
 }
 
-/* NOUVEAU : statut de la page paiement — même logique que #order-status */
+/* : statut de la page paiement — même logique que #order-status */
 #co-order-status {
   display: none;
   margin-top: 15px;
@@ -741,7 +659,7 @@ textarea.field {
   border-left: 3px solid #b33;
 }
 
-/* NOUVEAU : placeholder d'intégration du paiement (révélé par la classe .visible) */
+/* : placeholder d'intégration du paiement (révélé par la classe .visible) */
 #co-pay-placeholder {
   display: none;
   background: var(--grisclair);
@@ -773,7 +691,7 @@ textarea.field {
   border-top: var(--border);
 }
 
-/* MODIFIÉ : Question — rangée cliquable, police réduite (font85) et padding resserré pour coller à la référence */
+/* Question — rangée cliquable, police réduite (font85) et padding resserré pour coller à la référence */
 .faq-q {
   display: flex;
   justify-content: space-between;
@@ -792,7 +710,7 @@ textarea.field {
   text-align: left;
 }
 
-/* MODIFIÉ : Symbole + — taille réduite en proportion de la question */
+/* Symbole + — taille réduite en proportion de la question */
 .faq-toggle {
   font-size: 16px;
   color: var(--noir);
@@ -812,7 +730,7 @@ textarea.field {
   overflow: hidden;
 }
 
-/* MODIFIÉ : Réponse — police plus petite (font80) et interligne resserré, rendu compact type référence */
+/* Réponse — police plus petite (font80) et interligne resserré, rendu compact type référence */
 .faq-a-inner {
   overflow: hidden;
   min-height: 0;
@@ -902,18 +820,13 @@ screen and (max-width:1024px) {
   }
 }
 
-/* Mobile (<=768) — récap empilé, champs carte empilés */
+/* Mobile (<=768) — récap empilé */
 @media print,
 screen and (max-width:768px) {
   .recap-row {
     flex-direction: column;
     align-items: flex-start;
     gap: 4px;
-  }
-
-  /* NOUVEAU : expiration + CVC passent sur une colonne en mobile */
-  .card-row {
-    grid-template-columns: 1fr;
   }
 
   .c-opt:last-child .c-btn {

@@ -1,5 +1,3 @@
-// MODIFIÉ : réutilise sendOrderEmail() de modules/email (template HTML structurée) —
-// la confirmation part au client (billing.email) avec des champs dédiés (pas de bloc brut).
 import config from '../../config/config.json'
 import { sendOrderEmail } from '../email/email.service'
 import type { SendEmailDto } from '../email/email.dto'
@@ -54,10 +52,7 @@ function formatAr(n: number): string {
   return n.toLocaleString('fr-FR') + ' Ar';
 }
 
-// NOUVEAU : construit les champs structurés de la template HTML EmailJS
-// (fini le blob « order » illisible). Chaque valeur a sa propre variable,
-// fallback « — » pour les champs absents.
-export function buildOrderEmail(dto: OrderDto, q: QuoteResult): SendEmailDto {
+function buildOrderEmail(dto: OrderDto, q: QuoteResult): SendEmailDto {
   const sizeLabel: Record<OrderSize, string> = {
     mini: 'Mini',
     S: 'S',
@@ -97,10 +92,10 @@ export function buildOrderEmail(dto: OrderDto, q: QuoteResult): SendEmailDto {
     quartier: isHome ? (dto.quartier || '—') : '—',
     delivery_fee: isHome
       ? (q.deliveryIsDevis
-          ? 'sur devis / on quote'
-          : q.deliveryFee === 0
-            ? 'gratuit / free'
-            : formatAr(q.deliveryFee))
+        ? 'sur devis / on quote'
+        : q.deliveryFee === 0
+          ? 'gratuit / free'
+          : formatAr(q.deliveryFee))
       : '—',
     billing_name: dto.billing.nom || '—',
     billing_phone: dto.billing.tel || '—',
@@ -110,7 +105,6 @@ export function buildOrderEmail(dto: OrderDto, q: QuoteResult): SendEmailDto {
   }
 }
 
-// MODIFIÉ : création de commande — recalcul backend + email structuré au client.
 export async function createOrder(dto: OrderDto): Promise<QuoteResult> {
   validatePaymentMethod(dto.paymentMethod)
   const quote = computeQuote(dto)

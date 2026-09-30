@@ -22,10 +22,8 @@ export const ConfigSchema = {
     200: {
       type: 'object',
       additionalProperties: false,
-      additionalProperties: false,
       properties: {
         ok: { type: 'boolean' },
-        // MODIFIÉ : config libre (fast-json-stringify retire les propriétés non déclarées)
         config: { type: 'object', additionalProperties: true }
       }
     },

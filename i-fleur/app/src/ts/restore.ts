@@ -1,4 +1,4 @@
-// NOUVEAU : restauration de la commande en attente au retour du configurateur
+// : restauration de la commande en attente au retour du configurateur
 // (bouton « Modifier votre commande » depuis /paiement.html). Lit
 // sessionStorage['ifleur_order'] et re-applique la sélection dans le DOM
 // (taille, couleur, vase, message, livraison, quartier, facturation), puis
@@ -47,7 +47,7 @@ function setField(id: string, value: string | undefined): void {
   if (el) el.value = value;
 }
 
-// NOUVEAU : ré-applique le payload de la commande en attente sur le configurateur
+// : ré-applique le payload de la commande en attente sur le configurateur
 export function restoreSelection(): void {
   let raw: string | null = null;
   try {

@@ -1,19 +1,4 @@
-// NOUVEAU : paiement — uniquement MVola + carte. L'API externe sera intégrée plus tard.
-export type PaymentMethod = 'Mvola' | 'carte'
+// MODIFIÉ : paiement par carte retiré (présentation) — MVola est le seul mode de paiement.
+export type PaymentMethod = 'Mvola'
 
-export interface PaymentInfo {
-  method: PaymentMethod
-  reference?: string // référence de paiement (ex: n° transaction MVola) — optionnel pour l'instant
-}
-
-export const PaymentSchema = {
-  body: {
-    type: 'object',
-    required: ['method'],
-    additionalProperties: false,
-    properties: {
-      method: { type: 'string', enum: ['Mvola', 'carte'] },
-      reference: { type: 'string' },
-    },
-  },
-} as const
+export const PAYMENT_METHODS = ['Mvola'] as const

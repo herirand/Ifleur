@@ -38,15 +38,14 @@
         <div class="slide" style="background-image:url('src/images/bouquet-3.jpg')"></div>
         <div class="slide" style="background-image:url('src/images/bouquet-4.jpg')"></div>
       </div>
-      <!-- MODIFIÉ : flèches prev/next rondes (référence saison : .swiper-button-prev/next) -->
       <button class="slide-arrow prev" aria-label="Précédent / Previous">←</button>
       <button class="slide-arrow next" aria-label="Suivant / Next">→</button>
       <!-- pagination numérotée type saison -->
       <div class="slide-dots">
-        <button class="dot active" data-slide="0">1</button>
-        <button class="dot" data-slide="1">2</button>
-        <button class="dot" data-slide="2">3</button>
-        <button class="dot" data-slide="3">4</button>
+        <button class="dot active">1</button>
+        <button class="dot">2</button>
+        <button class="dot">3</button>
+        <button class="dot">4</button>
       </div>
     </div>
 
@@ -71,27 +70,26 @@
       <div class="step-header">1 — TAILLE / SIZE</div>
       <div class="size-note">Guide de taille / size guide : Mini ~15cm · S ~20cm · M ~30cm · L ~40cm</div>
       <!-- libellés tailles sur une seule ligne, bouton sur-mesure réduit au signe « + » -->
-      <!-- MODIFIÉ : data-price → data-size (le prix est calculé par le backend) -->
       <div class="circle-row" id="size-row">
         <div class="c-opt"><button class="c-btn" data-size="mini">Mini</button>
-          <div class="c-label" data-price-label="mini">80 000 Ar</div>
+          <div class="c-label">80 000 Ar</div>
         </div>
         <div class="c-line"></div>
         <div class="c-opt"><button class="c-btn selected" data-size="S">S</button>
-          <div class="c-label" data-price-label="S">100 000 Ar</div>
+          <div class="c-label">100 000 Ar</div>
         </div>
         <div class="c-line"></div>
         <div class="c-opt"><button class="c-btn" data-size="M">M</button>
-          <div class="c-label" data-price-label="M">120 000 Ar</div>
+          <div class="c-label">120 000 Ar</div>
         </div>
         <div class="c-line"></div>
         <div class="c-opt"><button class="c-btn" data-size="L">L</button>
-          <div class="c-label" data-price-label="L">150 000 Ar</div>
+          <div class="c-label">150 000 Ar</div>
         </div>
         <div class="c-line"></div>
         <!-- bouton sur-mesure affiche uniquement « + » -->
         <div class="c-opt"><button class="c-btn" data-size="custom">+</button>
-          <div class="c-label" data-price-label="surmesure">min 200 000 Ar</div>
+          <div class="c-label">min 200 000 Ar</div>
         </div>
       </div>
       <!-- bloc « prix sur devis » masqué par défaut, affiché quand le sur-mesure est choisi -->
@@ -103,7 +101,6 @@
 
       <!-- 2. COULEUR -->
       <div class="step-header">2 — COULEUR / COLOR</div>
-      <!-- libellés couleurs sur une seule ligne (sous-texte retiré, classes conservées) -->
       <div class="color-row" id="color-row">
         <div class="col-opt pastel"><button class="col-btn"></button>
           <div class="col-label">pastel</div>
@@ -128,7 +125,7 @@
       <div class="fieldset-legend">je souhaite un vase / i would like a vase</div>
       <!-- vase en radio-boîtes style saison -->
       <div class="radio-row" id="vase-row">
-        <button class="r-btn" data-vase="1" data-price-label="vase">oui / yes (+20 000 Ar)</button>
+        <button class="r-btn" data-vase="1">oui / yes (+20 000 Ar)</button>
         <button class="r-btn selected" data-vase="0">non / no</button>
       </div>
 
@@ -151,8 +148,8 @@
       <div id="pickup-block">
         <div class="fieldset-legend">retrait souhaitée le / pickup on</div>
         <input class="field" type="date" id="pickup-date">
-        <!-- MODIFIÉ : horaires servies par la config (GET /api/config) — plus de texte en dur -->
-        <p style="font-size:11px;color:var(--noir);margin-top:-0.5rem;margin-bottom:1rem" id="shop-pickup-hours">lundi — samedi · 10h–16h /
+        <p style="font-size:11px;color:var(--noir);margin-top:-0.5rem;margin-bottom:1rem" id="shop-pickup-hours">lundi —
+          samedi · 10h–16h /
           monday — saturday · 10am–4pm</p>
       </div>
 
@@ -177,7 +174,7 @@
 
       <!-- 6. FACTURATION -->
       <div class="step-header">6 — COORDONNÉES DE FACTURATION / BILLING INFOS</div>
-      <div id="billing-block">
+      <div>
         <div class="field-row">
           <input class="field" type="text" id="billing-name" placeholder="nom / name *">
           <input class="field" type="tel" id="billing-phone" placeholder="téléphone / phone *">
@@ -195,11 +192,11 @@
       <!-- TOTAL -->
       <div class="total-row">
         <span class="total-label">TOTAL</span>
-        <span class="total-amount" id="total-display">80 000 Ar</span>
+        <span class="total-amount" id="total-display">—</span>
       </div>
 
       <!-- RÉCAP -->
-      <div class="recap-block" id="recap">
+      <div class="recap-block">
         <!-- titre du récap — « Ma commande / My order » -->
         <div class="recap-title">Ma commande / My order</div>
         <div class="recap-grid">
@@ -218,8 +215,6 @@
         </div>
       </div>
 
-      <!-- MODIFIÉ : paiement géré sur la page dédiée /paiement.html (récap + total requoté backend +
-      bouton Payer). La commande (POST /api/order) part uniquement au clic « Payer ». -->
       <button class="pay-btn" id="btn-checkout"><span>Paiement / Checkout</span><span>→</span></button>
       <div id="order-status" aria-live="polite"></div>
 
@@ -251,7 +246,6 @@
             id="shop-name">i.fleur</span></strong><br>
         <span id="shop-address">Antananarivo, Madagascar</span><br>
         MVola : 034 04 764 14<br><br>
-        <!-- MODIFIÉ : fallback synchronisé avec la config (écrasé par applyShopConfig) -->
         <span id="shop-hours">lundi — samedi · 10h–16h / monday — saturday · 10am–4pm</span>
       </div>
 

@@ -1,4 +1,5 @@
-/* MODIFIÉ : slider type saison-eshop — crossfade (opacité) speed ~100ms, sans glissement horizontal */
+/* slider type saison-eshop — crossfade (opacité), sans glissement horizontal.
+   La durée du fondu a été personnalisée (0.5s) : voir .slide plus bas. */
 
 /* Piste du slider — conteneur relatif, pas de flex (slides empilées en absolu pour le crossfade) */
 .slides {
@@ -6,14 +7,20 @@
   height: 100%;
 }
 
-/* Slide — pleine surface, empilé, fondu 0.1s (référence Swiper effect:fade speed:100) */
+/* Slide — pleine surface, empilé, fondu 0.5s.
+   0.1s (valeur Swiper de la référence saison-eshop) -> 0.5s. Mesuré : le fondu
+   de 100 ms ne durait que 6 frames et se lisait comme un saut sec, pas comme une animation.
+   translateZ(0) + backface-visibility pour promouvoir chaque slide en couche GPU —
+   mesuré, la pire frame au moment du changement tombe de 50 ms à 33 ms. */
 .slide {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
   opacity: 0;
-  transition: opacity .1s linear;
+  transition: opacity .5s ease;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Fallback sans JS — première diapo visible par défaut */
@@ -64,7 +71,7 @@
   color: var(--noir);
 }
 
-/* MODIFIÉ : Pagination — puces numérotées rondes, actif noir + léger zoom (référence: bullets-dynamic scale) */
+/* Pagination — puces numérotées rondes, actif noir + léger zoom (référence: bullets-dynamic scale) */
 .dot {
   width: 35px;
   height: 35px;

@@ -1,4 +1,4 @@
-// MODIFIÉ : serveur monolithe Fastify — sert l'API (/api) + le frontend statique (public/)
+// serveur monolithe Fastify — sert l'API (/api) + le frontend statique (public/)
 import fastifyCors from "@fastify/cors";
 import fastifyStatic from "@fastify/static";
 import Fastify, { FastifyError } from "fastify";
@@ -14,7 +14,7 @@ const PUBLIC_DIR = path.join(process.cwd(), 'public')
 
 const app = Fastify({ logger: true })
 
-// MODIFIÉ : CORS restreint aux origines locales (monolithe same-origin)
+// CORS restreint aux origines locales (monolithe same-origin)
 app.register(fastifyCors, {
   origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
   methods: ['GET', 'PUT', 'POST', 'DELETE'],
@@ -29,7 +29,7 @@ app.setErrorHandler((error: FastifyError, request, reply) => {
       message: error.message
     })
   }
-  // NOUVEAU : gère valablement les erreurs Fastify hors AppError
+  // : gère valablement les erreurs Fastify hors AppError
   // (validation 400, payload 413...) en réutilisant le statusCode de l'erreur,
   // sinon repli 500 — évite une réponse suspendue.
   const statusCode = typeof error.statusCode === 'number' ? error.statusCode : 500;
@@ -41,12 +41,12 @@ app.setErrorHandler((error: FastifyError, request, reply) => {
 // API d'abord (prefix /api) — les routes exactes gagnent sur le wildcard statique
 app.register(RegisterRoutes, { prefix: '/api' })
 
-// NOUVEAU : sert le frontend statique (index.html, src/*, dist/app.js) depuis public/
+// : sert le frontend statique (index.html, src/*, dist/app.js) depuis public/
 app.register(fastifyStatic, {
   root: PUBLIC_DIR,
 })
 
-// NOUVEAU : SPA fallback — toute route GET inconnue (hors /api et hors fichier)
+// : SPA fallback — toute route GET inconnue (hors /api et hors fichier)
 // renvoie index.html. Les chemins "fichier" (extension) et les dotfiles
 // (/.env, /.gitignore, /src/ts/*) restent un vrai 404 : jamais l'HTML.
 const HAS_FILE_EXT = /\/[^/]+\.[a-zA-Z0-9]{1,6}$/;
@@ -67,7 +67,7 @@ app.setNotFoundHandler((request, reply) => {
 
 const start = async () => {
   try {
-    // NOUVEAU : builde le bundle frontend au démarrage (watch en dev, once en prod)
+    // : builde le bundle frontend au démarrage (watch en dev, once en prod)
     await ensureFrontendBuilt({ watch: process.env.NODE_ENV !== 'production' })
     await app.listen({ port: 3000, host: '0.0.0.0' });
     console.log(`serveur listening at port: 3000`);

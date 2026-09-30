@@ -5,8 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>i.fleur · paiement / payment</title>
-  <meta name="description"
-    content="i.fleur — paiement de votre commande. / i.fleur — pay for your order.">
+  <meta name="description" content="i.fleur — paiement de votre commande. / i.fleur — pay for your order.">
 
   <!-- polices locales Saison — mêmes feuilles que la boutique -->
   <link rel="stylesheet" href="src/styles/variables.css">
@@ -17,9 +16,6 @@
 </head>
 
 <body>
-  <!-- MODIFIÉ : page paiement au même design que la boutique (split-screen : header logo,
-       photo fixe à gauche + contenu défilant à droite). La commande (POST /api/order) part
-       toujours ici ; le processeur de paiement sera intégré plus tard. -->
   <div class="layout">
 
     <!-- Header (logo + titre) — même structure que la boutique -->
@@ -41,19 +37,16 @@
       <button class="slide-arrow prev" aria-label="Précédent / Previous">←</button>
       <button class="slide-arrow next" aria-label="Suivant / Next">→</button>
       <div class="slide-dots">
-        <button class="dot active" data-slide="0">1</button>
-        <button class="dot" data-slide="1">2</button>
-        <button class="dot" data-slide="2">3</button>
-        <button class="dot" data-slide="3">4</button>
+        <button class="dot active">1</button>
+        <button class="dot">2</button>
+        <button class="dot">3</button>
+        <button class="dot">4</button>
       </div>
     </div>
 
     <!-- CONTENT / RÉCAP + PAIEMENT -->
     <div class="col-content">
       <div id="checkout-page">
-        <!-- MODIFIÉ : page paiement calée sur l'étape paiement de saison-eshop —
-             récap « Ma commande », UN bouton « modifier votre commande » (pastille animée),
-             total TTC, mode de paiement puis « Confirmer le paiement ». -->
 
         <!-- RÉCAP COMMANDE (design saison-eshop : boîte gris clair) -->
         <div class="recap-block">
@@ -61,10 +54,7 @@
           <div class="recap-grid" id="co-recap-grid"></div>
         </div>
 
-        <!-- NOUVEAU : « modifier votre commande » — UN SEUL, directement sous le récap
-             (comme saison : pastille pleine largeur fond gris clair, texte gris, animée)
-             → retour au configurateur avec la sélection restaurée (restore.ts) -->
-        <button class="modifier-btn" id="co-modify">modifier votre commande</button>
+        <button class="modifier-btn">modifier votre commande</button>
 
         <!-- TOTAL (recalculé côté backend à l'arrivée) -->
         <div class="total-row">
@@ -76,7 +66,6 @@
         <div class="pay-label">MODE DE PAIEMENT / PAYMENT</div>
         <div class="radio-row">
           <button class="r-btn selected" data-pay="Mvola">MVola · 034 04 764 14</button>
-          <button class="r-btn" data-pay="carte">Carte bancaire / bank card</button>
         </div>
 
         <!-- MVola box -->
@@ -84,59 +73,41 @@
           <div class="mm-provider">MVOLA</div>
           <div class="mm-num">034 04 764 14</div>
           <div class="mm-name">i.fleur</div>
-          <div class="mm-info">Envoyez le montant exact après validation de votre commande ; nous confirmons la réception
+          <div class="mm-info">Envoyez le montant exact après validation de votre commande ; nous confirmons la
+            réception
             du paiement avant livraison. / Send the exact amount after validating your order; we confirm payment receipt
             before delivery.</div>
-        </div>
-
-        <!-- NOUVEAU : section « carte » façon référence (saison/Stripe) — SANS boîte ni fond gris,
-             posée directement sur le fond blanc, espacée du total par 30px comme l'élément
-             de paiement saison. Champs compacts NB : validés localement uniquement, jamais
-             stockés ni envoyés (l'API réelle sera branchée via TODO API paiement carte). -->
-        <div id="co-card-box">
-          <div class="card-fields">
-            <label class="card-field">
-              <span class="card-field-label">Nom sur la carte / name on card</span>
-              <input type="text" id="card-name" class="card-input" autocomplete="cc-name"
-                spellcheck="false" placeholder="ex : RAKOTO Jean">
-            </label>
-            <label class="card-field">
-              <span class="card-field-label">N° de carte / card number</span>
-              <input type="text" id="card-number" class="card-input" inputmode="numeric"
-                autocomplete="cc-number" placeholder="4242 4242 4242 4242">
-            </label>
-            <div class="card-row">
-              <label class="card-field">
-                <span class="card-field-label">Expiration / expiry</span>
-                <input type="text" id="card-expiry" class="card-input" inputmode="numeric"
-                  autocomplete="cc-exp" placeholder="MM/AA">
-              </label>
-              <label class="card-field">
-                <span class="card-field-label">CVC</span>
-                <input type="text" id="card-cvc" class="card-input" inputmode="numeric"
-                  autocomplete="cc-csc" placeholder="123">
-              </label>
-            </div>
-            <div class="card-error" id="co-card-status" aria-live="polite"></div>
+          <!-- : demande de capture de paiement sur WhatsApp (avant toute livraison).
+               Le numéro et le montant sont injectés par checkout.ts (initWhatsappProof) —
+               numéro depuis GET /api/config, montant depuis le quote serveur. -->
+          <div class="mm-info" id="co-wa-proof-box">
+            <strong>Dernière étape : envoyez-nous la capture de votre paiement sur WhatsApp.</strong>
+            Après avoir envoyé le montant exact ci-dessus, prenez une capture d'écran de la
+            confirmation MVola et transmettez-la nous. Nous confirmons la réception avant toute
+            livraison.
+            / <strong>Last step: send us a screenshot of your payment on WhatsApp.</strong>
+            After sending the exact amount above, take a screenshot of the MVola confirmation and
+            send it to us. We confirm receipt before any delivery.
+            <a class="pay-btn secondary" id="co-wa-proof" href="#" target="_blank" rel="noopener noreferrer">Envoyer la
+              capture sur WhatsApp / Send proof on WhatsApp</a>
           </div>
-          <div class="mm-info">Vos informations de carte sont protégées : elles seront transmises directement à notre
-            partenaire sécurisé lors de la finalisation du paiement. / Your card details are safe: they will be sent
-            directly to our secure partner when the payment is finalized.</div>
         </div>
 
-        <!-- NOUVEAU : « Confirmer le paiement » (design saison) — fond gris `--gris`,
+        <!-- MODIFIÉ : paiement par carte retiré (présentation) — seul MVola ne subsiste -->
+
+        <!-- « Confirmer le paiement » (design saison) — fond gris `--gris`,
              texte noir, pleine largeur, hover animé. Envoie POST /api/order. -->
         <button class="pay-btn" id="btn-pay">Confirmer le paiement</button>
         <div id="co-order-status" aria-live="polite"></div>
 
-        <!-- NOUVEAU : emplacement réservé à l'intégration du paiement réel (affiché après succès) -->
+        <!-- emplacement réservé à l'intégration du paiement réel (affiché après succès) -->
         <div id="co-pay-placeholder">
           <div class="mm-provider">Paiement sécurisé / Secure payment</div>
           <p class="mm-info">
             Votre commande est bien reçue. Le paiement de <span class="co-placeholder-total">—</span> sera
-            très prochainement finalisé ici (MVola · Carte bancaire). Nous vous contactons pour confirmer.
+            très prochainement finalisé ici (MVola). Nous vous contactons pour confirmer.
             / Your order has been received. The payment of <span class="co-placeholder-total">—</span> will
-            shortly be finalized here (MVola · bank card). We will contact you to confirm.
+            shortly be finalized here (MVola). We will contact you to confirm.
           </p>
         </div>
       </div>

@@ -1,4 +1,4 @@
-/* NOUVEAU : scroll fluide global (référence saison : html{scroll-behavior:smooth}) */
+/* : scroll fluide global (référence saison : html{scroll-behavior:smooth}) */
 html {
   scroll-behavior: smooth;
 }
@@ -36,7 +36,7 @@ html {
   padding: 0 var(--gutter);
 }
 
-/* MODIFIÉ : logo agrandi — max-height 15vh → 20vh (padding inchangé) */
+/* logo agrandi — max-height 15vh → 20vh (padding inchangé) */
 .logo-img {
   max-height: 20vh;
   width: auto;

@@ -1,4 +1,3 @@
-// MODIFIÉ : use createOrder (au lieu de l'ancien sendOrderEmail dupliqué)
 import { FastifyReply, FastifyRequest } from "fastify"
 import { QuoteOrderDto, OrderDto } from "./order.dto"
 import { computeQuote, createOrder } from "./order.service"

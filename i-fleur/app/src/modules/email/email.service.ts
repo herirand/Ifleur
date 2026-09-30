@@ -24,9 +24,6 @@ export async function sendOrderEmail(dto: SendEmailDto): Promise<void> {
   }
 
   try {
-    // MODIFIÉ : template HTML structurée — chaque champ est une variable EmailJS
-    // (plus de bloc « order » illisible). Les conditionnels {{#isHome}}/{{#isPickup}}
-    // de la template décident des sections affichées.
     await emailjs.send(
       EMAILJS_SERVICE_ID,
       EMAILJS_TEMPLATE_ID,

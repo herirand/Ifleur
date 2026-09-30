@@ -1,8 +1,9 @@
-// MODIFIÉ : aucun calcul de prix local — la sélection est envoyée au backend
+// aucun calcul de prix local — la sélection est envoyée au backend
 // (POST /api/order/quote, débouncé 150 ms pour un rendu temps réel) et le résultat serveur est affiché.
 
-import { $, $$, formatPrice } from './utils.js';
+import { $, $$, formatPrice, setText } from './utils.js';
 import { getConfig } from './data.js';
+import { ORDER_COLORS } from './types.js';
 import type { OrderSize, OrderDelivery, QuoteResult } from './types.js';
 
 interface Selection {
@@ -78,7 +79,8 @@ async function fetchQuote(): Promise<void> {
   }
 }
 
-export function updateTotal(): void {
+// plus exporté — appelé uniquement en interne (fetchQuote + initPricing)
+function updateTotal(): void {
   const display = $('#total-display');
   if (!display) return;
   if (quote.isDevis) {
@@ -91,17 +93,12 @@ export function updateTotal(): void {
 }
 
 export function refreshRecap(): void {
-  const setText = (id: string, value: string): void => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value;
-  };
-
   const sizeBtn = document.querySelector('#size-row .c-btn.selected') as HTMLElement | null;
   const sizeLabel = sizeBtn?.dataset.size === 'custom'
     ? 'Sur-mesure / Custom'
     : (sizeBtn?.textContent?.trim() || '—');
   const colorEl = (document.querySelector('#color-row .col-btn.selected') as HTMLElement | null)?.closest('.col-opt') as HTMLElement | null;
-  const colorClass = colorEl ? Array.from(colorEl.classList).find(c => ['pastel', 'chaud', 'surprenez-moi', 'neutre'].includes(c)) || '—' : '—';
+  const colorClass = colorEl ? Array.from(colorEl.classList).find(c => (ORDER_COLORS as readonly string[]).includes(c)) || '—' : '—';
   const vaseBtn = document.querySelector('#vase-row .r-btn.selected') as HTMLElement | null;
   const withVase = vaseBtn?.dataset.vase === '1';
   const message = (document.getElementById('message') as HTMLTextAreaElement)?.value?.trim() || '—';
@@ -126,7 +123,7 @@ export function initPricing(): void {
 
   $$('#size-row .c-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      // MODIFIÉ : bascule visuelle du cercle (référence saison-eshop) — le cercle cliqué
+      // bascule visuelle du cercle (référence saison-eshop) — le cercle cliqué
       // passe en fond noir, les autres reviennent en fond blanc.
       $$('#size-row .c-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
@@ -139,7 +136,7 @@ export function initPricing(): void {
     });
   });
 
-  // MODIFIÉ : bascule visuelle du carré (même logique que les tailles) —
+  // bascule visuelle du carré (même logique que les tailles) —
   // la classe .selected pilotait le visuel mais n'était plus togglée (bug).
   $$('#vase-row .r-btn').forEach(btn => {
     btn.addEventListener('click', () => {

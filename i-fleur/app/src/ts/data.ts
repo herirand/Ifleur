@@ -1,4 +1,4 @@
-// MODIFIÉ : charge la config depuis le backend (GET /api/config) — plus d'import config.json
+// charge la config depuis le backend (GET /api/config) — plus d'import config.json
 
 import type { Config, DeliveryZone } from './types.js';
 
@@ -20,21 +20,7 @@ export function getConfig(): Config {
   return CONFIG;
 }
 
-// NOUVEAU : localiser la zone de livraison d'un quartier donné
-export function findZoneForQuartier(quartier: string): DeliveryZone | null {
-  if (!CONFIG || !quartier) return null;
-  const q = quartier.trim().toLowerCase();
-  let fallback: DeliveryZone | null = null;
-
-  for (const zone of CONFIG.delivery.zones) {
-    if (zone.quartiers.some(item => item.toLowerCase() === q)) return zone;
-    if (zone.quartiers.length === 0 && zone.fee === null) fallback = zone;
-  }
-
-  return fallback;
-}
-
-// NOUVEAU : liste à plat de tous les quartiers (pour le <select>)
+// : liste à plat de tous les quartiers (pour le <select>)
 export function getAllQuartiers(): { quartier: string; zone: DeliveryZone }[] {
   const list: { quartier: string; zone: DeliveryZone }[] = [];
   if (!CONFIG) return list;

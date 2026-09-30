@@ -1,9 +1,11 @@
 // Module sélecteurs UI (couleurs)
 
 import { $$ } from './utils.js';
+import { ORDER_COLORS } from './types.js';
+import type { OrderColor } from './types.js';
 
 // Couleur florale sélectionnée (défaut : neutre vert & blanc)
-let selectedColor: string = 'neutre';
+let selectedColor: OrderColor = 'neutre';
 
 // Gérer la sélection de couleur (nouvelles palettes pastel / chaud / surprenez-moi / neutre)
 export function selectColor(btn: HTMLElement): void {
@@ -14,17 +16,15 @@ export function selectColor(btn: HTMLElement): void {
   const parent = btn.closest('.col-opt');
   if (parent) {
     const classList = Array.from(parent.classList);
-    const colorClass = classList.find(c =>
-      ['pastel', 'chaud', 'surprenez-moi', 'neutre'].includes(c)
-    );
+    const colorClass = classList.find(c => (ORDER_COLORS as readonly string[]).includes(c));
     if (colorClass) {
-      selectedColor = colorClass;
+      selectedColor = colorClass as OrderColor;
     }
   }
 }
 
 // Récupérer la couleur sélectionnée
-export function getSelectedColor(): string {
+export function getSelectedColor(): OrderColor {
   return selectedColor;
 }
 
